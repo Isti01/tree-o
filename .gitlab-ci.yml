@@ -80,17 +80,17 @@ get-activation-file:
   coverage: /<Linecoverage>(.*?)</Linecoverage>/
 
 # Tests without junit reporting results in GitLab
-# test-playmode:
-#   <<: *test
-#   variables:
-#     TEST_PLATFORM: playmode
-#     TESTING_TYPE: NUNIT
+test-playmode:
+  <<: *test
+  variables:
+    TEST_PLATFORM: playmode
+    TESTING_TYPE: NUNIT
 
-# test-editmode:
-#   <<: *test
-#   variables:
-#     TEST_PLATFORM: editmode
-#     TESTING_TYPE: NUNIT
+test-editmode:
+  <<: *test
+  variables:
+    TEST_PLATFORM: editmode
+    TESTING_TYPE: NUNIT
 
 # uncomment the following blocks if you'd like to have junit reporting unity test results in gitlab
 # We currently have the following issue which prevents it from working right now, but you can give
@@ -144,17 +144,17 @@ get-activation-file:
   # https://gitlab.com/gableroux/unity3d-gitlab-ci-example/-/issues/83
   # you may need to remove or replace these to fit your need if you are using your own runners
 
-build-StandaloneLinux64:
-  <<: *build
-  variables:
-    BUILD_TARGET: StandaloneLinux64
+#build-StandaloneLinux64:
+#  <<: *build
+#  variables:
+#    BUILD_TARGET: StandaloneLinux64
 
-build-StandaloneLinux64-il2cpp:
-  <<: *build
-  image: $IMAGE:$UNITY_VERSION-linux-il2cpp-$IMAGE_VERSION
-  variables:
-    BUILD_TARGET: StandaloneLinux64
-    SCRIPTING_BACKEND: IL2CPP
+#build-StandaloneLinux64-il2cpp:
+#  <<: *build
+#  image: $IMAGE:$UNITY_VERSION-linux-il2cpp-$IMAGE_VERSION
+#  variables:
+#    BUILD_TARGET: StandaloneLinux64
+#    SCRIPTING_BACKEND: IL2CPP
 
 #build-StandaloneOSX:
 #  <<: *build
