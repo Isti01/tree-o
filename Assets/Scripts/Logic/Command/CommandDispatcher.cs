@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Logic.Command {
 
 /// <summary>
-/// Class through which <see cref="BaseCommand{T}"/> instances can be issued
+/// Class through which <see cref="CommandBase{T}"/> instances can be issued
 /// and command handlers can be registered.
 /// </summary>
 public class CommandDispatcher {
@@ -19,7 +19,7 @@ public class CommandDispatcher {
 	/// <typeparam name="TR">the command's return type</typeparam>
 	/// <exception cref="IllegalHandlerStateException">if a handler is already set</exception>
 	public void RegisterConsumer<TC, TR>(Consumer<TC, TR> consumer)
-		where TC : BaseCommand<TR> where TR : ICommandResult {
+		where TC : CommandBase<TR> where TR : ICommandResult {
 		if (_consumers.TryGetValue(typeof(TC), out Delegate old)) {
 			throw new IllegalHandlerStateException($"{typeof(TC)} already has a handler: {old}");
 		} else {
@@ -36,7 +36,7 @@ public class CommandDispatcher {
 	/// <typeparam name="TR">the command's return type</typeparam>
 	/// <exception cref="IllegalHandlerStateException">if the passed parameter isn't the current handler</exception>
 	public void RemoveConsumer<TC, TR>(Consumer<TC, TR> consumer)
-		where TC : BaseCommand<TR> where TR : ICommandResult {
+		where TC : CommandBase<TR> where TR : ICommandResult {
 		if (!_consumers.Remove(new KeyValuePair<Type, Delegate>(typeof(TC), consumer))) {
 			throw new IllegalHandlerStateException($"{typeof(TC)} isn't associated with handler: {consumer}");
 		}
@@ -50,7 +50,7 @@ public class CommandDispatcher {
 	/// <returns>the command's result</returns>
 	/// <exception cref="IllegalHandlerStateException">if the command doesn't have a handler</exception>
 	/// <exception cref="CommandInvocationException">if the command's execution fails exceptionally</exception>
-	public T Issue<T>(BaseCommand<T> command) where T : ICommandResult {
+	public T Issue<T>(CommandBase<T> command) where T : ICommandResult {
 		if (!_consumers.TryGetValue(command.GetType(), out Delegate consumer)) {
 			throw new IllegalHandlerStateException($"Command '{command}' doesn't have a handler");
 		}
@@ -69,7 +69,7 @@ public class CommandDispatcher {
 	/// <typeparam name="TC">type of command being handled</typeparam>
 	/// <typeparam name="TR">return type of command being handled</typeparam>
 	public delegate TR Consumer<in TC, out TR>(TC command)
-		where TC : BaseCommand<TR> where TR : ICommandResult;
+		where TC : CommandBase<TR> where TR : ICommandResult;
 
 	/// <summary>
 	/// Exception that signals that handlers aren't in the expected state.
