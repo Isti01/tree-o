@@ -12,6 +12,8 @@ public class GameWorld {
 
 	#region Properties
 
+	public GameOverview Overview { get; }
+
 	public int Width { get; }
 
 	public int Height { get; }

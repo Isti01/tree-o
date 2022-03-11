@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
 public class Barrack : Building {
@@ -7,6 +8,8 @@ public class Barrack : Building {
 	#region Fields
 
 	private IList<TilePosition> _checkPoints;
+
+	private readonly IList<IUnitTypeData> _queuedUnits = new List<IUnitTypeData>();
 
 	#endregion
 
@@ -18,14 +21,15 @@ public class Barrack : Building {
 
 	public float RemainingCooldownTime { get; }
 
-	public IReadOnlyCollection<IUnitTypeData> QueuedUnits { get; }
+	public IReadOnlyCollection<IUnitTypeData> QueuedUnits => new List<IUnitTypeData>(_queuedUnits);
 
 	#endregion
 
 	#region Methods
 
-	public void QueueUnit(IUnitTypeData unit) {
-		throw new NotImplementedException();
+	public void QueueUnit(IUnitTypeData type) {
+		_queuedUnits.Add(type);
+		World.Overview.Events.Raise(new UnitQueuedEvent(type, this));
 	}
 	public void PushCheckPoint(TilePosition tile) {
 		throw new NotImplementedException();
