@@ -1,4 +1,8 @@
-﻿// ReSharper disable InconsistentNaming
-namespace Logic.Data {
-public enum Color {RED, BLUE }
+﻿namespace Logic.Data {
+
+public enum Color {
+	Red,
+	Blue
+}
+
 }

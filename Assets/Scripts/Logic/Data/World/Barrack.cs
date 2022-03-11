@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace Logic.Data.World {
-public class Barrack {
+public class Barrack : Building {
 
 	#region Fields
 
