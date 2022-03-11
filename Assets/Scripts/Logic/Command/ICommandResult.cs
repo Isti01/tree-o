@@ -1,7 +1,7 @@
 ﻿namespace Logic.Command {
 
 /// <summary>
-/// Base class for the results of <see cref="CommandBase{T}"/> subclasses.
+/// Base class for the results of <see cref="BaseCommand{T}"/> subclasses.
 /// </summary>
 public interface ICommandResult {
 	/// <summary>
