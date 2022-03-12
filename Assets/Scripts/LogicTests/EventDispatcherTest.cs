@@ -8,7 +8,7 @@ public class EventDispatcherTest {
 	[Test]
 	public void TestAddingListener() {
 		EventDispatcher dispatcher = NewErrorRethrowingDispatcher();
-		EventDispatcher.Listener<EventBase> listener = _ => {};
+		EventDispatcher.Listener<BaseEvent> listener = _ => {};
 		dispatcher.AddListener<BicycleEvent>(listener);
 		dispatcher.AddListener<BicycleEvent>(listener);
 		dispatcher.AddListener<AstraEvent>(_ => {});
@@ -17,7 +17,7 @@ public class EventDispatcherTest {
 	[Test]
 	public void TestRemovingListener() {
 		EventDispatcher dispatcher = NewErrorRethrowingDispatcher();
-		EventDispatcher.Listener<EventBase> listener = _ => {};
+		EventDispatcher.Listener<BaseEvent> listener = _ => {};
 		Assert.Throws<EventDispatcher.IllegalListenerStateException>(() =>
 			dispatcher.RemoveListener<BicycleEvent>(listener));
 		dispatcher.AddListener<BicycleEvent>(listener);
@@ -61,7 +61,7 @@ public class EventDispatcherTest {
 		EventDispatcher dispatcher = NewErrorRethrowingDispatcher();
 		var counter = 0;
 		// ReSharper disable once AccessToModifiedClosure
-		dispatcher.AddListener<EventBase>(_ => counter++);
+		dispatcher.AddListener<BaseEvent>(_ => counter++);
 		dispatcher.AddListener<BicycleEvent>(_ => counter++);
 		dispatcher.AddListener<CarAbstractEvent>(_ => Assert.Fail());
 		dispatcher.AddListener<AstraEvent>(_ => Assert.Fail());
@@ -71,7 +71,7 @@ public class EventDispatcherTest {
 
 		dispatcher = NewErrorRethrowingDispatcher();
 		counter = 0;
-		dispatcher.AddListener<EventBase>(_ => counter++);
+		dispatcher.AddListener<BaseEvent>(_ => counter++);
 		dispatcher.AddListener<BicycleEvent>(_ => Assert.Fail());
 		dispatcher.AddListener<CarAbstractEvent>(_ => counter++);
 		dispatcher.AddListener<AstraEvent>(_ => counter++);
@@ -81,7 +81,7 @@ public class EventDispatcherTest {
 
 		dispatcher = NewErrorRethrowingDispatcher();
 		counter = 0;
-		dispatcher.AddListener<EventBase>(_ => counter++);
+		dispatcher.AddListener<BaseEvent>(_ => counter++);
 		dispatcher.AddListener<BicycleEvent>(_ => Assert.Fail());
 		dispatcher.AddListener<CarAbstractEvent>(_ => counter++);
 		dispatcher.AddListener<AstraEvent>(_ => Assert.Fail());
@@ -110,7 +110,7 @@ public class EventDispatcherTest {
 			called = true;
 		});
 		dispatcher.AddListener<BicycleEvent>(_ => throw new Exception("Testing"));
-		dispatcher.AddListener<EventBase>(_ => throw new Exception("Testing"));
+		dispatcher.AddListener<BaseEvent>(_ => throw new Exception("Testing"));
 		dispatcher.AddListener<BicycleEvent>(_ => throw new Exception("Testing"));
 		dispatcher.Raise(new BicycleEvent());
 		Assert.IsTrue(called);
@@ -120,9 +120,9 @@ public class EventDispatcherTest {
 		return new EventDispatcher(errors => throw new AggregateException(errors));
 	}
 
-	private class BicycleEvent : EventBase {}
+	private class BicycleEvent : BaseEvent {}
 
-	private abstract class CarAbstractEvent : EventBase {}
+	private abstract class CarAbstractEvent : BaseEvent {}
 
 	private class AstraEvent : CarAbstractEvent {}
 

@@ -60,7 +60,7 @@ public class CommandDispatcherTest {
 		Assert.Throws<CommandDispatcher.CommandInvocationException>(() => dispatcher.Issue(new Sample()));
 	}
 
-	private class Sample : CommandBase {}
+	private class Sample : BaseCommand {}
 }
 
 }

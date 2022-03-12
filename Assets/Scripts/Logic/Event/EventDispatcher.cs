@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Logic.Event {
 
 /// <summary>
-/// Class through which <see cref="EventBase"/> instances can be raised
+/// Class through which <see cref="BaseEvent"/> instances can be raised
 /// and event listeners can be added.
 /// <p>
 /// Some notable design decisions:
@@ -37,7 +37,7 @@ public class EventDispatcher {
 	/// </summary>
 	/// <param name="listener">the consumer of the event</param>
 	/// <typeparam name="T">the event to listen to</typeparam>
-	public void AddListener<T>(Listener<T> listener) where T : EventBase {
+	public void AddListener<T>(Listener<T> listener) where T : BaseEvent {
 		if (!_listeners.TryGetValue(typeof(T), out IList<Delegate> list)) {
 			list = new List<Delegate>();
 			_listeners[typeof(T)] = list;
@@ -56,7 +56,7 @@ public class EventDispatcher {
 	/// <typeparam name="T">the event to unregister the listener from</typeparam>
 	/// <exception cref="IllegalListenerStateException">if the specified listener isn't
 	/// among the listeners of the specified event</exception>
-	public void RemoveListener<T>(Listener<T> listener) where T : EventBase {
+	public void RemoveListener<T>(Listener<T> listener) where T : BaseEvent {
 		if (!_listeners.TryGetValue(typeof(T), out IList<Delegate> list) || !list.Remove(listener)) {
 			throw new IllegalListenerStateException($"{listener} isn't a registered listener of {typeof(T)}");
 		}
@@ -68,7 +68,7 @@ public class EventDispatcher {
 	/// Errors thrown by the listeners are delegated to the handler specified in this class' constructor.
 	/// </summary>
 	/// <param name="eventData">the event whose listeners to invoke</param>
-	public void Raise(EventBase eventData) {
+	public void Raise(BaseEvent eventData) {
 		List<EventInvocationException> errors = new List<EventInvocationException>();
 
 		//Call listeners which listen to the exact event type or one of its superclasses

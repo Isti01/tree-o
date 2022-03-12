@@ -3,6 +3,6 @@
 /// <summary>
 /// Base class for all events.
 /// </summary>
-public abstract class EventBase {}
+public abstract class BaseEvent {}
 
 }
