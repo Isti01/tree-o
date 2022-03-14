@@ -27,6 +27,9 @@ public class Barrack : Building {
 
 	#region Methods
 
+	public Barrack(GameWorld world, TilePosition position, Color owner)
+		: base(world, position, owner) {}
+
 	public void QueueUnit(IUnitTypeData type) {
 		_queuedUnits.Add(type);
 		World.Overview.Events.Raise(new UnitQueuedEvent(type, this));

@@ -17,6 +17,11 @@ public class Tower : Building {
 
 	#region Methods
 
+	public Tower(GameWorld world, TilePosition position, Color owner, ITowerTypeData data)
+		: base(world, position, owner) {
+		Data = data;
+	}
+
 	public void Upgrade() {
 		throw new NotImplementedException();
 	}

@@ -6,5 +6,12 @@ public class Castle : Building {
 	public float Health { get; }
 
 	#endregion
+
+	#region Methods
+
+	public Castle(GameWorld world, TilePosition position, Color owner)
+		: base(world, position, owner) {}
+
+	#endregion
 }
 }

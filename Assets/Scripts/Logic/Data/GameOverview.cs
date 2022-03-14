@@ -16,7 +16,8 @@ public class GameOverview {
 
 	public GamePhase CurrentPhase { get; }
 
-	public Random Random { get; }
+	//Virtual to allow mocking
+	public virtual Random Random { get; }
 
 	#endregion
 
