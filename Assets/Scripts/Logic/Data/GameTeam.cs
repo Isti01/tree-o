@@ -8,7 +8,7 @@ public class GameTeam {
 
 	#region Properties
 
-	public GameOverview Overview { get; }
+	public IGameOverview Overview { get; }
 
 	public Color TeamColor { get; }
 
@@ -30,6 +30,13 @@ public class GameTeam {
 	#endregion
 
 	#region Methods
+
+	public GameTeam(IGameOverview overview, Color color, Castle castle, IEnumerable<Barrack> barracks) {
+		Overview = overview;
+		TeamColor = color;
+		Castle = castle;
+		Barracks = new List<Barrack>(barracks);
+	}
 
 	public void SpendMoney(int amount) {
 		if (amount <= 0) throw new ArgumentException($"Cannot spend non-positive amount {amount}");

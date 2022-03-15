@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
 public class GameWorld {
@@ -8,11 +10,13 @@ public class GameWorld {
 
 	private readonly TileObject[,] _grid;
 
+	private readonly IList<Unit> _units = new List<Unit>();
+
 	#endregion
 
 	#region Properties
 
-	public GameOverview Overview { get; }
+	public IGameOverview Overview { get; }
 
 	public int Width { get; }
 
@@ -31,13 +35,13 @@ public class GameWorld {
 
 	public WorldNavigation Navigation { get; }
 
-	public IReadOnlyCollection<Unit> Units { get; }
+	public IReadOnlyCollection<Unit> Units => new List<Unit>(_units);
 
 	#endregion
 
 	#region Methods
 
-	public GameWorld(GameOverview overview, int width, int height) {
+	public GameWorld(IGameOverview overview, int width, int height) {
 		Overview = overview;
 		Width = width;
 		Height = height;
@@ -51,10 +55,27 @@ public class GameWorld {
 
 	}
 
+	public IEnumerable<T> GetTileObjectsOfType<T>() where T : TileObject {
+		return TileObjects.Where(o => o is T).Cast<T>();
+	}
+
 	public void BuildTower(GameTeam team, ITowerTypeData data, TilePosition position) {
 		throw new NotImplementedException();
 	}
 	public void DestroyTower(Tower tower) {
+		throw new NotImplementedException();
+	}
+
+	public void DeployUnit(Barrack barrack, IUnitTypeData type) {
+		Vector2 position = barrack.Position.ToVectorCentered();
+		//TODO Should this really be the position? I don't have any better ideas
+
+		Unit unit = new Unit(type, barrack.Owner, this, position, barrack.CheckPoints);
+		_units.Add(unit);
+		Overview.Events.Raise(new UnitDeployedEvent(unit, barrack));
+	}
+
+	public void DestroyUnit(Unit unit) {
 		throw new NotImplementedException();
 	}
 
