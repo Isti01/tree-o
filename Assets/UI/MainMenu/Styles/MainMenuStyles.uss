@@ -1,0 +1,16 @@
+.button-style {
+    font-size: 24px;
+    margin-left: 12px;
+    margin-right: 12px;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding-right: 30px;
+    padding-top: 16px;
+    padding-left: 30px;
+    padding-bottom: 16px;
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+    color: rgba(27, 27, 27, 255);
+}
