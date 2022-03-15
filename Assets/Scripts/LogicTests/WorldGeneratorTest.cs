@@ -166,7 +166,7 @@ public class WorldGeneratorTest {
 		int width = random.Next(10, 15);
 		int height = random.Next(10, 15);
 
-		Mock<GameOverview> overview = new Mock<GameOverview>();
+		Mock<IGameOverview> overview = new Mock<IGameOverview>();
 		overview.Setup(o => o.Random).Returns(new Random());
 		GameWorld world = new GameWorld(overview.Object, width, height);
 

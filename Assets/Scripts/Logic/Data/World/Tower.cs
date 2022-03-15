@@ -7,6 +7,7 @@ public class Tower : Building {
 
 	public ITowerTypeData Data { get; }
 
+	//TODO we need a CanBeNull annotation or some documentation here
 	public Unit Target { get; }
 
 	public int Level { get; }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
@@ -7,7 +8,7 @@ public class Barrack : Building {
 
 	#region Fields
 
-	private IList<TilePosition> _checkPoints;
+	private readonly IList<TilePosition> _checkPoints = new List<TilePosition>();
 
 	private readonly IList<IUnitTypeData> _queuedUnits = new List<IUnitTypeData>();
 
@@ -15,11 +16,11 @@ public class Barrack : Building {
 
 	#region Properties
 
-	public IReadOnlyCollection<TilePosition> CheckPoints { get; }
+	public IReadOnlyCollection<TilePosition> CheckPoints => new List<TilePosition>(_checkPoints);
 
-	public float SpawnCooldownTime { get; }
+	public float SpawnCooldownTime => 0.5f;
 
-	public float RemainingCooldownTime { get; }
+	public float RemainingCooldownTime { get; private set; }
 
 	public IReadOnlyCollection<IUnitTypeData> QueuedUnits => new List<IUnitTypeData>(_queuedUnits);
 
@@ -34,15 +35,38 @@ public class Barrack : Building {
 		_queuedUnits.Add(type);
 		World.Overview.Events.Raise(new UnitQueuedEvent(type, this));
 	}
+
 	public void PushCheckPoint(TilePosition tile) {
-		throw new NotImplementedException();
+		if (_checkPoints.Contains(tile)) {
+			throw new ArgumentException("Position is already a checkpoint");
+		} else {
+			_checkPoints.Add(tile);
+		}
 	}
 
 	public void DeleteCheckPoint(TilePosition tile) {
-		throw new NotImplementedException();
+		if (!_checkPoints.Remove(tile)) {
+			throw new ArgumentException("Position is not a checkpoint");
+		}
 	}
-	public void spawn() {
-		throw new NotImplementedException();
+
+	public void UpdateCooldown(float delta) {
+		RemainingCooldownTime -= delta;
+		if (RemainingCooldownTime < 0) {
+			RemainingCooldownTime = 0;
+		}
+	}
+
+	public void Spawn() {
+		if (!QueuedUnits.Any())
+			throw new InvalidOperationException($"No queued units exist; nothing to spawn");
+
+		if (RemainingCooldownTime > 0)
+			throw new InvalidOperationException($"Spawning is on cooldown: {RemainingCooldownTime}");
+
+		IUnitTypeData type = _queuedUnits[0];
+		_queuedUnits.RemoveAt(0);
+		World.DeployUnit(this, type);
 	}
 
 	#endregion
