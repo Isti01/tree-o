@@ -2,7 +2,8 @@
 
 public enum GamePhase {
 	Prepare,
-	Fight
+	Fight,
+	Finished
 }
 
 }
