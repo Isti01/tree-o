@@ -14,6 +14,8 @@ public class Tower : Building {
 
 	public float RemainingCooldownTime { get; }
 
+	public bool IsOnCooldown => RemainingCooldownTime > 0;
+
 	#endregion
 
 	#region Methods

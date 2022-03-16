@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Logic.Command;
 using Logic.Data.World;
@@ -22,11 +23,13 @@ public class GameOverview : IGameOverview {
 
 	public GameWorld World { get; }
 
-	public GamePhase CurrentPhase { get; } = GamePhase.Prepare;
+	public GamePhase CurrentPhase { get; private set; } = GamePhase.Prepare;
 
 	public float TimeLeftFromPhase { get; private set; } = float.PositiveInfinity;
 
 	public Random Random { get; }
+
+	public IEnumerable<GameTeam> Teams => new[] { _redTeam, _blueTeam };
 
 	#endregion
 
@@ -73,7 +76,24 @@ public class GameOverview : IGameOverview {
 	}
 
 	public void AdvancePhase() {
-		throw new NotImplementedException();
+		GamePhase oldPhase = CurrentPhase;
+
+		if (CurrentPhase == GamePhase.Prepare) {
+			CurrentPhase = GamePhase.Fight;
+			TimeLeftFromPhase = 100; //TODO don't hardcode this value
+		} else if (CurrentPhase == GamePhase.Fight) {
+			if (Teams.Any(t => t.Castle.IsDestroyed)) {
+				CurrentPhase = GamePhase.Finished;
+				TimeLeftFromPhase = float.PositiveInfinity;
+			} else {
+				CurrentPhase = GamePhase.Prepare;
+				TimeLeftFromPhase = float.PositiveInfinity;
+			}
+		} else {
+			throw new Exception($"Unexpected phase: {CurrentPhase}");
+		}
+
+		Events.Raise(new PhaseAdvancedEvent(this, oldPhase));
 	}
 
 	public void DecreaseTimeLeftFromPhase(float deltaTime) {

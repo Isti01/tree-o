@@ -22,6 +22,8 @@ public class Barrack : Building {
 
 	public float RemainingCooldownTime { get; private set; }
 
+	public bool IsOnCooldown => RemainingCooldownTime > 0;
+
 	public IReadOnlyCollection<IUnitTypeData> QueuedUnits => new List<IUnitTypeData>(_queuedUnits);
 
 	#endregion
@@ -61,7 +63,7 @@ public class Barrack : Building {
 		if (!QueuedUnits.Any())
 			throw new InvalidOperationException($"No queued units exist; nothing to spawn");
 
-		if (RemainingCooldownTime > 0)
+		if (IsOnCooldown)
 			throw new InvalidOperationException($"Spawning is on cooldown: {RemainingCooldownTime}");
 
 		IUnitTypeData type = _queuedUnits[0];

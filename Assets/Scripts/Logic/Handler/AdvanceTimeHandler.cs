@@ -11,16 +11,16 @@ public class AdvanceTimeHandler : BaseHandler {
 	}
 
 	private BiCommandResult Handle(AdvanceTimeCommand command) {
-		IGameOverview game = command.Game;
-		GameWorld world = command.Game.World;
+		IGameOverview overview = command.Overview;
+		GameWorld world = command.Overview.World;
 		float deltaTime = command.DeltaTime;
 
-		game.DecreaseTimeLeftFromPhase(deltaTime);
-		if (game.CurrentPhase != GamePhase.Fight) return BiCommandResult.Success;
+		overview.DecreaseTimeLeftFromPhase(deltaTime);
+		if (overview.CurrentPhase != GamePhase.Fight) return BiCommandResult.Success;
 
 		foreach (Tower tower in world.GetTileObjectsOfType<Tower>()) {
 			tower.UpdateTarget();
-			if (tower.RemainingCooldownTime > 0) {
+			if (tower.IsOnCooldown) {
 				tower.UpdateCooldown(deltaTime);
 			} else if (tower.Target != null) {
 				tower.Shoot();
@@ -32,7 +32,7 @@ public class AdvanceTimeHandler : BaseHandler {
 		}
 
 		foreach (Barrack barrack in world.GetTileObjectsOfType<Barrack>()) {
-			if (barrack.RemainingCooldownTime > 0) {
+			if (barrack.IsOnCooldown) {
 				barrack.UpdateCooldown(deltaTime);
 			} else if (barrack.QueuedUnits.Any()) {
 				barrack.Spawn();

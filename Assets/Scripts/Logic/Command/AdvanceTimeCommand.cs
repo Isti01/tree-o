@@ -3,11 +3,11 @@
 namespace Logic.Command {
 
 public class AdvanceTimeCommand : BaseCommand {
-	public IGameOverview Game { get; }
+	public IGameOverview Overview { get; }
 	public float DeltaTime { get; }
 
-	public AdvanceTimeCommand(IGameOverview game, float deltaTime) {
-		Game = game;
+	public AdvanceTimeCommand(IGameOverview overview, float deltaTime) {
+		Overview = overview;
 		DeltaTime = deltaTime;
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
 public class Unit {
@@ -20,6 +21,8 @@ public class Unit {
 
 	public Vector2 Position { get; }
 
+	public TilePosition TilePosition => Position.ToTilePosition();
+
 	public IUnitTypeData Type { get; }
 
 	#endregion
@@ -37,7 +40,13 @@ public class Unit {
 	}
 
 	public void Move(float delta) {
+		TilePosition oldPosition = TilePosition;
+
 		throw new NotImplementedException();
+
+		if (!oldPosition.Equals(TilePosition)) {
+			World.Overview.Events.Raise(new UnitMovedTileEvent(this, oldPosition));
+		}
 	}
 
 	public void SkipUnreachableCheckpoints() {

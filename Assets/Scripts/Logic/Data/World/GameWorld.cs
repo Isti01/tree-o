@@ -76,7 +76,13 @@ public class GameWorld {
 	}
 
 	public void DestroyUnit(Unit unit) {
-		throw new NotImplementedException();
+		if (!_units.Contains(unit)) throw new ArgumentException("Unit is not among this world's units");
+
+		Overview.Events.Raise(new UnitDestroyedEvent(unit));
+
+		//This event is special: we modify stuff after dispatching the event.
+		// This is done on purpose: we don't want to lose reference to the unit.
+		_units.Remove(unit);
 	}
 
 	#endregion
