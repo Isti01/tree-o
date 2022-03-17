@@ -6,7 +6,7 @@ namespace Presentation.UI {
 public class MainMenu : MonoBehaviour {
 	private void Start() {
 		var document = GetComponent<UIDocument>();
-		var root = document.rootVisualElement;
+		VisualElement root = document.rootVisualElement;
 
 		var newGameButton = root.Q<Button>("NewGameButton");
 		var exitButton = root.Q<Button>("ExitButton");
