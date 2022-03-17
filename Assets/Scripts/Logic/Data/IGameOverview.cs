@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Logic.Command;
 using Logic.Data.World;
 using Logic.Event;
@@ -13,6 +14,7 @@ public interface IGameOverview {
 	GamePhase CurrentPhase { get; }
 	float TimeLeftFromPhase { get; }
 	Random Random { get; }
+	public IEnumerable<GameTeam> Teams { get; }
 	GameTeam GetTeam(Color color);
 	GameTeam GetEnemyTeam(GameTeam team);
 	void AdvancePhase();

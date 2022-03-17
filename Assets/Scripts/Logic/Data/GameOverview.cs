@@ -4,12 +4,16 @@ using System.Linq;
 using Logic.Command;
 using Logic.Data.World;
 using Logic.Event;
+using Logic.Handler;
+using Logic.System;
 
 namespace Logic.Data {
-public class GameOverview : IGameOverview {
 
+public class GameOverview : IGameOverview {
 	#region Fields
 
+	private readonly IList<BaseSystem> _systems = new List<BaseSystem>();
+	private readonly IList<BaseHandler> _handlers = new List<BaseHandler>();
 	private readonly GameTeam _redTeam;
 	private readonly GameTeam _blueTeam;
 
@@ -42,7 +46,11 @@ public class GameOverview : IGameOverview {
 				eventExceptionHandler.Invoke(exception);
 			}
 		}));
+		RegisterSystems();
+
 		Commands = new CommandDispatcher();
+		RegisterHandlers();
+
 		Random = new Random(seed);
 
 		World = new GameWorld(this, worldWidth, worldHeight);
@@ -103,6 +111,20 @@ public class GameOverview : IGameOverview {
 		}
 	}
 
+	private void RegisterSystems() {
+		_systems.Add(new UnitDamagesCastleSystem());
+		_systems.Add(new UpdateUnitPathSystem());
+		foreach (BaseSystem system in _systems) system.RegisterListeners(Events);
+	}
+
+	private void RegisterHandlers() {
+		_handlers.Add(new AdvancePhaseHandler());
+		_handlers.Add(new AdvanceTimeHandler());
+		_handlers.Add(new ManageUnitHandler());
+		foreach (BaseHandler handler in _handlers) handler.RegisterConsumers(Commands);
+	}
+
 	#endregion
 }
+
 }
