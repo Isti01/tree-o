@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Logic.Data.World;
 using UnityEngine;
+using Vector2 = Logic.Data.World.Vector2;
 
 namespace Presentation.World {
 public class World : MonoBehaviour {
@@ -22,22 +23,31 @@ public class World : MonoBehaviour {
 		GameWorld world = simulation.GameOverview.World;
 		_map = new GameObject[world.Width, world.Height];
 
-		float sizeMultiplier = TilePadding + 1.0f;
 		for (var i = 0; i < world.Width; i++) {
-			float x = (i - world.Width / 2.0f + 0.5f) * sizeMultiplier;
-			for (var j = 0; j < world.Height; j++) {
-				float y = (j - world.Height / 2.0f + 0.5f) * sizeMultiplier;
-				var position = new Vector3(x, y);
-				GameObject tile = Instantiate(Tile, position, Quaternion.identity, transform);
-				_map[i, j] = tile;
-
-				TileObject data = world[i, j];
-				if (data != null) InstantiateStructure(tile, position, data);
-			}
+			for (var j = 0; j < world.Height; j++) InstantiateTile(i, j, world);
 		}
 	}
 
 	private void Update() {}
+
+	private GameObject InstantiateTile(int col, int row, GameWorld world) {
+		float sizeMultiplier = TilePadding + 1.0f;
+
+		float x = col - world.Width / 2.0f + 0.5f;
+		float y = row - world.Height / 2.0f + 0.5f;
+
+		Vector3 position = new Vector3(x, y) * sizeMultiplier;
+
+		GameObject tile = Instantiate(Tile, position, Quaternion.identity, transform);
+		var tileComponent = tile.GetComponent<Tile>();
+		tileComponent.Position = new Vector2(col, row);
+		_map[col, row] = tile;
+
+		TileObject data = world[col, row];
+		if (data != null) InstantiateStructure(tile, position, data);
+
+		return tile;
+	}
 
 	private GameObject InstantiateStructure(GameObject parent, Vector3 position, TileObject tileData) {
 		switch (tileData) {
