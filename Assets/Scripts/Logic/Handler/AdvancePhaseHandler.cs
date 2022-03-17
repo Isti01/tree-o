@@ -9,7 +9,7 @@ public class AdvancePhaseHandler : BaseHandler {
 	}
 
 	private BiCommandResult On(AdvancePhaseCommand command) {
-		GameOverview overview = command.Overview;
+		IGameOverview overview = command.Overview;
 		if (overview.CurrentPhase == GamePhase.Finished) {
 			return BiCommandResult.Failure;
 		}

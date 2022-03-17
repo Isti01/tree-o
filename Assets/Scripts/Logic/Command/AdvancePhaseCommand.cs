@@ -3,9 +3,9 @@
 namespace Logic.Command {
 
 public class AdvancePhaseCommand : BaseCommand {
-	public GameOverview Overview { get; }
+	public IGameOverview Overview { get; }
 
-	public AdvancePhaseCommand(GameOverview overview) {
+	public AdvancePhaseCommand(IGameOverview overview) {
 		Overview = overview;
 	}
 }

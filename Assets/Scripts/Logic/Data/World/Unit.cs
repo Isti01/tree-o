@@ -49,7 +49,8 @@ public class Unit {
 		}
 	}
 
-	public void SkipUnreachableCheckpoints() {
+	public void UpdatePlannedPath() {
+		//TODO invalidate cached navigation data, if such a cache exists
 		throw new NotImplementedException();
 	}
 
