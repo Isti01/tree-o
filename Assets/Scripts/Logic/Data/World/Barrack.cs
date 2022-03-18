@@ -18,7 +18,7 @@ public class Barrack : Building {
 
 	public IReadOnlyCollection<TilePosition> CheckPoints => new List<TilePosition>(_checkPoints);
 
-	public float SpawnCooldownTime => 0.5f;
+	public float SpawnCooldownTime => 0.5f; //TODO don't hardcode this value
 
 	public float RemainingCooldownTime { get; private set; }
 
@@ -59,6 +59,10 @@ public class Barrack : Building {
 		}
 	}
 
+	public void ResetCooldown() {
+		RemainingCooldownTime = 0;
+	}
+
 	public void Spawn() {
 		if (!QueuedUnits.Any())
 			throw new InvalidOperationException($"No queued units exist; nothing to spawn");
@@ -66,6 +70,7 @@ public class Barrack : Building {
 		if (IsOnCooldown)
 			throw new InvalidOperationException($"Spawning is on cooldown: {RemainingCooldownTime}");
 
+		RemainingCooldownTime = SpawnCooldownTime;
 		IUnitTypeData type = _queuedUnits[0];
 		_queuedUnits.RemoveAt(0);
 		World.DeployUnit(this, type);

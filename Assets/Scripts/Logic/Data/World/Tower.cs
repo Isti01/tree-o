@@ -12,7 +12,7 @@ public class Tower : Building {
 
 	public int Level { get; }
 
-	public float RemainingCooldownTime { get; }
+	public float RemainingCooldownTime { get; private set; }
 
 	public bool IsOnCooldown => RemainingCooldownTime > 0;
 
@@ -34,6 +34,10 @@ public class Tower : Building {
 
 	public void UpdateCooldown(float delta) {
 		throw new NotImplementedException();
+	}
+
+	public void ResetCooldown() {
+		RemainingCooldownTime = 0;
 	}
 
 	public void Shoot() {
