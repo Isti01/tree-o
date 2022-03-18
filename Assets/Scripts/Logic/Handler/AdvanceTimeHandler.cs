@@ -18,6 +18,13 @@ public class AdvanceTimeHandler : BaseHandler {
 		overview.DecreaseTimeLeftFromPhase(deltaTime);
 		if (overview.CurrentPhase != GamePhase.Fight) return BiCommandResult.Success;
 
+		bool anyUnitAlive = world.Units.Any();
+		bool anyUnitQueued = world.GetTileObjectsOfType<Barrack>().Any(b => b.QueuedUnits.Any());
+		if (!anyUnitAlive && !anyUnitQueued) {
+			overview.AdvancePhase();
+			return BiCommandResult.Success;
+		}
+
 		foreach (Tower tower in world.GetTileObjectsOfType<Tower>()) {
 			tower.UpdateTarget();
 			if (tower.IsOnCooldown) {
