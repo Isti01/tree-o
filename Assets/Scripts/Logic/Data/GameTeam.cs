@@ -16,7 +16,7 @@ public class GameTeam {
 
 	public Castle Castle { get; }
 
-	public int Money { get; private set; }
+	public int Money { get; private set; } = 100; //TODO don't use a hardcoded value
 
 	public int PresentTowerCount { get; }
 
