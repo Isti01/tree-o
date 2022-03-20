@@ -4,17 +4,14 @@ using UnityEngine;
 namespace Presentation.World {
 [CreateAssetMenu(fileName = "New Tower Type", menuName = "World/Structures/Tower Type", order = 1)]
 public class TowerTypeData : ScriptableObject, ITowerTypeData {
+	public Sprite sprite;
 	public new string name;
-
 	public float damage;
-
 	public float range;
-
 	public float cooldownTime;
-
 	public int buildingCost;
-
 	public int upgradeCost;
+
 	public string Name => name;
 	public float Damage => damage;
 	public float Range => range;

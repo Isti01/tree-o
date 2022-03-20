@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; flex-direction: row;">
+        <ui:VisualElement style="flex-grow: 1;">
+            <ui:VisualElement name="GameView" style="height: 214px; flex-grow: 1;" />
+            <ui:VisualElement name="BottomPanel" style="height: 175px; background-color: rgb(255, 255, 255);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="TopPanel" style="width: 175px; background-color: rgb(255, 255, 255);" />
+    </ui:VisualElement>
+</ui:UXML>
