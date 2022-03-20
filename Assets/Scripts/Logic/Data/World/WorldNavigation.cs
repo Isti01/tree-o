@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Logic.Data.World {
-
 public class WorldNavigation {
 	private readonly TileObject[,] _grid;
 
@@ -44,13 +44,65 @@ public class WorldNavigation {
 		return true; //TODO implement
 	}
 
-	public IEnumerable<Vector2> TryGetPathDeltas(Vector2 from, Vector2 to, float collider) {
-		throw new NotImplementedException();
+	public List<Vector2> TryGetPathDeltas(Vector2 from, Vector2 to, float collider) {
+		if ((int) from.X == (int) to.X && (int) from.Y == (int) to.Y) return new List<Vector2>();
+		Dijkstra[,] dgrid = new Dijkstra[_grid.GetLength(0), _grid.GetLength(1)];
+		for (int i = 0; i < dgrid.GetLength(0); i++) {
+			for (int j = 0; j < dgrid.GetLength(1); j++) {
+				dgrid[i, j] = new Dijkstra(i, j);
+			}
+		}
+
+		dgrid[(int) from.X, (int) from.Y].D = 0;
+		List<Dijkstra> q = new List<Dijkstra>();
+		foreach (var item in dgrid) {
+			q.Add(item);
+		}
+
+		int[] difx = {0, 0, -1, 1};
+		int[] dify = {1, -1, 0, 0};
+		Dijkstra u = dgrid[(int) from.X, (int) from.Y];
+		q.Remove(u);
+		while (u.D < Int32.MaxValue && q.Count > 0) {
+			for (int i = 0; i < 4; i++) {
+				int newx = u.Ox + difx[i];
+				int newy = u.Oy + dify[i];
+				if (Math.Min(newx, newy) >= 0
+					&& newx < dgrid.GetLength(0)
+					&& newy < dgrid.GetLength(1)) {
+					if ((_grid[newx, newy] == null || (newx == (int) to.X && newy == (int) to.Y))
+						&& dgrid[newx, newy].D > dgrid[u.Ox, u.Oy].D + 1) {
+						//üres vagy célpont
+						dgrid[newx, newy].D = dgrid[u.Ox, u.Oy].D + 1;
+						dgrid[newx, newy].Px = u.Ox;
+						dgrid[newx, newy].Py = u.Oy;
+					}
+				}
+			}
+
+			int min = q.Min(y => y.D);
+			u = q.Where(x => x.D == min).First();
+			q.Remove(u);
+		}
+
+		List<Vector2> pathDeltas = new List<Vector2>();
+
+		Dijkstra target = dgrid[(int) to.X, (int) to.Y];
+		Dijkstra prev = dgrid[target.Px, target.Py];
+		while (!(prev.Ox == (int) from.X && prev.Oy == (int) from.Y)) {
+			pathDeltas.Add(new Vector2(target.Ox - prev.Ox, target.Oy - prev.Oy));
+			target = prev;
+			prev = dgrid[prev.Px, prev.Py];
+		}
+
+		pathDeltas.Add(new Vector2(target.Ox + 0.5F - from.X, target.Oy + 0.5F - from.Y));
+
+		pathDeltas.Reverse();
+		return pathDeltas;
 	}
 
 	private class FillerTileObject : TileObject {
 		public FillerTileObject(TilePosition position) : base(null, position) {}
 	}
 }
-
 }
