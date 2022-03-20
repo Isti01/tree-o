@@ -1,3 +1,4 @@
+using Presentation.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -21,9 +22,6 @@ public class SimulationCamera : MonoBehaviour {
 
 	[SerializeField]
 	private float panSpeed = 100;
-
-	[SerializeField]
-	private UIDocument ui;
 
 	private Camera _cam;
 
@@ -50,19 +48,16 @@ public class SimulationCamera : MonoBehaviour {
 	}
 
 	private void SetupCallbacks() {
-		var gameView = ui.rootVisualElement.Q<VisualElement>("GameView");
-		gameView.RegisterCallback<MouseDownEvent>(evt => {
-			// Right Button
-			_isRightButtonDown |= evt.button == 1;
-		});
-		gameView.RegisterCallback<MouseUpEvent>(evt => {
-			// Right Button
-			_isRightButtonDown &= evt.button != 1;
-		});
-		gameView.RegisterCallback<MouseMoveEvent>(evt => {
+		var simulationUI = FindObjectOfType<SimulationUI>();
+
+		simulationUI.OnGameViewPanStart += evt => _isRightButtonDown |= evt.button == 1;
+
+		simulationUI.OnGameViewPanEnd += evt => _isRightButtonDown &= evt.button != 1;
+
+		simulationUI.OnGameViewPanUpdate += evt => {
 			if (_isRightButtonDown)
 				_panTarget -= new Vector3(evt.mouseDelta.x * panSensitivity.x, -evt.mouseDelta.y * panSensitivity.y, 0);
-		});
+		};
 	}
 }
 }

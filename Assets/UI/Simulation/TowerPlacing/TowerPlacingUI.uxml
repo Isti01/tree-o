@@ -1,0 +1,22 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/Simulation/GameUISTyles.uss" />
+    <ui:VisualElement name="TowerPlacingUI" style="flex-grow: 1;">
+        <ui:VisualElement name="GameUIBase" class="GameUIStyles">
+            <ui:VisualElement name="VisualElement" class="ContainerStyle">
+                <ui:VisualElement class="ColumnContainer">
+                    <ui:VisualElement name="GameView" class="GameViewStyle" />
+                    <ui:VisualElement name="BottomPanel" class="BottomPanelStyle" />
+                </ui:VisualElement>
+                <ui:VisualElement name="TopPanel" class="TopPanelStyle">
+                    <ui:VisualElement name="NextButtonContainer" class="NextButtonStyle">
+                        <ui:Button text="Next" display-tooltip-when-elided="true" name="Next" style="bottom: auto; position: relative; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px; flex-grow: 1; font-size: 32px;" />
+                    </ui:VisualElement>
+                    <ui:Label text="Place Towers" display-tooltip-when-elided="true" class="TitleStyle" />
+                    <ui:Label text="Player Red&apos;s turn" display-tooltip-when-elided="true" name="PlayerNameTurn" />
+                    <ui:Label text="Budget: 123" display-tooltip-when-elided="true" name="BudgetText" />
+                    <ui:VisualElement name="DeployedUnitsContainer" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
