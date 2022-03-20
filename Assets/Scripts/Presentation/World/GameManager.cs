@@ -3,15 +3,15 @@ using UnityEngine.SceneManagement;
 
 namespace Presentation.World {
 public class GameManager : MonoBehaviour {
-	public const string MAIN_MENU_SCENE = "Scenes/MainMenu";
-	public const string SIMULATION_SCENE = "Scenes/Simulation";
+	public const string MainMenuScene = "Scenes/MainMenu";
+	public const string SimulationScene = "Scenes/Simulation";
 
 	public void LoadMenu() {
-		SceneManager.LoadScene(MAIN_MENU_SCENE);
+		SceneManager.LoadScene(MainMenuScene);
 	}
 
 	public void LoadNewGame() {
-		SceneManager.LoadScene(SIMULATION_SCENE);
+		SceneManager.LoadScene(SimulationScene);
 	}
 
 	public void ExitGame() {
