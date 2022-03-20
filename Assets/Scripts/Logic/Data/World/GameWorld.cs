@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Logic.Event.World.Tower;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
@@ -23,6 +24,8 @@ public class GameWorld {
 	public int Height { get; }
 
 	public TileObject this[int x, int y] => GetTile(x, y);
+
+	public TileObject this[TilePosition position] => GetTile(position.X, position.Y);
 
 	public IEnumerable<TileObject> TileObjects {
 		get {
@@ -59,11 +62,24 @@ public class GameWorld {
 		return TileObjects.Where(o => o is T).Cast<T>();
 	}
 
-	public void BuildTower(GameTeam team, ITowerTypeData data, TilePosition position) {
-		throw new NotImplementedException();
+	public void BuildTower(GameTeam team, ITowerTypeData type, TilePosition position) {
+		if (_grid[position.X, position.Y] != null)
+			throw new ArgumentException($"Position {position} is already occupied");
+
+		Tower tower = new Tower(this, position, team.TeamColor, type);
+		_grid[position.X, position.Y] = tower;
+		Overview.Events.Raise(new TowerBuiltEvent(tower));
 	}
+
 	public void DestroyTower(Tower tower) {
-		throw new NotImplementedException();
+		if (_grid[tower.Position.X, tower.Position.Y] != tower)
+			throw new ArgumentException("Tower is not at the position it says it is");
+
+		Overview.Events.Raise(new TowerDestroyedEvent(tower));
+
+		//This event is special: we modify stuff after dispatching the event.
+		// This is done on purpose: we don't want to lose reference to the tower.
+		_grid[tower.Position.X, tower.Position.Y] = null;
 	}
 
 	public void DeployUnit(Barrack barrack, IUnitTypeData type) {

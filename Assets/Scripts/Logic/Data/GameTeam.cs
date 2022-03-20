@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Logic.Data.World;
 using Logic.Event.Team;
 
@@ -16,15 +17,16 @@ public class GameTeam {
 
 	public Castle Castle { get; }
 
-	public int Money { get; private set; } = 100; //TODO don't use a hardcoded value
+	public int Money { get; private set; } = 500; //TODO don't use a hardcoded value
 
-	public int PresentTowerCount { get; }
+	public int PresentTowerCount => Overview.World.GetTileObjectsOfType<Tower>()
+		.Count(tower => tower.OwnerColor == TeamColor);
 
 	public int MoneySpent { get; private set; }
 
 	public int PurchasedUnitCount { get; private set; }
 
-	public int BuiltTowerCount { get; }
+	public int BuiltTowerCount { get; private set; }
 
 
 	#endregion
@@ -48,8 +50,21 @@ public class GameTeam {
 		Overview.Events.Raise(new TeamMoneyUpdatedEvent(this, oldMoney));
 	}
 
+	public void GiveMoney(int amount) {
+		if (amount <= 0) throw new ArgumentException($"Cannot give non-positive amount {amount}");
+
+		int oldMoney = Money;
+		Money += amount;
+		Overview.Events.Raise(new TeamMoneyUpdatedEvent(this, oldMoney));
+	}
+
 	public void IncrementPurchasedUnitCount() {
 		PurchasedUnitCount++;
+		Overview.Events.Raise(new TeamStatisticsUpdatedEvent(this));
+	}
+
+	public void IncrementBuiltTowerCount() {
+		BuiltTowerCount++;
 		Overview.Events.Raise(new TeamStatisticsUpdatedEvent(this));
 	}
 

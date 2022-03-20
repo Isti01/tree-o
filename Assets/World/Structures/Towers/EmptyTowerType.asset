@@ -18,4 +18,5 @@ MonoBehaviour:
   range: 100
   cooldownTime: 100
   buildingCost: 100
+  destroyRefund: 50
   upgradeCost: 100
