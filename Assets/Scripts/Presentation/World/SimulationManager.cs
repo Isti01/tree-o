@@ -1,8 +1,9 @@
 using System;
 using Logic.Command;
 using Logic.Data;
+using Logic.Data.World;
 using UnityEngine;
-using Vector2 = Logic.Data.World.Vector2;
+using Vector2 = UnityEngine.Vector2;
 
 namespace Presentation.World {
 public class SimulationManager : MonoBehaviour {
@@ -10,10 +11,10 @@ public class SimulationManager : MonoBehaviour {
 	public int WorldHeight = 10;
 	public int Seed = 1337;
 
-	public bool IsPaused { get; private set; } = false;
-
 	[SerializeField]
 	private Camera mainCamera;
+
+	public bool IsPaused { get; private set; }
 
 	public GameOverview GameOverview { get; private set; }
 
@@ -25,7 +26,7 @@ public class SimulationManager : MonoBehaviour {
 		GameOverview = new GameOverview(ExceptionHandler, Seed, WorldWidth, WorldHeight);
 	}
 
-	public void Update() {
+	private void Update() {
 		Tile tile = GetClickedTile();
 		if (tile != null) {
 			Debug.Log("A tile has been clicked");
@@ -44,12 +45,10 @@ public class SimulationManager : MonoBehaviour {
 	private Tile GetClickedTile() {
 		if (!Input.GetMouseButtonDown(0)) return null;
 		Vector3 mousePosition = Input.mousePosition;
-		RaycastHit2D result = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(mousePosition), UnityEngine.Vector2.zero);
+		RaycastHit2D result = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(mousePosition), Vector2.zero);
 
 		return !result ? null : result.collider.gameObject.GetComponent<Tile>();
 	}
-
-	public event Action<Vector2> OnTileSelected;
 
 	public void ResumeGame() {
 		Time.timeScale = 1;
@@ -60,5 +59,7 @@ public class SimulationManager : MonoBehaviour {
 		Time.timeScale = 0;
 		IsPaused = true;
 	}
+
+	public event Action<TilePosition> OnTileSelected;
 }
 }

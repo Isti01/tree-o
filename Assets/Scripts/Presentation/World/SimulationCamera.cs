@@ -1,6 +1,5 @@
 using Presentation.UI;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Presentation.World {
 [RequireComponent(typeof(Camera))]

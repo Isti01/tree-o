@@ -1,5 +1,5 @@
+using Logic.Data.World;
 using UnityEngine;
-using Vector2 = Logic.Data.World.Vector2;
 
 namespace Presentation.World {
 [RequireComponent(typeof(SpriteRenderer))]
@@ -9,7 +9,7 @@ public class Tile : MonoBehaviour {
 
 	private SpriteRenderer _spriteRenderer;
 
-	public Vector2 Position { get; set; }
+	public TilePosition Position { get; set; }
 
 	private void Start() {
 		_spriteRenderer = GetComponent<SpriteRenderer>();
