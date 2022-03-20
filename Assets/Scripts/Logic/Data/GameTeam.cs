@@ -17,10 +17,15 @@ public class GameTeam {
 
 	public Castle Castle { get; }
 
+	public IEnumerable<Tower> Towers => Overview.World.GetTileObjectsOfType<Tower>()
+		.Where(t => t.OwnerColor == TeamColor);
+
+	public IEnumerable<Unit> Units => Overview.World.Units
+		.Where(t => t.Owner == this);
+
 	public int Money { get; private set; } = 500; //TODO don't use a hardcoded value
 
-	public int PresentTowerCount => Overview.World.GetTileObjectsOfType<Tower>()
-		.Count(tower => tower.OwnerColor == TeamColor);
+	public int PresentTowerCount => Towers.Count();
 
 	public int MoneySpent { get; private set; }
 
