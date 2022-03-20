@@ -1,7 +1,9 @@
 using System;
+using Logic.Command;
 using Logic.Command.Unit;
 using Logic.Data;
 using Logic.Data.World;
+using Logic.Event;
 using Presentation.World;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -23,44 +25,103 @@ public class SimulationUI : MonoBehaviour {
 	private BattleUI _battleUI;
 	private GameOverOverlay _gameOverOverlay;
 	private PauseOverlay _pauseOverlay;
-
 	private TowerTypeData _selectedTowerType;
-	private SimulationManager _simulationManager;
 	private TowerPlacingUI _towerPlacing;
 	private UIState _uiState = UIState.UnitDeployment;
 	private UnitDeploymentUI _unitDeployment;
 
+	private SimulationManager _simulationManager;
+	private GameManager _gameManager;
+
 	private GameOverview GameOverview => _simulationManager.GameOverview;
 
 	private void Start() {
+		_gameManager = FindObjectOfType<GameManager>();
+
 		_simulationManager = FindObjectOfType<SimulationManager>();
 		_simulationManager.OnTileSelected += OnTileSelected;
 
 		_battleUI = GetComponentInChildren<BattleUI>();
-		_gameOverOverlay = GetComponentInChildren<GameOverOverlay>();
-		_pauseOverlay = GetComponentInChildren<PauseOverlay>();
-		_towerPlacing = GetComponentInChildren<TowerPlacingUI>();
+		_battleUI.OnPauseClicked += OnPauseClicked;
 
+		_gameOverOverlay = GetComponentInChildren<GameOverOverlay>();
+
+		_pauseOverlay = GetComponentInChildren<PauseOverlay>();
+
+		_pauseOverlay.OnResumeClicked += OnResumeClicked;
+		_pauseOverlay.OnNewGameClicked += OnNewGameClicked;
+		_pauseOverlay.OnExitClicked += OnExitClicked;
+
+		_towerPlacing = GetComponentInChildren<TowerPlacingUI>();
 		_towerPlacing.SetTeamColors(teamRedColor, teamBlueColor);
-		_towerPlacing.Hide();
 
 		_towerPlacing.OnNextClicked += StepTowerPlacing;
 		_towerPlacing.OnTowerTypeSelected += OnTowerTypeSelected;
 
 		_unitDeployment = GetComponentInChildren<UnitDeploymentUI>();
-
 		_unitDeployment.SetTeamColors(teamRedColor, teamBlueColor);
-		_unitDeployment.Hide();
 
 		_unitDeployment.OnNextClicked += StepUnitDeployment;
 		_unitDeployment.OnUnitPurchased += OnUnitPurchased;
 
+		GameOverview.Events.AddListener<PhaseAdvancedEvent>(args => {
+			switch (GameOverview.CurrentPhase) {
+				case GamePhase.Prepare:
+					UpdateUiState(UIState.TowerPlacing);
+					break;
+				case GamePhase.Fight:
+					UpdateUiState(UIState.Battle);
+					break;
+				case GamePhase.Finished:
+					UpdateUiState(UIState.GameOver);
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+		});
+
+		HideUIs();
 		SetupMousePanning();
 		UpdateUiState(UIState.TowerPlacing);
 	}
 
+	private void OnResumeClicked() {
+		_simulationManager.ResumeGame();
+		_pauseOverlay.Hide();
+	}
+
+	private void OnNewGameClicked() {
+		_simulationManager.ResumeGame();
+		_gameManager.LoadNewGame();
+	}
+
+	private void OnExitClicked() {
+		_simulationManager.ResumeGame();
+		_gameManager.LoadMenu();
+	}
+
 	private void OnDestroy() {
 		_simulationManager.OnTileSelected -= OnTileSelected;
+
+		_battleUI.OnPauseClicked -= OnPauseClicked;
+
+		_towerPlacing.OnNextClicked -= StepTowerPlacing;
+		_towerPlacing.OnTowerTypeSelected -= OnTowerTypeSelected;
+
+		_unitDeployment.OnNextClicked -= StepUnitDeployment;
+		_unitDeployment.OnUnitPurchased -= OnUnitPurchased;
+	}
+
+	private void HideUIs() {
+		_pauseOverlay.Hide();
+		_battleUI.Hide();
+		_unitDeployment.Hide();
+		_towerPlacing.Hide();
+	}
+
+	private void OnPauseClicked() {
+		UpdateUiState(UIState.Paused);
+		_simulationManager.PauseGame();
 	}
 
 	private void SetupMousePanning() {
@@ -101,7 +162,6 @@ public class SimulationUI : MonoBehaviour {
 		if (_activePlayer == Logic.Data.Color.Blue) {
 			StartTowerPlacing(Logic.Data.Color.Red);
 		} else {
-			_towerPlacing.Hide();
 			UpdateUiState(UIState.UnitDeployment);
 		}
 	}
@@ -127,8 +187,10 @@ public class SimulationUI : MonoBehaviour {
 		if (_activePlayer == Logic.Data.Color.Blue) {
 			StartUnitDeployment(Logic.Data.Color.Red);
 		} else {
-			_unitDeployment.Hide();
 			UpdateUiState(UIState.Battle);
+			if (GameOverview.CurrentPhase == GamePhase.Prepare)
+				if (!GameOverview.Commands.Issue(new AdvancePhaseCommand(GameOverview)).IsSuccess)
+					Debug.LogError("[GamePhase] Failed to advance the GamePhase");
 		}
 	}
 
@@ -141,18 +203,31 @@ public class SimulationUI : MonoBehaviour {
 		_unitDeployment.SetPlayerMoney(playerData.Money);
 	}
 
+	private void StartBattle() {
+		_battleUI.Show();
+	}
+
+	private void ShowPauseOverlay() {
+		_pauseOverlay.Show();
+	}
+
 	private void UpdateUiState(UIState uiState) {
 		_uiState = uiState;
 		switch (_uiState) {
 			case UIState.TowerPlacing:
+				HideUIs();
 				StartTowerPlacing(Logic.Data.Color.Blue);
 				break;
 			case UIState.UnitDeployment:
+				HideUIs();
 				StartUnitDeployment(Logic.Data.Color.Blue);
 				break;
 			case UIState.Battle:
+				HideUIs();
+				StartBattle();
 				break;
 			case UIState.Paused:
+				ShowPauseOverlay();
 				break;
 			case UIState.GameOver:
 				break;

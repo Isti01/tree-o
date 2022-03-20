@@ -10,6 +10,8 @@ public class SimulationManager : MonoBehaviour {
 	public int WorldHeight = 10;
 	public int Seed = 1337;
 
+	public bool IsPaused { get; private set; } = false;
+
 	[SerializeField]
 	private Camera mainCamera;
 
@@ -25,7 +27,10 @@ public class SimulationManager : MonoBehaviour {
 
 	public void Update() {
 		Tile tile = GetClickedTile();
-		if (tile != null) OnTileSelected?.Invoke(tile.Position);
+		if (tile != null) {
+			Debug.Log("A tile has been clicked");
+			OnTileSelected?.Invoke(tile.Position);
+		}
 	}
 
 	private void FixedUpdate() {
@@ -45,5 +50,15 @@ public class SimulationManager : MonoBehaviour {
 	}
 
 	public event Action<Vector2> OnTileSelected;
+
+	public void ResumeGame() {
+		Time.timeScale = 1;
+		IsPaused = false;
+	}
+
+	public void PauseGame() {
+		Time.timeScale = 0;
+		IsPaused = true;
+	}
 }
 }
