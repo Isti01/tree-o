@@ -28,11 +28,14 @@ public class ManageTowerHandler : BaseHandler {
 
 		ICollection<TilePosition> blockedTiles = new List<TilePosition>();
 		blockedTiles.Add(command.Position);
-		foreach (Unit unit in world.Units) {
-			TilePosition from = unit.TilePosition;
-			TilePosition to = overview.GetEnemyTeam(unit.Owner).Castle.Position;
-			if (!world.Navigation.IsPositionReachable(from, to, blockedTiles)) {
-				return BuildTowerCommand.CommandResult.LeavesNoPathForUnit;
+
+		foreach (GameTeam team in overview.Teams) {
+			TilePosition to = overview.GetEnemyTeam(team).Castle.Position;
+			foreach (TilePosition from in team.Barracks.Select(b => b.Position)
+				.Concat(team.Units.Select(u => u.TilePosition))) {
+				if (!world.Navigation.IsPositionReachable(from, to, blockedTiles)) {
+					return BuildTowerCommand.CommandResult.LeavesNoPathForUnit;
+				}
 			}
 		}
 
