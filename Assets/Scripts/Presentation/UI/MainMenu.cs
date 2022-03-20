@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Presentation.UI {
+[RequireComponent(typeof(UIDocument))]
 public class MainMenu : MonoBehaviour {
 	private void Start() {
 		var document = GetComponent<UIDocument>();
