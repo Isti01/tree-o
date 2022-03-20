@@ -1,0 +1,52 @@
+.GameUIStyles {
+    flex-grow: 1;
+}
+
+.BottomPanelStyle {
+    height: 175px;
+    background-color: rgb(238, 238, 238);
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    flex-direction: row;
+    align-items: auto;
+    justify-content: space-around;
+}
+
+.TopPanelStyle {
+    width: 175px;
+    background-color: rgb(238, 238, 238);
+}
+
+.ContainerStyle {
+    flex-grow: 1;
+    flex-direction: row;
+}
+
+.ColumnContainer {
+    flex-grow: 1;
+}
+
+.GameViewStyle {
+    height: 214px;
+    flex-grow: 1;
+}
+
+.NextButtonStyle {
+    bottom: 0;
+    right: 0;
+    left: 0;
+    position: absolute;
+    height: 175px;
+}
+
+.TitleStyle {
+    font-size: 20px;
+    padding-top: 12px;
+    -unity-font-style: bold;
+}
+
+.SubtitleStyle {
+    font-size: 18px;
+}

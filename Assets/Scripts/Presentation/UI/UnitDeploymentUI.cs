@@ -78,11 +78,15 @@ public class UnitDeploymentUI : MonoBehaviour {
 	public void SetActivePlayer(Color activePlayer) {
 		_activePlayer = activePlayer;
 
-		SetupCards();
-		UnityEngine.Color color = _activePlayer == Color.Blue ? _teamBlueColor : _teamRedColor;
+		SetupCards(); // TODO maybe do this better (store references to the cards, and query the deployed units by ref)
+		bool isBlue = _activePlayer == Color.Blue;
+		UnityEngine.Color color = isBlue ? _teamBlueColor : _teamRedColor;
 
 		RootElement.Q(SimulationUI.TopPanel).style.backgroundColor = color;
 		RootElement.Q(SimulationUI.BottomPanel).style.backgroundColor = color;
+
+		string playerName = isBlue ? "Blue" : "Red";
+		RootElement.Q<Label>("PlayerNameTurn").text = $"Player {playerName}'s turn";
 	}
 
 	public void SetPlayerMoney(int playerMoney) {
