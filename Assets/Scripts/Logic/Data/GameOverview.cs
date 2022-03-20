@@ -120,6 +120,7 @@ public class GameOverview : IGameOverview {
 	private void RegisterHandlers() {
 		_handlers.Add(new AdvancePhaseHandler());
 		_handlers.Add(new AdvanceTimeHandler());
+		_handlers.Add(new ManageTowerHandler());
 		_handlers.Add(new ManageUnitHandler());
 		foreach (BaseHandler handler in _handlers) handler.RegisterConsumers(Commands);
 	}

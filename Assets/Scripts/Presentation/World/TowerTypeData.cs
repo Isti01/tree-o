@@ -10,6 +10,7 @@ public class TowerTypeData : ScriptableObject, ITowerTypeData {
 	public float range;
 	public float cooldownTime;
 	public int buildingCost;
+	public int destroyRefund;
 	public int upgradeCost;
 
 	public string Name => name;
@@ -17,6 +18,7 @@ public class TowerTypeData : ScriptableObject, ITowerTypeData {
 	public float Range => range;
 	public float CooldownTime => cooldownTime;
 	public int BuildingCost => buildingCost;
+	public int DestroyRefund => destroyRefund;
 	public int UpgradeCost => upgradeCost;
 }
 }

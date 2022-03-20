@@ -5,7 +5,7 @@ public class Tower : Building {
 
 	#region Properties
 
-	public ITowerTypeData Data { get; }
+	public ITowerTypeData Type { get; }
 
 	//TODO we need a CanBeNull annotation or some documentation here
 	public Unit Target { get; }
@@ -20,9 +20,9 @@ public class Tower : Building {
 
 	#region Methods
 
-	public Tower(GameWorld world, TilePosition position, Color owner, ITowerTypeData data)
+	public Tower(GameWorld world, TilePosition position, Color owner, ITowerTypeData type)
 		: base(world, position, owner) {
-		Data = data;
+		Type = type;
 	}
 
 	public void Upgrade() {
