@@ -19,7 +19,7 @@ public class Unit : MonoBehaviour {
 	}
 
 	private void FixedUpdate() {
-		transform.localPosition = new Vector3(_data.Position.X, _data.Position.Y);
+		transform.localPosition = new Vector3(_data.Position.X - 0.5f, _data.Position.Y - 0.5f);
 	}
 
 	public void SetData(Logic.Data.World.Unit data) {

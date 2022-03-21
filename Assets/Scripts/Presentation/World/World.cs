@@ -45,7 +45,7 @@ public class World : MonoBehaviour {
 		try {
 			Logic.Data.World.Unit unitData = e.Unit;
 			GameObject unit = Instantiate(Unit, gameObject.transform);
-			unit.transform.localPosition = new Vector3(unitData.Position.X, unitData.Position.Y);
+			unit.transform.localPosition = new Vector3(unitData.Position.X - 0.5f, unitData.Position.Y - 0.5f);
 			var unitComponent = unit.GetComponent<Unit>();
 			unitComponent.SetData(unitData);
 
@@ -57,7 +57,7 @@ public class World : MonoBehaviour {
 
 	private void OnUnitMovedTile(UnitMovedTileEvent e) {
 		if (_units.TryGetValue(e.Unit, out Unit unit))
-			unit.transform.localPosition = new Vector3(e.Unit.Position.X, e.Unit.Position.Y);
+			unit.transform.localPosition = new Vector3(e.Unit.Position.X - 0.5f, e.Unit.Position.Y - 0.5f);
 		else
 			Debug.LogError($"Failed to retrieve the unit {e.Unit}");
 	}

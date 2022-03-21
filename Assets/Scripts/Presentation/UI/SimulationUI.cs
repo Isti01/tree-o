@@ -16,7 +16,7 @@ public class SimulationUI : MonoBehaviour {
 	public const string TopPanel = "TopPanel";
 	public const string NextButton = "Next";
 	public const string BudgetText = "BudgetText";
-	public static readonly string BottomPanel = "BottomPanel";
+	public const string BottomPanel = "BottomPanel";
 
 	public Color teamRedColor;
 	public Color teamBlueColor;
