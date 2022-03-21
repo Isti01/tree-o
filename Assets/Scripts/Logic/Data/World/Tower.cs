@@ -29,7 +29,7 @@ public class Tower : Building {
 		throw new NotImplementedException();
 	}
 	public void UpdateTarget() {
-		throw new NotImplementedException();
+		// TODO implement UpdateTarget
 	}
 
 	public void UpdateCooldown(float delta) {

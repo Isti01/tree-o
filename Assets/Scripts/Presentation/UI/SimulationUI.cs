@@ -172,12 +172,8 @@ public class SimulationUI : MonoBehaviour {
 	private void OnTileSelected(TilePosition position) {
 		GameTeam playerData = GameOverview.GetTeam(_activePlayer);
 		if (_uiState == UIState.TowerPlacing && _selectedTowerType != null) {
-			var result = GameOverview.Commands.Issue(new BuildTowerCommand(playerData, _selectedTowerType, position));
-
-			if (result.IsSuccess) {
-				string towerName = _selectedTowerType.name;
-				Debug.Log($"[TowerPlacing]: {playerData.TeamColor} team placed {towerName} tower to {position}");
-			}
+			GameOverview.Commands.Issue(new BuildTowerCommand(playerData, _selectedTowerType, position));
+			// TODO maybe handle the possible outcomes
 			_towerPlacing.SetPlayerMoney(playerData.Money);
 		} else if (_uiState == UIState.TowerPlacing) {
 			TileObject tileObject = GameOverview.World[position.X, position.Y];
