@@ -88,7 +88,7 @@ public class GameOverview : IGameOverview {
 
 		if (CurrentPhase == GamePhase.Prepare) {
 			CurrentPhase = GamePhase.Fight;
-			TimeLeftFromPhase = 100; //TODO don't hardcode this value
+			TimeLeftFromPhase = 5; //TODO don't hardcode this value
 		} else if (CurrentPhase == GamePhase.Fight) {
 			if (Teams.Any(t => t.Castle.IsDestroyed)) {
 				CurrentPhase = GamePhase.Finished;

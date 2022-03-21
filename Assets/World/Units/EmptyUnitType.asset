@@ -16,5 +16,5 @@ MonoBehaviour:
   name: Empty
   health: 100
   damage: 1
-  speed: 5
+  speed: 2
   cost: 100
