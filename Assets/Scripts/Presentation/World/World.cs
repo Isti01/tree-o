@@ -15,13 +15,14 @@ public class World : MonoBehaviour {
 	public GameObject Unit;
 
 	public float TilePadding = 0.1f;
+
 	private GameObject[,] _map;
-	public Dictionary<Logic.Data.World.Unit, Unit> Units;
+	private Dictionary<Logic.Data.World.Unit, Unit> _units;
 
 	private void Start() {
 		var simulation = FindObjectOfType<SimulationManager>();
 
-		Units = new Dictionary<Logic.Data.World.Unit, Unit>();
+		_units = new Dictionary<Logic.Data.World.Unit, Unit>();
 
 		simulation.GameOverview.Events.AddListener<TowerBuiltEvent>(OnTowerBuilt);
 
@@ -48,22 +49,21 @@ public class World : MonoBehaviour {
 			var unitComponent = unit.GetComponent<Unit>();
 			unitComponent.SetData(unitData);
 
-			Units.Add(unitData, unitComponent);
+			_units.Add(unitData, unitComponent);
 		} catch (Exception ex) {
 			Debug.Log($"{ex.Message}\n{ex.StackTrace}");
 		}
 	}
 
 	private void OnUnitMovedTile(UnitMovedTileEvent e) {
-		if (Units.TryGetValue(e.Unit, out Unit unit))
+		if (_units.TryGetValue(e.Unit, out Unit unit))
 			unit.transform.localPosition = new Vector3(e.Unit.Position.X, e.Unit.Position.Y);
 		else
 			Debug.LogError($"Failed to retrieve the unit {e.Unit}");
 	}
 
 	private void OnUnitDestroyed(UnitDestroyedEvent e) {
-		Debug.Log("unit destroyed");
-		if (Units.TryGetValue(e.Unit, out Unit unit))
+		if (_units.TryGetValue(e.Unit, out Unit unit))
 			unit.DestroyUnit();
 		else
 			Debug.LogError($"Failed to retrieve the unit {e.Unit}");

@@ -15,6 +15,6 @@ MonoBehaviour:
   sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
   name: Empty
   health: 100
-  damage: 100
+  damage: 1
   speed: 5
   cost: 100

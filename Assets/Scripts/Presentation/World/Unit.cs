@@ -1,5 +1,3 @@
-using System;
-using System.Transactions;
 using UnityEngine;
 using Color = Logic.Data.Color;
 
@@ -20,6 +18,10 @@ public class Unit : MonoBehaviour {
 		_spriteRenderer = GetComponent<SpriteRenderer>();
 	}
 
+	private void FixedUpdate() {
+		transform.localPosition = new Vector3(_data.Position.X, _data.Position.Y);
+	}
+
 	public void SetData(Logic.Data.World.Unit data) {
 		_data = data;
 		UnitData unitData = _data.Owner.TeamColor == Color.Blue ? blueUnitData : redUnitData;
@@ -27,12 +29,7 @@ public class Unit : MonoBehaviour {
 		_spriteRenderer.color = unitData.Color;
 	}
 
-	private void FixedUpdate() {
-		transform.localPosition = new Vector3(_data.Position.X, _data.Position.Y);
-	}
-
 	public void DestroyUnit() {
-		Debug.Log("Unit destroyed");
 		Destroy(gameObject);
 	}
 }
