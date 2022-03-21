@@ -28,10 +28,7 @@ public class SimulationManager : MonoBehaviour {
 
 	private void Update() {
 		Tile tile = GetClickedTile();
-		if (tile != null) {
-			Debug.Log("A tile has been clicked");
-			OnTileSelected?.Invoke(tile.Position);
-		}
+		if (tile != null) OnTileSelected?.Invoke(tile.Position);
 	}
 
 	private void FixedUpdate() {

@@ -1,3 +1,5 @@
+using System;
+using System.Transactions;
 using UnityEngine;
 using Color = Logic.Data.Color;
 
@@ -15,15 +17,23 @@ public class Unit : MonoBehaviour {
 	private SpriteRenderer _spriteRenderer;
 
 	private void Awake() {
-		UnitData data = _data.Owner.TeamColor == Color.Blue ? blueUnitData : redUnitData;
-
 		_spriteRenderer = GetComponent<SpriteRenderer>();
-		_spriteRenderer.sprite = data.AliveSprite;
-		_spriteRenderer.color = data.Color;
 	}
 
 	public void SetData(Logic.Data.World.Unit data) {
 		_data = data;
+		UnitData unitData = _data.Owner.TeamColor == Color.Blue ? blueUnitData : redUnitData;
+		_spriteRenderer.sprite = unitData.AliveSprite;
+		_spriteRenderer.color = unitData.Color;
+	}
+
+	private void FixedUpdate() {
+		transform.localPosition = new Vector3(_data.Position.X, _data.Position.Y);
+	}
+
+	public void DestroyUnit() {
+		Debug.Log("Unit destroyed");
+		Destroy(gameObject);
 	}
 }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
@@ -41,27 +40,30 @@ public class Unit {
 
 	public void Move(float delta) {
 		TilePosition oldPosition = TilePosition;
+
+		if (_checkPoints.Count > 1) throw new NotImplementedException();
+
 		List<Vector2> path = World.Navigation.TryGetPathDeltas(Position, NextCheckpoint.ToVectorCentered(), 0);
-
-		float dist = Type.Speed * delta;
-		float nextlength = path.First().Length;
-		while (dist > nextlength && path.Count() > 0) {
-			Position = Position.Added(path.First());
-			path.RemoveAt(0);
-
-			dist -= nextlength;
-			nextlength = path.First().Length;
+		float remainingDistance = Type.Speed * delta;
+		foreach (Vector2 segment in path) {
+			float length = segment.Length;
+			if (remainingDistance > length) {
+				remainingDistance -= length;
+				Position = Position.Added(segment);
+			} else {
+				Position = Position.Added(segment.Multiplied(remainingDistance / length));
+				break;
+			}
 		}
 
-		Position = Position.Added(path.First().Multiplied(dist / nextlength));
 		if (!oldPosition.Equals(TilePosition)) {
 			World.Overview.Events.Raise(new UnitMovedTileEvent(this, oldPosition));
 		}
 	}
 
 	public void UpdatePlannedPath() {
-		//TODO invalidate cached navigation data, if such a cache exists
-		throw new NotImplementedException();
+		if (_checkPoints.Count > 1) throw new NotImplementedException();
+		//TODO delete unreachable checkpoints
 	}
 
 	#endregion
