@@ -12,10 +12,12 @@ public class UnitDamagesCastleSystem : BaseSystem {
 	private void On(UnitMovedTileEvent e) {
 		Unit unit = e.Unit;
 		Castle enemyCastle = unit.World.Overview.GetEnemyTeam(unit.Owner).Castle;
-		if (enemyCastle.Health <= 0) return;
 
 		if (unit.TilePosition.Equals(enemyCastle.Position)) {
-			enemyCastle.Damage(unit, unit.Type.Damage);
+			if (!enemyCastle.IsDestroyed) {
+				enemyCastle.Damage(unit, unit.Type.Damage);
+			}
+
 			unit.World.DestroyUnit(unit);
 		}
 	}
