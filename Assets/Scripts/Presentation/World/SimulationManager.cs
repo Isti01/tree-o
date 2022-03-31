@@ -20,7 +20,7 @@ public class SimulationManager : MonoBehaviour {
 
 	private void Awake() {
 		void ExceptionHandler(Exception e) {
-			Debug.LogError($"[Logic Exception]: ${e.Message}\n${e.StackTrace}");
+			Debug.LogError($"[Logic Exception]: ${e}");
 		}
 
 		GameOverview = new GameOverview(ExceptionHandler, Seed, WorldWidth, WorldHeight);

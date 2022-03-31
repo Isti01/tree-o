@@ -8,7 +8,6 @@ using Logic.Handler;
 using Logic.System;
 
 namespace Logic.Data {
-
 public class GameOverview : IGameOverview {
 	#region Fields
 
@@ -33,7 +32,7 @@ public class GameOverview : IGameOverview {
 
 	public Random Random { get; }
 
-	public IEnumerable<GameTeam> Teams => new[] { _redTeam, _blueTeam };
+	public IEnumerable<GameTeam> Teams => new[] {_redTeam, _blueTeam};
 
 	#endregion
 
@@ -112,6 +111,7 @@ public class GameOverview : IGameOverview {
 	}
 
 	private void RegisterSystems() {
+		_systems.Add(new TowerDamagesUnitSystem());
 		_systems.Add(new UnitDamagesCastleSystem());
 		_systems.Add(new InvalidateCachesSystem());
 		foreach (BaseSystem system in _systems) system.RegisterListeners(Events);
@@ -127,5 +127,4 @@ public class GameOverview : IGameOverview {
 
 	#endregion
 }
-
 }

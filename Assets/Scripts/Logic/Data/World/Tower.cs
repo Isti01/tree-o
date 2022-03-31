@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
+using Logic.Event.World.Tower;
 
 namespace Logic.Data.World {
 public class Tower : Building {
@@ -31,19 +32,25 @@ public class Tower : Building {
 	}
 
 	public void UpdateTarget() {
-		if (Target != null) return;
+		if (Target != null && Position.ToVectorCentered().Distance(Target.Position) <= Type.Range
+			&& Target.CurrentHealth > 0)
+			return;
+		Unit oldTarget = Target;
 		var units = World.Units;
 		foreach (Unit unit in World.Units) {
-			if (unit.Owner != this.Owner
-				&& this.Position.ToVectorCentered().Distance(unit.Position) <= this.Type.Range) {
+			if (unit.Owner != Owner
+				&& this.Position.ToVectorCentered().Distance(unit.Position) <= Type.Range) {
 				Target = unit;
 				break;
 			}
 		}
+
+		if (Target != oldTarget) World.Overview.Events.Raise(new TowerTargetChangedEvent(this, oldTarget));
 	}
 
 	public void UpdateCooldown(float delta) {
 		RemainingCooldownTime = Math.Max(RemainingCooldownTime - delta, 0);
+		if (!IsOnCooldown) World.Overview.Events.Raise(new TowerCooledDownEvent(this));
 	}
 
 	public void ResetCooldown() {
@@ -52,11 +59,15 @@ public class Tower : Building {
 
 	public void Shoot() {
 		if (Target == null) throw new InvalidOperationException("No target in tower range");
-		if (IsOnCooldown)
-			throw new InvalidOperationException($"Shooting is on cooldown: {RemainingCooldownTime}");
+		if (IsOnCooldown) throw new InvalidOperationException($"Shooting is on cooldown: {RemainingCooldownTime}");
 
 		World.ShootFromTower(this);
-		Target.GetDamaged(Type.Damage);
+		if (Target.CurrentHealth == 0) {
+			Unit oldTarget = Target;
+			Target = null;
+			World.Overview.Events.Raise(new TowerTargetChangedEvent(this, oldTarget));
+		}
+
 		RemainingCooldownTime = Type.CooldownTime;
 	}
 

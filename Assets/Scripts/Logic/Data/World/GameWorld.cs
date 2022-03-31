@@ -6,7 +6,6 @@ using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
 public class GameWorld {
-
 	#region Fields
 
 	private readonly TileObject[,] _grid;
@@ -52,10 +51,8 @@ public class GameWorld {
 		Navigation = new WorldNavigation(_grid);
 	}
 
-	public TileObject GetTile(int x, int y)
-	{
+	public TileObject GetTile(int x, int y) {
 		return _grid[x, y];
-
 	}
 
 	public IEnumerable<T> GetTileObjectsOfType<T>() where T : TileObject {
@@ -83,8 +80,7 @@ public class GameWorld {
 	}
 
 	public void ShootFromTower(Tower tower) {
-		if(tower.Target==null)
-			throw new ArgumentException("Tower has no target");
+		if (tower.Target == null) throw new ArgumentException("Tower has no target");
 		Overview.Events.Raise(new TowerShotEvent(tower, tower.Target));
 	}
 

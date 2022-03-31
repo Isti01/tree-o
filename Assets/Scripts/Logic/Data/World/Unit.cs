@@ -69,11 +69,8 @@ public class Unit {
 		//TODO delete unreachable checkpoints
 	}
 
-	public void GetDamaged(float damage) {
-		if (damage >= CurrentHealth)
-			World.DestroyUnit(this);
-		else
-			CurrentHealth -= damage;
+	public void InflictDamage(float damage) {
+		CurrentHealth = Math.Max(CurrentHealth - damage, 0);
 	}
 
 	#endregion
