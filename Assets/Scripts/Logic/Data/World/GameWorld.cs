@@ -82,6 +82,12 @@ public class GameWorld {
 		_grid[tower.Position.X, tower.Position.Y] = null;
 	}
 
+	public void ShootFromTower(Tower tower) {
+		if(tower.Target==null)
+			throw new ArgumentException("Tower has no target");
+		Overview.Events.Raise(new TowerShotEvent(tower, tower.Target));
+	}
+
 	public void DeployUnit(Barrack barrack, IUnitTypeData type) {
 		Vector2 position = barrack.Position.ToVectorCentered();
 		//TODO Should this really be the position? I don't have any better ideas
