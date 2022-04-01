@@ -6,7 +6,6 @@ using Logic.Event.Team;
 
 namespace Logic.Data {
 public class GameTeam {
-
 	#region Properties
 
 	public IGameOverview Overview { get; }
@@ -32,7 +31,6 @@ public class GameTeam {
 	public int PurchasedUnitCount { get; private set; }
 
 	public int BuiltTowerCount { get; private set; }
-
 
 	#endregion
 

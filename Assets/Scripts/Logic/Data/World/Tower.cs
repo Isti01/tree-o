@@ -35,6 +35,7 @@ public class Tower : Building {
 			&& Target.IsAlive)
 			return;
 		Unit oldTarget = Target;
+		Target = null;
 		foreach (Unit unit in World.Units.OrderBy(unit => Position.ToVectorCentered().Distance(unit.Position))) {
 			if (unit.Owner != Owner) {
 				Target = Position.ToVectorCentered().Distance(unit.Position) <= Type.Range ? unit : null;

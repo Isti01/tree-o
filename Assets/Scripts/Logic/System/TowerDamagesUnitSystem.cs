@@ -1,6 +1,8 @@
 ﻿using System;
+using Logic.Data.World;
 using Logic.Event;
 using Logic.Event.World.Tower;
+using Logic.Event.World.Unit;
 
 namespace Logic.System {
 public class TowerDamagesUnitSystem : BaseSystem {
@@ -9,9 +11,7 @@ public class TowerDamagesUnitSystem : BaseSystem {
 	}
 
 	private void On(TowerShotEvent e) {
-		e.Target.InflictDamage(e.Tower.Type.Damage);
-
-		if (!e.Target.IsAlive) e.Target.World.DestroyUnit(e.Target);
+		e.Target.InflictDamage(e.Tower,e.Tower.Type.Damage);
 	}
 }
 }
