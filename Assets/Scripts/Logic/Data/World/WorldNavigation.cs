@@ -41,11 +41,11 @@ public class WorldNavigation {
 	}
 
 	public bool IsPositionReachable(Vector2 from, Vector2 to) {
-		return true; //TODO implement
+		Dijkstra[,] dgrid = RunDijkstra((int) from.X, (int) from.Y, (int) to.X, (int) to.Y);
+		return dgrid[(int) to.X, (int) to.Y].D != int.MaxValue;
 	}
 
-	public List<Vector2> TryGetPathDeltas(Vector2 from, Vector2 to, float collider) {
-		if ((int) from.X == (int) to.X && (int) from.Y == (int) to.Y) return new List<Vector2>();
+	private Dijkstra[,] RunDijkstra(int fromX, int fromY, int toX, int toY) {
 		Dijkstra[,] dgrid = new Dijkstra[_grid.GetLength(0), _grid.GetLength(1)];
 		for (int i = 0; i < dgrid.GetLength(0); i++) {
 			for (int j = 0; j < dgrid.GetLength(1); j++) {
@@ -53,15 +53,15 @@ public class WorldNavigation {
 			}
 		}
 
-		dgrid[(int) from.X, (int) from.Y].D = 0;
+		dgrid[fromX, fromY].D = 0;
 		List<Dijkstra> q = new List<Dijkstra>();
 		foreach (var item in dgrid) {
 			q.Add(item);
 		}
 
-		int[] difx = {0, 0, -1, 1};
-		int[] dify = {1, -1, 0, 0};
-		Dijkstra u = dgrid[(int) from.X, (int) from.Y];
+		int[] difx = { 0, 0, -1, 1 };
+		int[] dify = { 1, -1, 0, 0 };
+		Dijkstra u = dgrid[fromX, fromY];
 		q.Remove(u);
 		while (u.D < Int32.MaxValue && q.Count > 0) {
 			for (int i = 0; i < 4; i++) {
@@ -70,7 +70,7 @@ public class WorldNavigation {
 				if (Math.Min(newx, newy) >= 0
 					&& newx < dgrid.GetLength(0)
 					&& newy < dgrid.GetLength(1)) {
-					if ((_grid[newx, newy] == null || (newx == (int) to.X && newy == (int) to.Y))
+					if ((_grid[newx, newy] == null || (newx == toX && newy == toY))
 						&& dgrid[newx, newy].D > dgrid[u.Ox, u.Oy].D + 1) {
 						//üres vagy célpont
 						dgrid[newx, newy].D = dgrid[u.Ox, u.Oy].D + 1;
@@ -84,6 +84,15 @@ public class WorldNavigation {
 			u = q.Where(x => x.D == min).First();
 			q.Remove(u);
 		}
+
+		return dgrid;
+	}
+
+	public List<Vector2> TryGetPathDeltas(Vector2 from, Vector2 to, float colliderRadius) {
+		if (from.ToTilePosition().Equals(to.ToTilePosition())) return new List<Vector2>();
+
+		Dijkstra[,] dgrid = RunDijkstra((int) from.X, (int) from.Y, (int) to.X, (int) to.Y);
+		if (dgrid[(int) to.X, (int) to.Y].D == int.MaxValue) return null;
 
 		List<Vector2> pathDeltas = new List<Vector2>();
 

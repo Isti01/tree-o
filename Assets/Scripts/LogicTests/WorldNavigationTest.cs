@@ -9,6 +9,52 @@ public class WorldNavigationTest {
 	private const int HighRepeatCount = 100;
 
 	[Test]
+	public void CanReachOwnEmptyTile() {
+		WorldNavigation navigation = CreateNavigation(CreateGrid(3, 3));
+		var tile = new TilePosition(1, 1);
+		Assert.IsTrue(navigation.IsPositionReachable(tile, tile));
+	}
+
+	[Test]
+	public void CanReachOwnFilledTile() {
+		var tile = new TilePosition(1, 1);
+		WorldNavigation navigation = CreateNavigation(CreateGrid(3, 3, tile));
+		Assert.IsTrue(navigation.IsPositionReachable(tile, tile));
+	}
+
+	[Test]
+	public void CanReachEmptyTile() {
+		WorldNavigation navigation = CreateNavigation(CreateGrid(5, 3));
+		var from = new TilePosition(1, 1);
+		var to = new TilePosition(4, 1);
+		Assert.IsTrue(navigation.IsPositionReachable(from, to));
+	}
+
+	[Test]
+	public void CanReachFilledTile() {
+		var to = new TilePosition(4, 1);
+		WorldNavigation navigation = CreateNavigation(CreateGrid(5, 3, to));
+		var from = new TilePosition(1, 1);
+		Assert.IsTrue(navigation.IsPositionReachable(from, to));
+	}
+
+	[Test]
+	public void CanNotReachEmptyButUnreachableTile() {
+		WorldNavigation navigation = CreateNavigation(CreateGrid(3, 1, new TilePosition(1, 0)));
+		var from = new TilePosition(0, 0);
+		var to = new TilePosition(2, 0);
+		Assert.IsFalse(navigation.IsPositionReachable(from, to));
+	}
+
+	[Test]
+	public void CanReachLineOfSightBlockedButReachableEmptyTile() {
+		WorldNavigation navigation = CreateNavigation(CreateGrid(7, 3, new TilePosition(3, 1)));
+		var from = new TilePosition(1, 1);
+		var to = new TilePosition(5, 1);
+		Assert.IsTrue(navigation.IsPositionReachable(from, to));
+	}
+
+	[Test]
 	public void TestPathToSelf() {
 		GameWorld world = WorldTestUtils.GenerateWorld();
 		List<Vector2> path = world.Navigation.TryGetPathDeltas(new Vector2(1.5F, 1.5F), new Vector2(1.5F, 1.5F), 0);
@@ -30,8 +76,8 @@ public class WorldNavigationTest {
 			y += delta.Y;
 		}
 
-		Assert.IsTrue(Single.Equals(to.X, x));
-		Assert.IsTrue(Single.Equals(to.Y, y));
+		Assert.AreEqual(to.X, x);
+		Assert.AreEqual(to.Y, y);
 	}
 
 	[Test]
@@ -50,6 +96,23 @@ public class WorldNavigationTest {
 			y += delta.Y;
 			Assert.IsNull(world[(int) x, (int) y]);
 		}
+	}
+
+	private static WorldNavigation CreateNavigation(TileObject[,] grid) {
+		return new WorldNavigation(grid);
+	}
+
+	private static TileObject[,] CreateGrid(int width, int height, params TilePosition[] obstacles) {
+		TileObject[,] grid = new TileObject[width, height];
+		foreach (TilePosition position in obstacles) {
+			grid[position.X, position.Y] = new FillerTileObject(position);
+		}
+
+		return grid;
+	}
+
+	private class FillerTileObject : TileObject {
+		public FillerTileObject(TilePosition position) : base(null, position) {}
 	}
 }
 }
