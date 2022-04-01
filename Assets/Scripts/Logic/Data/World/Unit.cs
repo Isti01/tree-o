@@ -9,7 +9,7 @@ public class Unit {
 
 	private readonly IList<TilePosition> _checkPoints;
 
-	private List<Vector2> _cachedPath;
+	private CachedPath _cachedCheckpointPath;
 
 	#endregion
 
@@ -49,26 +49,10 @@ public class Unit {
 	public void Move(float delta) {
 		TilePosition oldPosition = TilePosition;
 
-		if (_checkPoints.Count > 1) throw new NotImplementedException();
-
-		if (_cachedPath == null) {
-			_cachedPath = World.Navigation.TryGetPathDeltas(Position, NextCheckpoint.ToVectorCentered(), 0);
-		}
-
 		float remainingDistance = Type.Speed * delta;
-		while (_cachedPath.Any()) {
-			Vector2 segment = _cachedPath[0];
-			float length = segment.Length;
-			if (remainingDistance > length) {
-				remainingDistance -= length;
-				Position = Position.Added(segment);
-				_cachedPath.RemoveAt(0);
-			} else {
-				Vector2 doneSegment = segment.Multiplied(remainingDistance / length);
-				Position = Position.Added(doneSegment);
-				_cachedPath[0] = segment.Subtracted(doneSegment);
-				break;
-			}
+		while (remainingDistance > 0 && _checkPoints.Any()
+			&& MoveTowardsNextCheckpoint(ref remainingDistance)) {
+			_checkPoints.RemoveAt(0);
 		}
 
 		if (!oldPosition.Equals(TilePosition)) {
@@ -76,11 +60,39 @@ public class Unit {
 		}
 	}
 
-	public void UpdatePlannedPath() {
-		_cachedPath = null;
+	private bool MoveTowardsNextCheckpoint(ref float remainingDistance) {
+		if (_cachedCheckpointPath == null || !_cachedCheckpointPath.Checkpoint.Equals(NextCheckpoint)) {
+			_cachedCheckpointPath = new CachedPath(NextCheckpoint,
+				World.Navigation.TryGetPathDeltas(Position, NextCheckpoint.ToVectorCentered(), 0));
+		}
 
-		if (_checkPoints.Count > 1) throw new NotImplementedException();
-		//TODO delete unreachable checkpoints
+		while (_cachedCheckpointPath.Path.Any()) {
+			Vector2 segment = _cachedCheckpointPath.Path[0];
+			float length = segment.Length;
+			if (remainingDistance > length) {
+				remainingDistance -= length;
+				Position = Position.Added(segment);
+				_cachedCheckpointPath.Path.RemoveAt(0);
+			} else {
+				Vector2 doneSegment = segment.Multiplied(remainingDistance / length);
+				Position = Position.Added(doneSegment);
+				_cachedCheckpointPath.Path[0] = segment.Subtracted(doneSegment);
+				return false; //Checkpoint not reached
+			}
+		}
+
+		return true; //Checkpoint reached
+	}
+
+	public void UpdatePlannedPath() {
+		_cachedCheckpointPath = null;
+
+		//TODO performance could be greatly improved by caching pathfinding stuff here
+		for (var i = 0; i < _checkPoints.Count - 1; i++) {
+			if (World.Navigation.IsPositionReachable(Position, _checkPoints[i].ToVectorCentered())) continue;
+			_checkPoints.RemoveAt(i);
+			i--;
+		}
 	}
 
 	public void InflictDamage(float damage) {
@@ -88,5 +100,15 @@ public class Unit {
 	}
 
 	#endregion
+
+	private class CachedPath {
+		public TilePosition Checkpoint { get; }
+		public IList<Vector2> Path { get; }
+
+		public CachedPath(TilePosition checkpoint, IList<Vector2> path) {
+			Checkpoint = checkpoint;
+			Path = path;
+		}
+	}
 }
 }

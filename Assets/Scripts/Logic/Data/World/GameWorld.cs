@@ -83,8 +83,6 @@ public class GameWorld {
 
 	public void DeployUnit(Barrack barrack, IUnitTypeData type) {
 		Vector2 position = barrack.Position.ToVectorCentered();
-		//TODO Should this really be the position? I don't have any better ideas
-
 		Unit unit = new Unit(type, barrack.Owner, this, position, barrack.CheckPoints);
 		_units.Add(unit);
 		Overview.Events.Raise(new UnitDeployedEvent(unit, barrack));
