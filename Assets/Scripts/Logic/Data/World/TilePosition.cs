@@ -23,8 +23,8 @@ public readonly struct TilePosition {
 		return (X - from.X) * (X - from.X) + (Y - from.Y) * (Y - from.Y);
 	}
 
-	public double Distance(TilePosition from) {
-		return Math.Sqrt(Distance2(from));
+	public float Distance(TilePosition from) {
+		return (float)Math.Sqrt(Distance2(from));
 	}
 
 	public override string ToString() {

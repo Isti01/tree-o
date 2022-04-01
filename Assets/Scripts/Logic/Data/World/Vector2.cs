@@ -29,5 +29,9 @@ public readonly struct Vector2 {
 	public override string ToString() {
 		return $"({X:F2};{Y:F2})";
 	}
+
+	public float Distance(Vector2 from) {
+		return (float) Math.Sqrt((X - from.X) * (X - from.X) + (Y - from.Y) * (Y - from.Y));
+	}
 }
 }

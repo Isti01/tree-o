@@ -14,6 +14,8 @@ public class Unit {
 
 	public GameTeam Owner { get; }
 
+	public float CurrentHealth { get; private set; }
+
 	public TilePosition NextCheckpoint => _checkPoints[0];
 
 	public GameWorld World { get; }
@@ -24,6 +26,10 @@ public class Unit {
 
 	public IUnitTypeData Type { get; }
 
+	public bool IsAlive {
+		get { return CurrentHealth > 0; }
+	}
+
 	#endregion
 
 	#region Methods
@@ -32,6 +38,7 @@ public class Unit {
 		IEnumerable<TilePosition> checkpoints) {
 		Type = type;
 		Owner = owner;
+		CurrentHealth = Type.Health;
 		World = world;
 		Position = position;
 		_checkPoints = new List<TilePosition>(checkpoints);
@@ -64,6 +71,10 @@ public class Unit {
 	public void UpdatePlannedPath() {
 		if (_checkPoints.Count > 1) throw new NotImplementedException();
 		//TODO delete unreachable checkpoints
+	}
+
+	public void InflictDamage(float damage) {
+		CurrentHealth = Math.Max(CurrentHealth - damage, 0);
 	}
 
 	#endregion

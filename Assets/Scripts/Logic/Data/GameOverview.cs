@@ -114,6 +114,7 @@ public class GameOverview : IGameOverview {
 	}
 
 	private void RegisterSystems() {
+		_systems.Add(new TowerDamagesUnitSystem());
 		_systems.Add(new UnitDamagesCastleSystem());
 		_systems.Add(new InvalidateCachesSystem());
 		foreach (BaseSystem system in _systems) system.RegisterListeners(Events);
