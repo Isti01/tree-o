@@ -14,7 +14,7 @@ public static class WorldTestUtils {
 
 		Mock<IGameOverview> overview = new Mock<IGameOverview>();
 		overview.Setup(o => o.Random).Returns(new Random());
-		GameWorld world = new GameWorld(overview.Object, width, height);
+		GameWorld world = new GameWorld(overview.Object, new WorldConfig(), width, height);
 
 		TestContext.Out.WriteLine("Generated world:");
 		TestContext.Out.WriteLine(WorldAsMultilineString(world));
@@ -47,6 +47,11 @@ public static class WorldTestUtils {
 		result.Append(boundary, world.Width + 2);
 		result.Append(Environment.NewLine);
 		return result.ToString();
+	}
+
+	private class WorldConfig : IGameWorldConfig {
+		public float BarrackSpawnCooldownTime => 1;
+		public float CastleStartingHealth => 1;
 	}
 }
 }

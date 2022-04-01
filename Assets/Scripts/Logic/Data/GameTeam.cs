@@ -22,7 +22,7 @@ public class GameTeam {
 	public IEnumerable<Unit> Units => Overview.World.Units
 		.Where(t => t.Owner == this);
 
-	public int Money { get; private set; } = 500; //TODO don't use a hardcoded value
+	public int Money { get; private set; }
 
 	public int PresentTowerCount => Towers.Count();
 
@@ -41,6 +41,7 @@ public class GameTeam {
 		TeamColor = color;
 		Castle = castle;
 		Barracks = new List<Barrack>(barracks);
+		Money = overview.EconomyConfig.StartingBalance;
 	}
 
 	public void SpendMoney(int amount) {

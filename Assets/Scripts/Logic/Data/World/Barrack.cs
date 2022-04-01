@@ -18,8 +18,6 @@ public class Barrack : Building {
 
 	public IReadOnlyCollection<TilePosition> CheckPoints => new List<TilePosition>(_checkPoints);
 
-	public float SpawnCooldownTime => 0.5f; //TODO don't hardcode this value
-
 	public float RemainingCooldownTime { get; private set; }
 
 	public bool IsOnCooldown => RemainingCooldownTime > 0;
@@ -70,7 +68,7 @@ public class Barrack : Building {
 		if (IsOnCooldown)
 			throw new InvalidOperationException($"Spawning is on cooldown: {RemainingCooldownTime}");
 
-		RemainingCooldownTime = SpawnCooldownTime;
+		RemainingCooldownTime = World.Config.BarrackSpawnCooldownTime;
 		IUnitTypeData type = _queuedUnits[0];
 		_queuedUnits.RemoveAt(0);
 		World.DeployUnit(this, type);

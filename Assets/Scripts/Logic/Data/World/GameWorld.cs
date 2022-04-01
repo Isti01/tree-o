@@ -39,12 +39,15 @@ public class GameWorld {
 
 	public IReadOnlyCollection<Unit> Units => new List<Unit>(_units);
 
+	public IGameWorldConfig Config { get; }
+
 	#endregion
 
 	#region Methods
 
-	public GameWorld(IGameOverview overview, int width, int height) {
+	public GameWorld(IGameOverview overview, IGameWorldConfig config, int width, int height) {
 		Overview = overview;
+		Config = config;
 		Width = width;
 		Height = height;
 		_grid = WorldGenerator.GenerateGrid(overview.Random.Next(), Width, Height, new TileObjectConstructors(this));
