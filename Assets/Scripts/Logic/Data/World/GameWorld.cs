@@ -81,7 +81,7 @@ public class GameWorld {
 
 	public void ShootFromTower(Tower tower) {
 		if (tower.Target == null) throw new ArgumentException("Tower has no target");
-		Overview.Events.Raise(new TowerShotEvent(tower, tower.Target));
+
 	}
 
 	public void DeployUnit(Barrack barrack, IUnitTypeData type) {

@@ -11,7 +11,7 @@ public class TowerDamagesUnitSystem : BaseSystem {
 	private void On(TowerShotEvent e) {
 		e.Target.InflictDamage(e.Tower.Type.Damage);
 
-		if (e.Target.CurrentHealth == 0) e.Target.World.DestroyUnit(e.Target);
+		if (!e.Target.IsAlive) e.Target.World.DestroyUnit(e.Target);
 	}
 }
 }

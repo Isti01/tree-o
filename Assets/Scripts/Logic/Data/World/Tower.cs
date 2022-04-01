@@ -36,11 +36,9 @@ public class Tower : Building {
 			&& Target.CurrentHealth > 0)
 			return;
 		Unit oldTarget = Target;
-		var units = World.Units;
-		foreach (Unit unit in World.Units) {
-			if (unit.Owner != Owner
-				&& this.Position.ToVectorCentered().Distance(unit.Position) <= Type.Range) {
-				Target = unit;
+		foreach (Unit unit in World.Units.OrderBy(unit => Position.ToVectorCentered().Distance(unit.Position))) {
+			if (unit.Owner != Owner) {
+				Target = Position.ToVectorCentered().Distance(unit.Position) <= Type.Range ? unit : null;
 				break;
 			}
 		}
@@ -49,6 +47,7 @@ public class Tower : Building {
 	}
 
 	public void UpdateCooldown(float delta) {
+		if (RemainingCooldownTime == 0) return;
 		RemainingCooldownTime = Math.Max(RemainingCooldownTime - delta, 0);
 		if (!IsOnCooldown) World.Overview.Events.Raise(new TowerCooledDownEvent(this));
 	}
@@ -62,7 +61,8 @@ public class Tower : Building {
 		if (IsOnCooldown) throw new InvalidOperationException($"Shooting is on cooldown: {RemainingCooldownTime}");
 
 		World.ShootFromTower(this);
-		if (Target.CurrentHealth == 0) {
+		World.Overview.Events.Raise(new TowerShotEvent(this, Target));
+		if (!Target.IsAlive) {
 			Unit oldTarget = Target;
 			Target = null;
 			World.Overview.Events.Raise(new TowerTargetChangedEvent(this, oldTarget));

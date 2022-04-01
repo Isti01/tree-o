@@ -26,6 +26,10 @@ public class Unit {
 
 	public IUnitTypeData Type { get; }
 
+	public bool IsAlive {
+		get { return CurrentHealth > 0; }
+	}
+
 	#endregion
 
 	#region Methods
