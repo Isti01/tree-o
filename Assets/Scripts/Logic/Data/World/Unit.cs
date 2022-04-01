@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
@@ -7,6 +8,8 @@ public class Unit {
 	#region Fields
 
 	private readonly IList<TilePosition> _checkPoints;
+
+	private List<Vector2> _cachedPath;
 
 	#endregion
 
@@ -26,9 +29,7 @@ public class Unit {
 
 	public IUnitTypeData Type { get; }
 
-	public bool IsAlive {
-		get { return CurrentHealth > 0; }
-	}
+	public bool IsAlive => CurrentHealth > 0;
 
 	#endregion
 
@@ -50,15 +51,22 @@ public class Unit {
 
 		if (_checkPoints.Count > 1) throw new NotImplementedException();
 
-		List<Vector2> path = World.Navigation.TryGetPathDeltas(Position, NextCheckpoint.ToVectorCentered(), 0);
+		if (_cachedPath == null) {
+			_cachedPath = World.Navigation.TryGetPathDeltas(Position, NextCheckpoint.ToVectorCentered(), 0);
+		}
+
 		float remainingDistance = Type.Speed * delta;
-		foreach (Vector2 segment in path) {
+		while (_cachedPath.Any()) {
+			Vector2 segment = _cachedPath[0];
 			float length = segment.Length;
 			if (remainingDistance > length) {
 				remainingDistance -= length;
 				Position = Position.Added(segment);
+				_cachedPath.RemoveAt(0);
 			} else {
-				Position = Position.Added(segment.Multiplied(remainingDistance / length));
+				Vector2 doneSegment = segment.Multiplied(remainingDistance / length);
+				Position = Position.Added(doneSegment);
+				_cachedPath[0] = segment.Subtracted(doneSegment);
 				break;
 			}
 		}
@@ -69,6 +77,8 @@ public class Unit {
 	}
 
 	public void UpdatePlannedPath() {
+		_cachedPath = null;
+
 		if (_checkPoints.Count > 1) throw new NotImplementedException();
 		//TODO delete unreachable checkpoints
 	}
