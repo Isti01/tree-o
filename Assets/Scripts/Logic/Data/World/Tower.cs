@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Numerics;
 using Logic.Event.World.Tower;
 
 namespace Logic.Data.World {
@@ -60,7 +59,6 @@ public class Tower : Building {
 		if (Target == null) throw new InvalidOperationException("No target in tower range");
 		if (IsOnCooldown) throw new InvalidOperationException($"Shooting is on cooldown: {RemainingCooldownTime}");
 
-		World.ShootFromTower(this);
 		World.Overview.Events.Raise(new TowerShotEvent(this, Target));
 		if (!Target.IsAlive) {
 			Unit oldTarget = Target;

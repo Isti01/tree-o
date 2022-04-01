@@ -79,10 +79,7 @@ public class GameWorld {
 		_grid[tower.Position.X, tower.Position.Y] = null;
 	}
 
-	public void ShootFromTower(Tower tower) {
-		if (tower.Target == null) throw new ArgumentException("Tower has no target");
 
-	}
 
 	public void DeployUnit(Barrack barrack, IUnitTypeData type) {
 		Vector2 position = barrack.Position.ToVectorCentered();
