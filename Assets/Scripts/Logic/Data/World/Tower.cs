@@ -32,7 +32,7 @@ public class Tower : Building {
 
 	public void UpdateTarget() {
 		if (Target != null && Position.ToVectorCentered().Distance(Target.Position) <= Type.Range
-			&& Target.CurrentHealth > 0)
+			&& Target.IsAlive)
 			return;
 		Unit oldTarget = Target;
 		foreach (Unit unit in World.Units.OrderBy(unit => Position.ToVectorCentered().Distance(unit.Position))) {
