@@ -8,7 +8,6 @@ using Logic.Handler;
 using Logic.System;
 
 namespace Logic.Data {
-
 public class GameOverview : IGameOverview {
 	#region Fields
 
@@ -33,7 +32,7 @@ public class GameOverview : IGameOverview {
 
 	public Random Random { get; }
 
-	public IEnumerable<GameTeam> Teams => new[] { _redTeam, _blueTeam };
+	public IEnumerable<GameTeam> Teams => new[] {_redTeam, _blueTeam};
 
 	#endregion
 
@@ -88,7 +87,10 @@ public class GameOverview : IGameOverview {
 
 		if (CurrentPhase == GamePhase.Prepare) {
 			CurrentPhase = GamePhase.Fight;
-			TimeLeftFromPhase = 5; //TODO don't hardcode this value
+			TimeLeftFromPhase = Math.Max(5, //TODO don't hardcode this value
+				World.GetTileObjectsOfType<Barrack>()
+					.Max(barrack =>
+						barrack.QueuedUnits.Count * barrack.SpawnCooldownTime));
 		} else if (CurrentPhase == GamePhase.Fight) {
 			if (Teams.Any(t => t.Castle.IsDestroyed)) {
 				CurrentPhase = GamePhase.Finished;
@@ -127,5 +129,4 @@ public class GameOverview : IGameOverview {
 
 	#endregion
 }
-
 }
