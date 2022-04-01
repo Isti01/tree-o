@@ -95,8 +95,9 @@ public class Unit {
 		}
 	}
 
-	public void InflictDamage(float damage) {
+	public void InflictDamage(Tower attacker, float damage) {
 		CurrentHealth = Math.Max(CurrentHealth - damage, 0);
+		World.Overview.Events.Raise(new UnitDamagedEvent(this, attacker));
 	}
 
 	#endregion
