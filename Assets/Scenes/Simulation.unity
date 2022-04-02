@@ -561,7 +561,8 @@ MonoBehaviour:
   cardComponent: {fileID: 9197481963319205126, guid: 25cba244207c43e44b6e9723bab308a1, type: 3}
   ui: {fileID: 1579271863}
   unitTypes:
-  - {fileID: 11400000, guid: a767ae00b7b7a554aa860d78afec58ed, type: 2}
+  - {fileID: 11400000, guid: 990eddc6120b95548a91484d5cad18ff, type: 2}
+  - {fileID: 11400000, guid: 7cde7bea9bf73ac44bd6563d6b5d7aeb, type: 2}
 --- !u!1 &1772625069
 GameObject:
   m_ObjectHideFlags: 0

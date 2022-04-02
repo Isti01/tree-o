@@ -10,11 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3bc0fee426f84030b94afd263d5e1c32, type: 3}
-  m_Name: EmptyUnitType
+  m_Name: SlowUnitType
   m_EditorClassIdentifier: 
-  sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  name: Empty
-  health: 100
+  blueColor: {r: 0, g: 0.3296814, b: 1, a: 1}
+  redColor: {r: 1, g: 0.12787381, b: 0, a: 1}
+  aliveSprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+  destroyedSprite: {fileID: 0}
+  attackEffect: {fileID: 0}
+  destroyedEffect: {fileID: 0}
+  name: Turtle
+  health: 50
   damage: 1
   speed: 2
   cost: 100

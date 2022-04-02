@@ -10,7 +10,7 @@ public class WorldConfig : ScriptableObject, IGameWorldConfig {
 	private float barrackSpawnCooldownTime;
 
 	[SerializeField]
-	[Min(1)]
+	[Min(0.01f)]
 	private float castleStartingHealth;
 
 	public float BarrackSpawnCooldownTime => barrackSpawnCooldownTime;

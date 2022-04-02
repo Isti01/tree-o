@@ -4,12 +4,6 @@ using Color = Logic.Data.Color;
 namespace Presentation.World {
 [RequireComponent(typeof(SpriteRenderer))]
 public class Unit : MonoBehaviour {
-	[SerializeField]
-	private UnitData redUnitData;
-
-	[SerializeField]
-	private UnitData blueUnitData;
-
 	private Logic.Data.World.Unit _data;
 
 	private SpriteRenderer _spriteRenderer;
@@ -24,9 +18,9 @@ public class Unit : MonoBehaviour {
 
 	public void SetData(Logic.Data.World.Unit data) {
 		_data = data;
-		UnitData unitData = _data.Owner.TeamColor == Color.Blue ? blueUnitData : redUnitData;
+		UnitTypeData unitData = (UnitTypeData) _data.Type;
 		_spriteRenderer.sprite = unitData.AliveSprite;
-		_spriteRenderer.color = unitData.Color;
+		_spriteRenderer.color = _data.Owner.TeamColor == Color.Blue ? unitData.BlueColor : unitData.RedColor;
 	}
 
 	public void DestroyUnit() {
