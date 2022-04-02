@@ -6,7 +6,7 @@ namespace Logic.Data.World {
 public class Tower : Building {
 	#region Properties
 
-	public ITowerTypeData Type { get; }
+	public ITowerTypeData Type { get; private set; }
 
 	//TODO we need a CanBeNull annotation or some documentation here
 	public Unit Target { get; private set; }
@@ -27,7 +27,10 @@ public class Tower : Building {
 	}
 
 	public void Upgrade() {
-		throw new NotImplementedException();
+		if (Type.AfterUpgradeType == null) throw new InvalidOperationException($"{Type} is not upgradeable");
+		ITowerTypeData oldType = Type;
+		Type = Type.AfterUpgradeType;
+		World.Overview.Events.Raise(new TowerUpgradedEvent(this, oldType));
 	}
 
 	public void UpdateTarget() {

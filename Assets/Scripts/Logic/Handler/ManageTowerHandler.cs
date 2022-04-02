@@ -11,6 +11,7 @@ public class ManageTowerHandler : BaseHandler {
 	public override void RegisterConsumers(CommandDispatcher dispatcher) {
 		dispatcher.RegisterConsumer<BuildTowerCommand, BuildTowerCommand.CommandResult>(Handle);
 		dispatcher.RegisterConsumer<DestroyTowerCommand, BiCommandResult>(Handle);
+		dispatcher.RegisterConsumer<UpgradeTowerCommand, UpgradeTowerCommand.CommandResult>(Handle);
 	}
 
 	private BuildTowerCommand.CommandResult Handle(BuildTowerCommand command) {
@@ -52,6 +53,16 @@ public class ManageTowerHandler : BaseHandler {
 		tower.Owner.GiveMoney(tower.Type.DestroyRefund);
 		tower.World.DestroyTower(tower);
 		return BiCommandResult.Success;
+	}
+
+	private UpgradeTowerCommand.CommandResult Handle(UpgradeTowerCommand command) {
+		Tower tower = command.Tower;
+		if (tower.Type.AfterUpgradeType == null) return UpgradeTowerCommand.CommandResult.NotUpgradeable;
+		if (tower.Type.UpgradeCost > tower.Owner.Money) return UpgradeTowerCommand.CommandResult.NotEnoughMoney;
+
+		tower.Owner.SpendMoney(tower.Type.UpgradeCost);
+		tower.Upgrade();
+		return UpgradeTowerCommand.CommandResult.Success;
 	}
 }
 

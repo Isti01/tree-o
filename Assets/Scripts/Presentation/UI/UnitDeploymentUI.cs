@@ -43,13 +43,13 @@ public class UnitDeploymentUI : MonoBehaviour {
 			UnitTypeData unit = unitType;
 			TemplateContainer card = cardComponent.Instantiate();
 			var content = card.Q<VisualElement>("CardContent");
-			content.style.backgroundImage = new StyleBackground(unitType.sprite);
+			content.style.backgroundImage = new StyleBackground(unitType.AliveSprite);
 
 			card.userData = 0;
 			UpdateCardUnitCount(card, 0);
 
 			var bottomLabel = card.Q<Label>("BottomChipText");
-			bottomLabel.text = $"Cost: {unitType.cost}";
+			bottomLabel.text = $"Cost: {unitType.Cost}";
 
 			card.RegisterCallback<ClickEvent>(e => {
 				if (e.button == 0) OnUnitPurchased?.Invoke(unit);

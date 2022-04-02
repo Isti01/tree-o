@@ -10,13 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a046f9e3c8344bada9e6404adcc932c1, type: 3}
-  m_Name: EmptyTowerType
+  m_Name: DmgTowerLvl2Type
   m_EditorClassIdentifier: 
-  sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-  name: Empty
-  damage: 100
-  range: 100
-  cooldownTime: 100
+  sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  blueColor: {r: 0, g: 0.3296814, b: 1, a: 1}
+  redColor: {r: 1, g: 0.12787381, b: 0, a: 1}
+  shootingEffect: {fileID: 0}
+  ambientEffect: {fileID: 0}
+  name: Heavy Hitter II
+  damage: 10
+  range: 10
+  cooldownTime: 1
   buildingCost: 100
   destroyRefund: 50
   upgradeCost: 100
+  afterUpgradeType: {fileID: 0}
