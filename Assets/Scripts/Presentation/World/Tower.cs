@@ -4,22 +4,17 @@ using Color = Logic.Data.Color;
 namespace Presentation.World {
 [RequireComponent(typeof(SpriteRenderer))]
 public class Tower : Structure {
-	[SerializeField]
-	private TowerData blueTowerData;
-
-	[SerializeField]
-	private TowerData redTowerData;
-
 	private Logic.Data.World.Tower _data;
 
 	private SpriteRenderer _spriteRenderer;
 
 	private void Start() {
-		TowerData data = _data.OwnerColor == Color.Blue ? blueTowerData : redTowerData;
+		TowerTypeData data = (TowerTypeData) _data.Type;
+		UnityEngine.Color color = _data.OwnerColor == Color.Blue ? data.BlueColor : data.RedColor;
 
 		_spriteRenderer = GetComponent<SpriteRenderer>();
 		_spriteRenderer.sprite = data.Sprite;
-		_spriteRenderer.color = data.Color;
+		_spriteRenderer.color = color;
 	}
 
 	public void SetData(Logic.Data.World.Tower data) {

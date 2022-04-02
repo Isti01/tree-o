@@ -10,6 +10,7 @@ public interface ITowerTypeData {
 	public int BuildingCost { get; }
 	public int DestroyRefund { get; }
 	public int UpgradeCost { get; }
+	public ITowerTypeData AfterUpgradeType { get; }
 
 	#endregion
 }

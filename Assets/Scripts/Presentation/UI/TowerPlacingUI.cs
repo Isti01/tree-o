@@ -65,11 +65,11 @@ public class TowerPlacingUI : MonoBehaviour {
 			TemplateContainer card = cardComponent.Instantiate();
 
 			var content = card.Q<VisualElement>("CardContent");
-			content.style.backgroundImage = new StyleBackground(towerType.sprite);
+			content.style.backgroundImage = new StyleBackground(towerType.Sprite);
 			card.Q("TopChip").style.display = DisplayStyle.None;
 
 			var bottomLabel = card.Q<Label>("BottomChipText");
-			bottomLabel.text = $"Cost: {towerType.buildingCost}";
+			bottomLabel.text = $"Cost: {towerType.BuildingCost}";
 
 			card.RegisterCallback<ClickEvent>(e => {
 				if (e.button == 0) OnTowerTypeSelected?.Invoke(towerType);
