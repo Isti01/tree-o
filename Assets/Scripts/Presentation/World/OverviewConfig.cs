@@ -5,6 +5,8 @@ namespace Presentation.World {
 
 [CreateAssetMenu(fileName = "New Overview Config", menuName = "World/Config/Overview Config", order = 1)]
 public class OverviewConfig : ScriptableObject, IGameOverviewConfig {
+	[SerializeField]
+	[Min(0.1f)]
 	public float fightingPhaseDuration;
 
 	public float FightingPhaseDuration => fightingPhaseDuration;
