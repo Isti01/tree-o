@@ -3,7 +3,7 @@ using Color = Logic.Data.Color;
 
 namespace Presentation.World {
 [RequireComponent(typeof(SpriteRenderer))]
-public class Barrack : MonoBehaviour {
+public class Barrack : Structure {
 	[SerializeField]
 	private BarrackData blueBarrackData;
 

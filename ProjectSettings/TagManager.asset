@@ -47,6 +47,9 @@ TagManager:
   - name: Structure
     uniqueID: 520840465
     locked: 0
+  - name: Projectile
+    uniqueID: 3098005577
+    locked: 0
   - name: Unit
     uniqueID: 1800257023
     locked: 0
