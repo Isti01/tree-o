@@ -35,12 +35,20 @@ public class GameOverview : IGameOverview {
 
 	public IEnumerable<GameTeam> Teams => new[] {_redTeam, _blueTeam};
 
+	public IGameOverviewConfig OverviewConfig { get; }
+
+	public IGameEconomyConfig EconomyConfig { get; }
+
 	#endregion
 
 	#region Methods
 
 	public GameOverview(Action<Exception> eventExceptionHandler, int seed,
-		int worldWidth, int worldHeight) {
+		int worldWidth, int worldHeight, IGameOverviewConfig overviewConfig,
+		IGameEconomyConfig economyConfig, IGameWorldConfig worldConfig) {
+		OverviewConfig = overviewConfig;
+		EconomyConfig = economyConfig;
+
 		Events = new EventDispatcher((exceptions => {
 			foreach (EventDispatcher.EventInvocationException exception in exceptions) {
 				eventExceptionHandler.Invoke(exception);
@@ -53,7 +61,7 @@ public class GameOverview : IGameOverview {
 
 		Random = new Random(seed);
 
-		World = new GameWorld(this, worldWidth, worldHeight);
+		World = new GameWorld(this, worldConfig, worldWidth, worldHeight);
 
 		GameTeam CreateTeam(Color color) {
 			return new GameTeam(this, color,
@@ -88,10 +96,10 @@ public class GameOverview : IGameOverview {
 
 		if (CurrentPhase == GamePhase.Prepare) {
 			CurrentPhase = GamePhase.Fight;
-			TimeLeftFromPhase = Math.Max(5, //TODO don't hardcode this value
+			TimeLeftFromPhase = Math.Max(OverviewConfig.FightingPhaseDuration,
 				World.GetTileObjectsOfType<Barrack>()
 					.Max(barrack =>
-						barrack.QueuedUnits.Count * barrack.SpawnCooldownTime));
+						barrack.QueuedUnits.Count * World.Config.BarrackSpawnCooldownTime));
 		} else if (CurrentPhase == GamePhase.Fight) {
 			if (Teams.Any(t => t.Castle.IsDestroyed)) {
 				CurrentPhase = GamePhase.Finished;
@@ -101,7 +109,8 @@ public class GameOverview : IGameOverview {
 				TimeLeftFromPhase = float.PositiveInfinity;
 				foreach (GameTeam team in Teams) {
 					int oldmoney = team.Money;
-					team.GiveMoney(200+team.PurchasedUnitCount*50); //TODO don't hardcode the values
+					team.GiveMoney(EconomyConfig.RoundBasePay
+						+ team.PurchasedUnitCount * EconomyConfig.TotalUnitsPurchasedPay);
 					Events.Raise(new TeamMoneyUpdatedEvent(team,oldmoney));
 				}
 			}

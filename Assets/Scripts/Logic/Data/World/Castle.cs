@@ -6,7 +6,7 @@ namespace Logic.Data.World {
 public class Castle : Building {
 	#region Properties
 
-	public float Health { get; private set; } = 10; //TODO don't hardcode this value
+	public float Health { get; private set; }
 
 	public bool IsDestroyed => Health <= 0;
 
@@ -15,7 +15,9 @@ public class Castle : Building {
 	#region Methods
 
 	public Castle(GameWorld world, TilePosition position, Color owner)
-		: base(world, position, owner) {}
+		: base(world, position, owner) {
+		Health = world.Config.CastleStartingHealth;
+	}
 
 	public void Damage(Unit attacker, float damage) {
 		if (damage <= 0) throw new ArgumentException("Damage must be positive");

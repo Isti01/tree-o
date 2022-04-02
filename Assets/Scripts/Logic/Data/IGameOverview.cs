@@ -15,6 +15,8 @@ public interface IGameOverview {
 	float TimeLeftFromPhase { get; }
 	Random Random { get; }
 	public IEnumerable<GameTeam> Teams { get; }
+	public IGameOverviewConfig OverviewConfig { get; }
+	public IGameEconomyConfig EconomyConfig { get; }
 	GameTeam GetTeam(Color color);
 	GameTeam GetEnemyTeam(GameTeam team);
 	void AdvancePhase();

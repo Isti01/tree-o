@@ -12,6 +12,15 @@ public class SimulationManager : MonoBehaviour {
 	public int Seed = 1337;
 
 	[SerializeField]
+	private OverviewConfig overviewConfig;
+
+	[SerializeField]
+	private EconomyConfig economyConfig;
+
+	[SerializeField]
+	private WorldConfig worldConfig;
+
+	[SerializeField]
 	private Camera mainCamera;
 
 	public bool IsPaused { get; private set; }
@@ -23,7 +32,8 @@ public class SimulationManager : MonoBehaviour {
 			Debug.LogError($"[Logic Exception]: ${e}");
 		}
 
-		GameOverview = new GameOverview(ExceptionHandler, Seed, WorldWidth, WorldHeight);
+		GameOverview = new GameOverview(ExceptionHandler, Seed, WorldWidth, WorldHeight,
+			overviewConfig, economyConfig, worldConfig);
 	}
 
 	private void Update() {

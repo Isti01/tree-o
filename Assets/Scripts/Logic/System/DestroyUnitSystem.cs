@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using Logic.Data;
 using Logic.Event;
 using Logic.Event.World.Unit;
 
@@ -9,10 +9,9 @@ public class DestroyUnitSystem : BaseSystem {
 	}
 
 	private void On(UnitDamagedEvent e) {
-
+		IGameOverview overview = e.Unit.World.Overview;
 		if (!e.Unit.IsAlive) e.Unit.World.DestroyUnit(e.Unit);
-		e.Unit.Owner.Overview.GetEnemyTeam(e.Unit.Owner).GiveMoney(50); //TODO: don't hardcode this
-
+		overview.GetEnemyTeam(e.Unit.Owner).GiveMoney(overview.EconomyConfig.NewUnitsKilledPay);
 	}
 }
 }
