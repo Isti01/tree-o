@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a34aa86e39548a3a95996b3e157adf7, type: 3}
   m_Name: EmptyRedCasle
   m_EditorClassIdentifier: 
-  Color: {r: 1, g: 0, b: 0.48850012, a: 1}
-  IntactSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  DestroyedSprite: {fileID: 0}
-  AmbientEffect: {fileID: 0}
-  ExplosionEffect: {fileID: 0}
+  color: {r: 1, g: 0, b: 0.48850012, a: 1}
+  intactSprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  destroyedSprite: {fileID: 0}
+  ambientEffect: {fileID: 0}
+  explosionEffect: {fileID: 0}

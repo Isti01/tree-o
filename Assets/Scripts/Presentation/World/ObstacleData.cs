@@ -3,8 +3,17 @@ using UnityEngine;
 namespace Presentation.World {
 [CreateAssetMenu(fileName = "New Obstacle", menuName = "World/Structures/Obstacle", order = 1)]
 public class ObstacleData : ScriptableObject {
-	public Color Color;
-	public Sprite Sprite;
-	public GameObject AmbientEffect;
+	[SerializeField]
+	private Color color;
+
+	[SerializeField]
+	private Sprite sprite;
+
+	[SerializeField]
+	private GameObject ambientEffect;
+
+	public Color Color => color;
+	public Sprite Sprite => sprite;
+	public GameObject AmbientEffect => ambientEffect;
 }
 }
