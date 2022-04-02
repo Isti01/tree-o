@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Logic.Data.World;
 using Logic.Event.World.Tower;
@@ -14,10 +15,13 @@ public class World : MonoBehaviour {
 	public GameObject Castle;
 	public GameObject Unit;
 
-	public float TilePadding = 0.1f;
-
 	private GameObject[,] _map;
 	private Dictionary<Logic.Data.World.Unit, Unit> _units;
+
+	public T LogicToPresentation<T>(TileObject tileObject) where T : Structure
+		=> _map[tileObject.Position.X, tileObject.Position.Y].GetComponentInChildren<T>();
+
+	public Unit LogicToPresentation(Logic.Data.World.Unit unit) => _units[unit];
 
 	private void Start() {
 		var simulation = FindObjectOfType<SimulationManager>();
@@ -25,6 +29,8 @@ public class World : MonoBehaviour {
 		_units = new Dictionary<Logic.Data.World.Unit, Unit>();
 
 		simulation.GameOverview.Events.AddListener<TowerBuiltEvent>(OnTowerBuilt);
+		simulation.GameOverview.Events.AddListener<TowerShotEvent>(OnTowerShot);
+		simulation.GameOverview.Events.AddListener<TowerCooledDownEvent>(OnTowerCooledDown);
 
 		simulation.GameOverview.Events.AddListener<UnitDeployedEvent>(OnUnitDeployed);
 		simulation.GameOverview.Events.AddListener<UnitMovedTileEvent>(OnUnitMovedTile);
@@ -76,6 +82,40 @@ public class World : MonoBehaviour {
 		InstantiateTower(_map[tilePosition.X, tilePosition.Y], tower);
 	}
 
+	private void OnTowerShot(TowerShotEvent e) {
+		Tower tower = LogicToPresentation<Tower>(e.Tower);
+		LineRenderer laserRenderer = tower.GetComponent<LineRenderer>();
+		Transform target = LogicToPresentation(e.Target).transform;
+
+		Vector3[] positions = { tower.transform.position, target.position };
+		laserRenderer.SetPositions(positions);
+		laserRenderer.enabled = true;
+
+		IEnumerator LaserUpdater() {
+			var remainingTime = 0.15f;
+			while (remainingTime > 0) {
+				yield return new WaitForFixedUpdate();
+				remainingTime -= Time.fixedDeltaTime;
+
+				if (e.Target.IsAlive) {
+					positions[1] = target.position;
+					laserRenderer.SetPositions(positions);
+				}
+			}
+
+			laserRenderer.enabled = false;
+		}
+
+		StartCoroutine(LaserUpdater());
+	}
+
+	private void OnTowerCooledDown(TowerCooledDownEvent e) {
+		Tower tower = LogicToPresentation<Tower>(e.Tower);
+		//Disable the laser renderer when the tower is ready to shoot again:
+		// we want to avoid activating a new laser pulse and then deactivating the old one
+		tower.GetComponent<LineRenderer>().enabled = false;
+	}
+
 	private GameObject InstantiateTower(GameObject parent, Logic.Data.World.Tower tower) {
 		GameObject structure = Instantiate(Tower, parent.transform);
 		var barrackComponent = structure.GetComponent<Tower>();
@@ -84,12 +124,8 @@ public class World : MonoBehaviour {
 	}
 
 	private GameObject InstantiateTile(int x, int y, GameWorld world) {
-		float sizeMultiplier = TilePadding + 1.0f;
-
-		Vector3 position = new Vector3(x, y) * sizeMultiplier;
-
 		GameObject tile = Instantiate(Tile, transform);
-		tile.transform.localPosition = position;
+		tile.transform.localPosition = new Vector3(x, y);
 		var tileComponent = tile.GetComponent<Tile>();
 		tileComponent.Position = new TilePosition(x, y);
 		_map[x, y] = tile;

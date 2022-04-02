@@ -19,13 +19,17 @@ public class EventDispatcherTest {
 		EventDispatcher dispatcher = NewErrorRethrowingDispatcher();
 		EventDispatcher.Listener<BaseEvent> listener = _ => {};
 		Assert.Throws<EventDispatcher.IllegalListenerStateException>(() =>
-			dispatcher.RemoveListener<BicycleEvent>(listener));
+			dispatcher.RemoveListener<BicycleEvent>(EventDispatcher.Ordering.Normal, listener));
 		dispatcher.AddListener<BicycleEvent>(listener);
 		dispatcher.AddListener<BicycleEvent>(listener);
-		dispatcher.RemoveListener<BicycleEvent>(listener);
-		dispatcher.RemoveListener<BicycleEvent>(listener);
+		dispatcher.AddListener<BicycleEvent>(EventDispatcher.Ordering.First, listener);
+		dispatcher.RemoveListener<BicycleEvent>(EventDispatcher.Ordering.Normal, listener);
+		dispatcher.RemoveListener<BicycleEvent>(EventDispatcher.Ordering.Normal, listener);
 		Assert.Throws<EventDispatcher.IllegalListenerStateException>(() =>
-			dispatcher.RemoveListener<BicycleEvent>(listener));
+			dispatcher.RemoveListener<BicycleEvent>(EventDispatcher.Ordering.Normal, listener));
+		dispatcher.RemoveListener<BicycleEvent>(EventDispatcher.Ordering.First, listener);
+		Assert.Throws<EventDispatcher.IllegalListenerStateException>(() =>
+			dispatcher.RemoveListener<BicycleEvent>(EventDispatcher.Ordering.First, listener));
 	}
 
 	[Test]
@@ -114,6 +118,21 @@ public class EventDispatcherTest {
 		dispatcher.AddListener<BicycleEvent>(_ => throw new Exception("Testing"));
 		dispatcher.Raise(new BicycleEvent());
 		Assert.IsTrue(called);
+	}
+
+	[Test]
+	public void TestInvocationOrder() {
+		EventDispatcher dispatcher = NewErrorRethrowingDispatcher();
+		var concat = "-";
+		// ReSharper disable once AccessToModifiedClosure
+		dispatcher.AddListener<BicycleEvent>(_ => concat += "3");
+		dispatcher.AddListener<BaseEvent>(EventDispatcher.Ordering.Normal, _ => concat += "3");
+		dispatcher.AddListener<BaseEvent>(EventDispatcher.Ordering.Sooner, _ => concat += "2");
+		dispatcher.AddListener<BicycleEvent>(EventDispatcher.Ordering.Last, _ => concat += "5");
+		dispatcher.AddListener<BicycleEvent>(EventDispatcher.Ordering.First, _ => concat += "1");
+		dispatcher.AddListener<BicycleEvent>(EventDispatcher.Ordering.Later, _ => concat += "4");
+		dispatcher.Raise(new BicycleEvent());
+		Assert.AreEqual("-123345", concat);
 	}
 
 	private static EventDispatcher NewErrorRethrowingDispatcher() {

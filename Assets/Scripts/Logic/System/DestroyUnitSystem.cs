@@ -5,7 +5,9 @@ using Logic.Event.World.Unit;
 namespace Logic.System {
 public class DestroyUnitSystem : BaseSystem {
 	public override void RegisterListeners(EventDispatcher dispatcher) {
-		dispatcher.AddListener<UnitDamagedEvent>(On);
+		//Call later than usual: let listeners get notified about the damaged event
+		// before the destroyed event is invoked.
+		dispatcher.AddListener<UnitDamagedEvent>(EventDispatcher.Ordering.Later, On);
 	}
 
 	private void On(UnitDamagedEvent e) {

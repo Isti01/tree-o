@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Logic.Event {
 
@@ -16,7 +17,9 @@ namespace Logic.Event {
 /// </p>
 /// </summary>
 public class EventDispatcher {
-	private readonly IDictionary<Type, IList<Delegate>> _listeners = new Dictionary<Type, IList<Delegate>>();
+	private readonly IDictionary<Type, IList<RegisteredListener>> _listeners =
+		new Dictionary<Type, IList<RegisteredListener>>();
+
 	private readonly Action<ICollection<EventInvocationException>> _eventRaisingErrorHandler;
 
 	/// <summary>
@@ -29,21 +32,29 @@ public class EventDispatcher {
 	}
 
 	/// <summary>
+	/// Same as calling <see cref="AddListener{T}(Ordering, Listener{T})"/> with <see cref="Ordering.Normal"/>.
+	/// </summary>
+	public void AddListener<T>(Listener<T> listener) where T : BaseEvent {
+		AddListener(Ordering.Normal, listener);
+	}
+
+	/// <summary>
 	/// Registers a new listener to the specified event.
 	/// The same listener is allowed to listen to the same event multiple times.
 	/// The same event is allowed to have multiple listeners.
 	/// A listener is also called if a superclass of the specified event is raised,
 	/// see <see cref="Raise"/> for more information about this.
 	/// </summary>
+	/// <param name="ordering">when the listener should be called relative to other listeners</param>
 	/// <param name="listener">the consumer of the event</param>
 	/// <typeparam name="T">the event to listen to</typeparam>
-	public void AddListener<T>(Listener<T> listener) where T : BaseEvent {
-		if (!_listeners.TryGetValue(typeof(T), out IList<Delegate> list)) {
-			list = new List<Delegate>();
-			_listeners[typeof(T)] = list;
+	public void AddListener<T>(Ordering ordering, Listener<T> listener) where T : BaseEvent {
+		if (!_listeners.TryGetValue(typeof(T), out IList<RegisteredListener> set)) {
+			set = new List<RegisteredListener>();
+			_listeners[typeof(T)] = set;
 		}
 
-		list.Add(listener);
+		set.Add(new RegisteredListener(ordering, listener));
 	}
 
 	/// <summary>
@@ -52,13 +63,15 @@ public class EventDispatcher {
 	/// If the same listener was registered multiple times,
 	/// then this method only removes one occurrence of the listener.
 	/// </summary>
+	/// <param name="ordering">the ordering of the listener that should be unregistered</param>
 	/// <param name="listener">the listener to unregister</param>
 	/// <typeparam name="T">the event to unregister the listener from</typeparam>
 	/// <exception cref="IllegalListenerStateException">if the specified listener isn't
 	/// among the listeners of the specified event</exception>
-	public void RemoveListener<T>(Listener<T> listener) where T : BaseEvent {
-		if (!_listeners.TryGetValue(typeof(T), out IList<Delegate> list) || !list.Remove(listener)) {
-			throw new IllegalListenerStateException($"{listener} isn't a registered listener of {typeof(T)}");
+	public void RemoveListener<T>(Ordering ordering, Listener<T> listener) where T : BaseEvent {
+		RegisteredListener registered = new RegisteredListener(ordering, listener);
+		if (!_listeners.TryGetValue(typeof(T), out IList<RegisteredListener> set) || !set.Remove(registered)) {
+			throw new IllegalListenerStateException($"{registered} isn't a registered listener of {typeof(T)}");
 		}
 	}
 
@@ -71,26 +84,41 @@ public class EventDispatcher {
 	public void Raise(BaseEvent eventData) {
 		List<EventInvocationException> errors = new List<EventInvocationException>();
 
-		//Call listeners which listen to the exact event type or one of its superclasses
-		Type type = eventData.GetType();
-		do {
-			// ReSharper disable once AssignNullToNotNullAttribute
-			if (!_listeners.TryGetValue(type, out IList<Delegate> listeners)) break;
+		foreach (Ordering ordering in Enum.GetValues(typeof(Ordering))) {
+			//Call listeners which listen to the exact event type or one of its superclasses
+			Type type = eventData.GetType();
+			do {
+				// ReSharper disable once AssignNullToNotNullAttribute
+				if (!_listeners.TryGetValue(type, out IList<RegisteredListener> listeners)) break;
 
-			foreach (Delegate del in listeners) {
-				try {
-					del.DynamicInvoke(eventData);
-				} catch (Exception e) {
-					errors.Add(new EventInvocationException($"Error consuming {eventData} by {del}", e));
+				foreach (RegisteredListener registered in listeners.Where(x => x.Order == ordering)) {
+					try {
+						registered.Listener.DynamicInvoke(eventData);
+					} catch (Exception e) {
+						errors.Add(new EventInvocationException($"Error consuming {eventData} by {registered}", e));
+					}
 				}
-			}
 
-			type = type.BaseType;
-		} while (type != typeof(object));
+				type = type.BaseType;
+			} while (type != typeof(object));
+		}
 
 		if (errors.Count > 0) {
 			_eventRaisingErrorHandler.Invoke(errors);
 		}
+	}
+
+	/// <summary>
+	/// Determines when a <see cref="Listener{T}"/> should be called
+	/// relative to other listeners.
+	/// The order when multiple listeners share the same enum value is unspecified.
+	/// </summary>
+	public enum Ordering {
+		First,
+		Sooner,
+		Normal,
+		Later,
+		Last
 	}
 
 	/// <summary>
@@ -111,6 +139,20 @@ public class EventDispatcher {
 	/// </summary>
 	public class EventInvocationException : Exception {
 		public EventInvocationException(string message, Exception e) : base(message, e) {}
+	}
+
+	private readonly struct RegisteredListener {
+		public Ordering Order { get; }
+		public Delegate Listener { get; }
+
+		public RegisteredListener(Ordering order, Delegate listener) {
+			Order = order;
+			Listener = listener;
+		}
+
+		public override string ToString() {
+			return "{" + Order + ">>" + Listener + "}";
+		}
 	}
 }
 
