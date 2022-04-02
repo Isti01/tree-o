@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a1721ff02ba40649343e5e89349cbb2, type: 3}
   m_Name: EmptyRedProjectile
   m_EditorClassIdentifier: 
-  Color: {r: 1, g: 0.16760457, b: 0, a: 1}
-  Sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
-  FlyingEffect: {fileID: 0}
-  ImpactEffect: {fileID: 0}
+  color: {r: 1, g: 0.16760457, b: 0, a: 1}
+  sprite: {fileID: -2413806693520163455, guid: ebe73ca9363db456bacf42c025bb4847, type: 3}
+  flyingEffect: {fileID: 0}
+  impactEffect: {fileID: 0}

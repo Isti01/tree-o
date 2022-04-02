@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d9b1029cc47445aa89805f85fbc593b, type: 3}
   m_Name: EmptyObstacle
   m_EditorClassIdentifier: 
-  Color: {r: 0, g: 0, b: 0, a: 1}
-  Sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
-  AmbientEffect: {fileID: 0}
+  color: {r: 0, g: 0, b: 0, a: 1}
+  sprite: {fileID: 7482667652216324306, guid: 48e93eef0688c4a259cb0eddcd8661f7, type: 3}
+  ambientEffect: {fileID: 0}

@@ -3,9 +3,21 @@ using UnityEngine;
 namespace Presentation.World {
 [CreateAssetMenu(fileName = "New Projectile", menuName = "World/Projectile", order = 1)]
 public class ProjectileData : ScriptableObject {
-	public Color Color;
-	public Sprite Sprite;
-	public GameObject FlyingEffect;
-	public GameObject ImpactEffect;
+	[SerializeField]
+	private Color color;
+
+	[SerializeField]
+	private Sprite sprite;
+
+	[SerializeField]
+	private GameObject flyingEffect;
+
+	[SerializeField]
+	private GameObject impactEffect;
+
+	public Color Color => color;
+	public Sprite Sprite => sprite;
+	public GameObject FlyingEffect => flyingEffect;
+	public GameObject ImpactEffect => impactEffect;
 }
 }
