@@ -496,7 +496,7 @@ MonoBehaviour:
   maxZoomLevel: 35
   zoomSensitivity: 1
   zoomSpeed: 30
-  panSensitivity: {x: 0.01, y: 0.02}
+  panSensitivity: {x: 0.02, y: 0.02}
   panSpeed: 100
 --- !u!1 &1579271861
 GameObject:
@@ -612,7 +612,6 @@ MonoBehaviour:
   Tower: {fileID: 1091641560809420229, guid: 7453f2c5b0de1434f8b333c2b8f45a29, type: 3}
   Castle: {fileID: 9084711428161005313, guid: 14fe3b5463cc4d24c8a07b1d1f912fd7, type: 3}
   Unit: {fileID: 8268301215112136559, guid: 89351f8508198b049a8fa60e02fb638d, type: 3}
-  TilePadding: 0
 --- !u!1 &1799972800
 GameObject:
   m_ObjectHideFlags: 0

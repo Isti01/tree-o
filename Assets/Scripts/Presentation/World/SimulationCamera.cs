@@ -1,5 +1,8 @@
+using System.Numerics;
 using Presentation.UI;
 using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Presentation.World {
 [RequireComponent(typeof(Camera))]
@@ -17,7 +20,7 @@ public class SimulationCamera : MonoBehaviour {
 	private float zoomSpeed = 30;
 
 	[SerializeField]
-	private Vector2 panSensitivity = new Vector2(0.01f, 0.02f);
+	private Vector2 panSensitivity = new Vector2(0.02f, 0.02f);
 
 	[SerializeField]
 	private float panSpeed = 100;
@@ -49,13 +52,19 @@ public class SimulationCamera : MonoBehaviour {
 	private void SetupCallbacks() {
 		var simulationUI = FindObjectOfType<SimulationUI>();
 
-		simulationUI.OnGameViewPanStart += evt => _isRightButtonDown |= evt.button == 1;
+		Vector2 mousePosition = Vector2.zero;
+		simulationUI.OnGameViewPanStart += evt => {
+			mousePosition = evt.mousePosition;
+			_isRightButtonDown |= evt.button == 1;
+		};
 
-		simulationUI.OnGameViewPanEnd += evt => _isRightButtonDown &= evt.button != 1;
+		simulationUI.OnGameViewPanEnd += evt => { _isRightButtonDown &= evt.button != 1; };
 
 		simulationUI.OnGameViewPanUpdate += evt => {
-			if (_isRightButtonDown)
-				_panTarget -= new Vector3(evt.mouseDelta.x * panSensitivity.x, -evt.mouseDelta.y * panSensitivity.y, 0);
+			if (!_isRightButtonDown) return;
+			var mouseDelta = evt.mousePosition - mousePosition;
+			_panTarget -= new Vector3(mouseDelta.x * panSensitivity.x, -mouseDelta.y * panSensitivity.y, 0);
+			mousePosition = evt.mousePosition;
 		};
 	}
 }
