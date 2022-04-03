@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a046f9e3c8344bada9e6404adcc932c1, type: 3}
   m_Name: FrtTowerLvl2Type
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: c9fe5f9d4baa8cb4585e1b8c77e92e41, type: 3}
+  sprite: {fileID: 21300000, guid: e7b9fbf86a28fc248b969dcab6196654, type: 3}
   blueColor: {r: 0, g: 0.3296814, b: 1, a: 1}
   redColor: {r: 1, g: 0.12787381, b: 0, a: 1}
   shootingEffect: {fileID: 0}
