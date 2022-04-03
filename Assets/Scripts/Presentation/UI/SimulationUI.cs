@@ -28,11 +28,13 @@ public class SimulationUI : MonoBehaviour {
 	private SimulationManager _simulationManager;
 	private TowerPlacingUI _towerPlacing;
 	private UIState _uiState = UIState.UnitDeployment;
+	private UIState _lastUiState;
 	private UnitDeploymentUI _unitDeployment;
 
 	private GameOverview GameOverview => _simulationManager.GameOverview;
 
 	private void Start() {
+		_lastUiState = _uiState;
 		_gameManager = FindObjectOfType<GameManager>();
 
 		_simulationManager = FindObjectOfType<SimulationManager>();
@@ -84,6 +86,16 @@ public class SimulationUI : MonoBehaviour {
 		UpdateUiState(UIState.TowerPlacing);
 	}
 
+	private void Update() {
+		if (Input.GetKeyDown(KeyCode.Escape)) {
+			if (_simulationManager.IsPaused) {
+				ResumeGame();
+			} else {
+				UpdateUiState(UIState.Paused);
+			}
+		}
+	}
+
 	private void OnTowerUpgraded(Tower tower) {
 		Debug.Log(GameOverview.Commands.Issue(new UpgradeTowerCommand(tower)).IsSuccess
 			? $"Upgraded: {tower}"
@@ -119,6 +131,11 @@ public class SimulationUI : MonoBehaviour {
 	}
 
 	private void OnResumeClicked() {
+		ResumeGame();
+	}
+
+	private void ResumeGame() {
+		UpdateUiState(_lastUiState);
 		_simulationManager.ResumeGame();
 		_pauseOverlay.Hide();
 	}
@@ -237,6 +254,11 @@ public class SimulationUI : MonoBehaviour {
 	}
 
 	private void UpdateUiState(UIState uiState) {
+		Debug.Log($"Updated UI state to: {uiState}");
+		if (_uiState != uiState) {
+			_lastUiState = _uiState;
+		}
+
 		_uiState = uiState;
 		switch (_uiState) {
 			case UIState.TowerPlacing:
