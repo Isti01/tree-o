@@ -45,10 +45,6 @@ public class SimulationManager : MonoBehaviour {
 		GameOverview?.Commands?.Issue(new AdvanceTimeCommand(GameOverview, Time.fixedDeltaTime));
 	}
 
-	public Projectile SpawnProjectile(Tower tower) {
-		throw new NotImplementedException();
-	}
-
 	private Tile GetClickedTile() {
 		if (!Input.GetMouseButtonDown(0)) return null;
 		Vector3 mousePosition = Input.mousePosition;
