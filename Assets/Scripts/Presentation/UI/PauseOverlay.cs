@@ -4,15 +4,19 @@ using UnityEngine.UIElements;
 
 namespace Presentation.UI {
 public class PauseOverlay : MonoBehaviour {
+	private const string ResumeButton = "ResumeButton";
+	private const string NewGameButton = "NewGameButton";
+	private const string ExitButton = "ExitButton";
+
 	[SerializeField]
 	private UIDocument ui;
 
 	private VisualElement RootElement => ui.rootVisualElement;
 
 	private void Start() {
-		RootElement.Q<Button>("ResumeButton").clicked += () => OnResumeClicked?.Invoke();
-		RootElement.Q<Button>("NewGameButton").clicked += () => OnNewGameClicked?.Invoke();
-		RootElement.Q<Button>("ExitButton").clicked += () => OnExitClicked?.Invoke();
+		RootElement.Q<Button>(ResumeButton).clicked += () => OnResumeClicked?.Invoke();
+		RootElement.Q<Button>(NewGameButton).clicked += () => OnNewGameClicked?.Invoke();
+		RootElement.Q<Button>(ExitButton).clicked += () => OnExitClicked?.Invoke();
 	}
 
 	public void Show() {

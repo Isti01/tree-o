@@ -7,6 +7,15 @@ using Color = Logic.Data.Color;
 
 namespace Presentation.UI {
 public class UnitDeploymentUI : MonoBehaviour {
+	private const string PlayerNameTurn = "PlayerNameTurn";
+	private const string NextButton = "Next";
+	private const string TopPanel = "TopPanel";
+	private const string BottomPanel = "BottomPanel";
+	private const string BudgetText = "BudgetText";
+	private const string TopChipText = "TopChipText";
+	private const string CardContent = "CardContent";
+	private const string BottomChipText = "BottomChipText";
+
 	[SerializeField]
 	private VisualTreeAsset cardComponent;
 
@@ -26,7 +35,7 @@ public class UnitDeploymentUI : MonoBehaviour {
 
 	private void Start() {
 		SetupCards();
-		RootElement.Q<Button>(SimulationUI.NextButton).clicked += () => OnNextClicked?.Invoke();
+		RootElement.Q<Button>(NextButton).clicked += () => OnNextClicked?.Invoke();
 	}
 
 	public void SetTeamColors(UnityEngine.Color teamRedColor, UnityEngine.Color teamBlueColor) {
@@ -36,19 +45,19 @@ public class UnitDeploymentUI : MonoBehaviour {
 
 	private void SetupCards() {
 		_unitCards.Clear();
-		var cardList = RootElement.Q<VisualElement>(SimulationUI.BottomPanel);
+		var cardList = RootElement.Q<VisualElement>(BottomPanel);
 		cardList.Clear();
 
 		foreach (UnitTypeData unitType in unitTypes) {
 			UnitTypeData unit = unitType;
 			TemplateContainer card = cardComponent.Instantiate();
-			var content = card.Q<VisualElement>("CardContent");
+			var content = card.Q<VisualElement>(CardContent);
 			content.style.backgroundImage = new StyleBackground(unitType.AliveSprite);
 
 			card.userData = 0;
 			UpdateCardUnitCount(card, 0);
 
-			var bottomLabel = card.Q<Label>("BottomChipText");
+			var bottomLabel = card.Q<Label>(BottomChipText);
 			bottomLabel.text = $"Cost: {unitType.Cost}";
 
 			card.RegisterCallback<ClickEvent>(e => {
@@ -71,7 +80,7 @@ public class UnitDeploymentUI : MonoBehaviour {
 		newUnits += (int) card.userData;
 		card.userData = newUnits;
 
-		var topLabel = card.Q<Label>("TopChipText");
+		var topLabel = card.Q<Label>(TopChipText);
 		topLabel.text = $"Amount: {newUnits}";
 	}
 
@@ -82,15 +91,15 @@ public class UnitDeploymentUI : MonoBehaviour {
 		bool isBlue = _activePlayer == Color.Blue;
 		UnityEngine.Color color = isBlue ? _teamBlueColor : _teamRedColor;
 
-		RootElement.Q(SimulationUI.TopPanel).style.backgroundColor = color;
-		RootElement.Q(SimulationUI.BottomPanel).style.backgroundColor = color;
+		RootElement.Q(TopPanel).style.backgroundColor = color;
+		RootElement.Q(BottomPanel).style.backgroundColor = color;
 
 		string playerName = isBlue ? "Blue" : "Red";
-		RootElement.Q<Label>("PlayerNameTurn").text = $"Player {playerName}'s turn";
+		RootElement.Q<Label>(PlayerNameTurn).text = $"Player {playerName}'s turn";
 	}
 
 	public void SetPlayerMoney(int playerMoney) {
-		RootElement.Q<Label>(SimulationUI.BudgetText).text = $"Budget: {playerMoney}";
+		RootElement.Q<Label>(BudgetText).text = $"Budget: {playerMoney}";
 	}
 
 	public void Show() {

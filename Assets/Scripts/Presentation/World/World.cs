@@ -28,13 +28,16 @@ public class World : MonoBehaviour {
 
 		_units = new Dictionary<Logic.Data.World.Unit, Unit>();
 
-		simulation.GameOverview.Events.AddListener<TowerBuiltEvent>(OnTowerBuilt);
-		simulation.GameOverview.Events.AddListener<TowerShotEvent>(OnTowerShot);
-		simulation.GameOverview.Events.AddListener<TowerCooledDownEvent>(OnTowerCooledDown);
+		var events = simulation.GameOverview.Events;
+		events.AddListener<TowerBuiltEvent>(OnTowerBuilt);
+		events.AddListener<TowerShotEvent>(OnTowerShot);
+		events.AddListener<TowerCooledDownEvent>(OnTowerCooledDown);
+		events.AddListener<TowerDestroyedEvent>(OnTowerDestroyed);
+		events.AddListener<TowerUpgradedEvent>(OnTowerUpgraded);
 
-		simulation.GameOverview.Events.AddListener<UnitDeployedEvent>(OnUnitDeployed);
-		simulation.GameOverview.Events.AddListener<UnitMovedTileEvent>(OnUnitMovedTile);
-		simulation.GameOverview.Events.AddListener<UnitDestroyedEvent>(OnUnitDestroyed);
+		events.AddListener<UnitDeployedEvent>(OnUnitDeployed);
+		events.AddListener<UnitMovedTileEvent>(OnUnitMovedTile);
+		events.AddListener<UnitDestroyedEvent>(OnUnitDestroyed);
 
 		GameWorld world = simulation.GameOverview.World;
 		transform.position = new Vector3(-world.Width / 2.0f, -world.Width / 2.0f, 0);
@@ -43,6 +46,18 @@ public class World : MonoBehaviour {
 		for (var x = 0; x < world.Width; x++) {
 			for (var y = 0; y < world.Height; y++) InstantiateTile(x, y, world);
 		}
+	}
+
+	private void OnTowerUpgraded(TowerUpgradedEvent e) {
+		var tower = LogicToPresentation<Tower>(e.Tower);
+		tower.SetData(e.Tower);
+		Debug.Log($"Tower Upgraded {e.Tower}");
+	}
+
+	private void OnTowerDestroyed(TowerDestroyedEvent e) {
+		var tower = LogicToPresentation<Tower>(e.Tower);
+		tower.DestroyTower();
+		Debug.Log($"Removed Tower: {e.Tower}");
 	}
 
 	private void Update() {}
@@ -118,8 +133,8 @@ public class World : MonoBehaviour {
 
 	private GameObject InstantiateTower(GameObject parent, Logic.Data.World.Tower tower) {
 		GameObject structure = Instantiate(Tower, parent.transform);
-		var barrackComponent = structure.GetComponent<Tower>();
-		barrackComponent.SetData(tower);
+		var towerComponent = structure.GetComponent<Tower>();
+		towerComponent.SetData(tower);
 		return structure;
 	}
 

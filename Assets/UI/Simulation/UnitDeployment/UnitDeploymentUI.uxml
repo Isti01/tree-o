@@ -4,11 +4,11 @@
         <ui:VisualElement name="VisualElement" class="ContainerStyle">
             <ui:VisualElement class="ColumnContainer">
                 <ui:VisualElement name="GameView" class="GameViewStyle" />
-                <ui:VisualElement name="BottomPanel" class="BottomPanelStyle" />
+                <ui:VisualElement name="BottomPanel" class="BottomPanelStyle" style="flex-shrink: 0;" />
             </ui:VisualElement>
-            <ui:VisualElement name="TopPanel" class="TopPanelStyle">
-                <ui:VisualElement name="NextButtonContainer" class="NextButtonStyle">
-                    <ui:Button text="Next" display-tooltip-when-elided="true" name="Next" style="bottom: auto; position: relative; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px; flex-grow: 1; font-size: 32px;" />
+            <ui:VisualElement name="TopPanel" class="TopPanelStyle" style="flex-shrink: 0;">
+                <ui:VisualElement name="NextButtonContainer" class="NextButtonStyle buttons" style="flex-shrink: 0;">
+                    <ui:Button text="Next" display-tooltip-when-elided="true" name="Next" class="button" style="bottom: auto; position: relative; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px; flex-grow: 1; font-size: 32px;" />
                 </ui:VisualElement>
                 <ui:Label text="Deploy Units" display-tooltip-when-elided="true" class="TitleStyle" />
                 <ui:Label text="Player Red&apos;s turn" display-tooltip-when-elided="true" name="PlayerNameTurn" />

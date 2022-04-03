@@ -53,6 +53,12 @@ TagManager:
   - name: Unit
     uniqueID: 1800257023
     locked: 0
+  - name: TowerRadiusCircle
+    uniqueID: 2449439365
+    locked: 0
+  - name: SelectedTower
+    uniqueID: 2150906415
+    locked: 0
   - name: Overlay
     uniqueID: 1682361585
     locked: 0
