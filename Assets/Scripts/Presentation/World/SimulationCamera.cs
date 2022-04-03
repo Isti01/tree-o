@@ -66,9 +66,9 @@ public class SimulationCamera : MonoBehaviour {
 			mousePosition = e.mousePosition;
 		};
 
-		simulationUI.OnGameViewMouseEnter += evt => { _shouldZoom = true; };
+		simulationUI.OnGameViewMouseEnter += e => { _shouldZoom = true; };
 
-		simulationUI.OnGameViewMouseLeave += evt => {
+		simulationUI.OnGameViewMouseLeave += e => {
 			_isRightButtonDown = false;
 			_shouldZoom = false;
 		};
