@@ -27,5 +27,9 @@ public class Tower : Structure {
 	public void SetData(Logic.Data.World.Tower data) {
 		_data = data;
 	}
+
+	public void DestroyTower() {
+		Destroy(gameObject);
+	}
 }
 }

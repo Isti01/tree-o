@@ -24,4 +24,4 @@ MonoBehaviour:
   buildingCost: 100
   destroyRefund: 50
   upgradeCost: 100
-  afterUpgradeType: {fileID: 0}
+  afterUpgradeType: {fileID: 11400000, guid: 97c730eb9809bfc4d918c7299fa050ed, type: 2}

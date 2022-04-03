@@ -50,3 +50,31 @@
 .SubtitleStyle {
     font-size: 18px;
 }
+
+.button {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    color: rgba(0, 0, 0, 255);
+    background-color: rgba(255, 255, 255, 255);
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.selected-button {
+    padding-left: 0;
+    padding-right: 0;
+    border-left-width: 1px;
+    border-right-width: 1px;
+    border-top-width: 1px;
+    border-bottom-width: 1px;
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+}

@@ -13,10 +13,7 @@ using Tower = Logic.Data.World.Tower;
 
 namespace Presentation.UI {
 public class SimulationUI : MonoBehaviour {
-	public const string TopPanel = "TopPanel";
-	public const string NextButton = "Next";
-	public const string BudgetText = "BudgetText";
-	public const string BottomPanel = "BottomPanel";
+	private const string GameView = "GameView";
 
 	public Color teamRedColor;
 	public Color teamBlueColor;
@@ -57,6 +54,8 @@ public class SimulationUI : MonoBehaviour {
 
 		_towerPlacing.OnNextClicked += StepTowerPlacing;
 		_towerPlacing.OnTowerTypeSelected += OnTowerTypeSelected;
+		_towerPlacing.OnTowerDestroyed += OnTowerDestroyed;
+		_towerPlacing.OnTowerUpgraded += OnTowerUpgraded;
 
 		_unitDeployment = GetComponentInChildren<UnitDeploymentUI>();
 		_unitDeployment.SetTeamColors(teamRedColor, teamBlueColor);
@@ -85,6 +84,26 @@ public class SimulationUI : MonoBehaviour {
 		UpdateUiState(UIState.TowerPlacing);
 	}
 
+	private void OnTowerUpgraded(Tower tower) {
+		Debug.Log(GameOverview.Commands.Issue(new UpgradeTowerCommand(tower)).IsSuccess
+			? $"Upgraded: {tower}"
+			: $"Failed to upgrade: {tower}");
+		_towerPlacing.ShowTowerStats(tower);
+	}
+
+	private void OnTowerDestroyed(Tower tower) {
+		if (GameOverview.Commands.Issue(new DestroyTowerCommand(tower))) {
+			Debug.Log($"Destroyed: {tower}");
+			if (_selectedTowerType != null) {
+				_towerPlacing.ShowTowerTypeStats(_selectedTowerType);
+			} else {
+				_towerPlacing.ShowInstructions();
+			}
+		} else {
+			Debug.Log($"Failed to destroy: {tower}");
+		}
+	}
+
 	private void OnDestroy() {
 		_simulationManager.OnTileSelected -= OnTileSelected;
 
@@ -92,6 +111,8 @@ public class SimulationUI : MonoBehaviour {
 
 		_towerPlacing.OnNextClicked -= StepTowerPlacing;
 		_towerPlacing.OnTowerTypeSelected -= OnTowerTypeSelected;
+		_towerPlacing.OnTowerDestroyed -= OnTowerDestroyed;
+		_towerPlacing.OnTowerUpgraded -= OnTowerUpgraded;
 
 		_unitDeployment.OnNextClicked -= StepUnitDeployment;
 		_unitDeployment.OnUnitPurchased -= OnUnitPurchased;
@@ -128,7 +149,7 @@ public class SimulationUI : MonoBehaviour {
 		UIDocument[] uiDocs = GetComponentsInChildren<UIDocument>();
 
 		foreach (UIDocument ui in uiDocs) {
-			var gameView = ui.rootVisualElement.Q<VisualElement>("GameView");
+			var gameView = ui.rootVisualElement.Q<VisualElement>(GameView);
 			if (gameView == null) continue;
 
 			gameView.RegisterCallback<MouseDownEvent>(e => OnGameViewPanStart?.Invoke(e));
@@ -139,7 +160,7 @@ public class SimulationUI : MonoBehaviour {
 
 	private void OnUnitPurchased(UnitTypeData unitType) {
 		var command = new PurchaseUnitCommand(GameOverview.GetTeam(_activePlayer), unitType);
-		if (GameOverview.Commands.Issue(command).IsSuccess) {
+		if (GameOverview.Commands.Issue(command)) {
 			_unitDeployment.OnUnitBought(unitType);
 			_unitDeployment.SetPlayerMoney(GameOverview.GetTeam(_activePlayer).Money);
 		} else {
@@ -153,6 +174,7 @@ public class SimulationUI : MonoBehaviour {
 
 		_selectedTowerType = null;
 
+		_towerPlacing.ResetUI();
 		_towerPlacing.Show();
 		_towerPlacing.SetActivePlayer(_activePlayer);
 		_towerPlacing.SetPlayerMoney(playerData.Money);
@@ -167,19 +189,22 @@ public class SimulationUI : MonoBehaviour {
 
 	private void OnTowerTypeSelected(TowerTypeData towerType) {
 		_selectedTowerType = towerType;
+		_towerPlacing.ShowTowerTypeStats(towerType);
 	}
 
 	private void OnTileSelected(TilePosition position) {
+		if (_uiState == UIState.TowerPlacing) HandleTowerPlacingTileSelection(position);
+	}
+
+	private void HandleTowerPlacingTileSelection(TilePosition position) {
 		GameTeam playerData = GameOverview.GetTeam(_activePlayer);
-		if (_uiState == UIState.TowerPlacing && _selectedTowerType != null) {
+		TileObject tileObject = GameOverview.World[position.X, position.Y];
+		if (tileObject is Tower tower && tower.OwnerColor == _activePlayer) {
+			_towerPlacing.ShowTowerStats(tower);
+			Debug.Log($"[TowerPlacing]: A tower has been selected: {tower} at position {position}");
+		} else if (_selectedTowerType != null) {
 			GameOverview.Commands.Issue(new BuildTowerCommand(playerData, _selectedTowerType, position));
-			// TODO maybe handle the possible outcomes
-			_towerPlacing.SetPlayerMoney(playerData.Money);
-		} else if (_uiState == UIState.TowerPlacing) {
-			TileObject tileObject = GameOverview.World[position.X, position.Y];
-			if (tileObject is Tower tower
-				&& tower.OwnerColor == _activePlayer) // TODO show the selected tower in the UI
-				Debug.Log($"[TowerPlacing]: A tower has been selected: {tower} at position {position}");
+			_towerPlacing.SetPlayerMoney(playerData.Money); // TODO maybe handle the possible outcomes
 		}
 	}
 
@@ -189,7 +214,7 @@ public class SimulationUI : MonoBehaviour {
 		} else {
 			UpdateUiState(UIState.Battle);
 			if (GameOverview.CurrentPhase == GamePhase.Prepare)
-				if (!GameOverview.Commands.Issue(new AdvancePhaseCommand(GameOverview)).IsSuccess)
+				if (!GameOverview.Commands.Issue(new AdvancePhaseCommand(GameOverview)))
 					Debug.LogError("[GamePhase] Failed to advance the GamePhase");
 		}
 	}

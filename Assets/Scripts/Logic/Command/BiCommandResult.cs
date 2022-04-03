@@ -1,5 +1,4 @@
 ﻿namespace Logic.Command {
-
 /// <summary>
 /// A general implementation of <see cref="ICommandResult"/> that only has two
 /// instances, <see cref="Success"/> and <see cref="Failure"/>,
@@ -11,9 +10,12 @@ public sealed class BiCommandResult : ICommandResult {
 
 	public bool IsSuccess => this == Success;
 
+	public static implicit operator bool(BiCommandResult result) {
+		return result.IsSuccess;
+	}
+
 	private BiCommandResult() {
 		//Disallow construction
 	}
 }
-
 }
