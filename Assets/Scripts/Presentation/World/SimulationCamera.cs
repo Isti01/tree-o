@@ -1,4 +1,3 @@
-using System.Numerics;
 using Presentation.UI;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
@@ -26,12 +25,10 @@ public class SimulationCamera : MonoBehaviour {
 	private float panSpeed = 100;
 
 	private Camera _cam;
-
 	private bool _isRightButtonDown;
-
 	private Vector3 _panTarget;
-
 	private float _zoomTarget;
+	private bool _shouldZoom = true;
 
 	private void Start() {
 		_cam = GetComponent<Camera>();
@@ -42,8 +39,10 @@ public class SimulationCamera : MonoBehaviour {
 	}
 
 	private void Update() {
-		_zoomTarget -= Input.mouseScrollDelta.y * zoomSensitivity;
-		_zoomTarget = Mathf.Clamp(_zoomTarget, minZoomLevel, maxZoomLevel);
+		if (_shouldZoom) {
+			_zoomTarget -= Input.mouseScrollDelta.y * zoomSensitivity;
+			_zoomTarget = Mathf.Clamp(_zoomTarget, minZoomLevel, maxZoomLevel);
+		}
 
 		_cam.orthographicSize = Mathf.MoveTowards(_cam.orthographicSize, _zoomTarget, zoomSpeed * Time.deltaTime);
 		transform.position = Vector3.MoveTowards(transform.position, _panTarget, panSpeed * Time.deltaTime);
@@ -53,18 +52,25 @@ public class SimulationCamera : MonoBehaviour {
 		var simulationUI = FindObjectOfType<SimulationUI>();
 
 		Vector2 mousePosition = Vector2.zero;
-		simulationUI.OnGameViewPanStart += evt => {
-			mousePosition = evt.mousePosition;
-			_isRightButtonDown |= evt.button == 1;
+		simulationUI.OnGameViewPanStart += e => {
+			mousePosition = e.mousePosition;
+			_isRightButtonDown |= e.button == 1;
 		};
 
-		simulationUI.OnGameViewPanEnd += evt => { _isRightButtonDown &= evt.button != 1; };
+		simulationUI.OnGameViewPanEnd += e => { _isRightButtonDown &= e.button != 1; };
 
-		simulationUI.OnGameViewPanUpdate += evt => {
+		simulationUI.OnGameViewPanUpdate += e => {
 			if (!_isRightButtonDown) return;
-			var mouseDelta = evt.mousePosition - mousePosition;
+			var mouseDelta = e.mousePosition - mousePosition;
 			_panTarget -= new Vector3(mouseDelta.x * panSensitivity.x, -mouseDelta.y * panSensitivity.y, 0);
-			mousePosition = evt.mousePosition;
+			mousePosition = e.mousePosition;
+		};
+
+		simulationUI.OnGameViewMouseEnter += evt => { _shouldZoom = true; };
+
+		simulationUI.OnGameViewMouseLeave += evt => {
+			_isRightButtonDown = false;
+			_shouldZoom = false;
 		};
 	}
 }
