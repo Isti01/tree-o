@@ -8,12 +8,12 @@ using NUnit.Framework;
 namespace LogicTests {
 public static class WorldTestUtils {
 	public static GameWorld GenerateWorld() {
-		Random random = new Random();
+		Random random = RandomUtils.CreateRandomlySeededRandom();
 		int width = random.Next(10, 15);
 		int height = random.Next(10, 15);
 
 		Mock<IGameOverview> overview = new Mock<IGameOverview>();
-		overview.Setup(o => o.Random).Returns(new Random());
+		overview.Setup(o => o.Random).Returns(random);
 
 		Mock<IGameWorldConfig> config = new Mock<IGameWorldConfig>();
 		config.Setup(c => c.BarrackSpawnCooldownTime).Returns(1);

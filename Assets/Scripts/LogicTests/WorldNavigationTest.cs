@@ -65,7 +65,7 @@ public class WorldNavigationTest {
 	[Repeat((LowRepeatCount))]
 	public void TestPathLeadsToTarget() {
 		GameWorld world = WorldTestUtils.GenerateWorld();
-		Random random = new Random();
+		Random random = RandomUtils.CreateRandomlySeededRandom();
 		Vector2 from = new Vector2((random.Next() % world.Width) + 0.5F, (random.Next() % world.Height) + 0.5F);
 		Vector2 to = new Vector2((random.Next() % world.Width) + 0.5F, (random.Next() % world.Height) + 0.5F);
 		List<Vector2> path = world.Navigation.TryGetPathDeltas(from, to, 0);
@@ -84,7 +84,7 @@ public class WorldNavigationTest {
 	[Repeat(HighRepeatCount)]
 	public void TestNoObstacles() {
 		GameWorld world = WorldTestUtils.GenerateWorld();
-		Random random = new Random();
+		Random random = RandomUtils.CreateRandomlySeededRandom();
 		Vector2 from = new Vector2((random.Next() % world.Width) + 0.5F, (random.Next() % world.Height) + 0.5F);
 		Vector2 to = new Vector2(0.5F, 0.5F);
 		List<Vector2> path = world.Navigation.TryGetPathDeltas(from, to, 0);
