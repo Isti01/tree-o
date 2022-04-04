@@ -101,6 +101,7 @@ public class SimulationUI : MonoBehaviour {
 			? $"Upgraded: {tower}"
 			: $"Failed to upgrade: {tower}");
 		_towerPlacing.ShowTowerStats(tower);
+		_towerPlacing.SetPlayerMoney(GameOverview.GetTeam(_activePlayer).Money);
 	}
 
 	private void OnTowerDestroyed(Tower tower) {
@@ -108,6 +109,7 @@ public class SimulationUI : MonoBehaviour {
 			Debug.Log($"Destroyed: {tower}");
 			if (_selectedTowerType != null) {
 				_towerPlacing.ShowTowerTypeStats(_selectedTowerType);
+				_towerPlacing.SetPlayerMoney(GameOverview.GetTeam(_activePlayer).Money);
 			} else {
 				_towerPlacing.ShowInstructions();
 			}
