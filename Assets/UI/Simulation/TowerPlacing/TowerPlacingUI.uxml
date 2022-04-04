@@ -13,12 +13,12 @@
                             <ui:Label text="Place Towers" display-tooltip-when-elided="true" class="TitleStyle" />
                             <ui:Label text="Player Red&apos;s turn" display-tooltip-when-elided="true" name="PlayerNameTurn" />
                             <ui:Label text="Budget: 123" display-tooltip-when-elided="true" name="BudgetText" />
-                            <ui:VisualElement name="TowerTypeStats" style="display: flex;">
+                            <ui:VisualElement name="TowerTypeStats" style="display: none;">
                                 <ui:Label text="Tower Type Name" display-tooltip-when-elided="true" name="TowerName" style="font-size: 16px; -unity-font-style: bold; margin-top: 8px;" />
                                 <ui:Label text="Type stats:" display-tooltip-when-elided="true" name="Label" />
                                 <ui:VisualElement name="TowerStats" style="margin-left: 12px;" />
                             </ui:VisualElement>
-                            <ui:VisualElement name="DeployedTowerStats" style="display: none;">
+                            <ui:VisualElement name="DeployedTowerStats" style="display: flex;">
                                 <ui:Label text="Deployer Tower Name" display-tooltip-when-elided="true" name="TowerName" style="font-size: 16px; -unity-font-style: bold; margin-top: 8px; white-space: normal;" />
                                 <ui:VisualElement name="TabButtons" style="flex-direction: row; align-items: stretch; justify-content: space-between;">
                                     <ui:Button text="STATS" display-tooltip-when-elided="true" name="StatsButton" class="button" style="padding-left: 8px; padding-right: 8px; flex-grow: 1;" />
@@ -26,12 +26,14 @@
                                 </ui:VisualElement>
                                 <ui:VisualElement name="StatsContainer" style="display: none; margin-left: 12px;" />
                                 <ui:VisualElement name="ManageContainer">
-                                    <ui:Label text="After Upgrade" display-tooltip-when-elided="true" style="font-size: 16px; white-space: normal;" />
-                                    <ui:VisualElement name="AfterUpgrade" style="margin-left: 12px;">
-                                        <ui:Label text="Szia uram itt van sok stats" display-tooltip-when-elided="true" style="white-space: normal;" />
+                                    <ui:VisualElement name="UpgradeContainer" style="flex-direction: column;">
+                                        <ui:Label text="After Upgrade" display-tooltip-when-elided="true" style="font-size: 16px; white-space: normal;" />
+                                        <ui:VisualElement name="AfterUpgrade" style="margin-left: 12px;">
+                                            <ui:Label text="Szia uram itt van sok stats" display-tooltip-when-elided="true" style="white-space: normal;" />
+                                        </ui:VisualElement>
+                                        <ui:Label text="Upgrade Cost: 100" display-tooltip-when-elided="true" name="UpgradeCost" style="margin-top: 16px; white-space: normal; font-size: 16px;" />
+                                        <ui:Button text="UPGRADE" display-tooltip-when-elided="true" name="UpgradeButton" class="button" />
                                     </ui:VisualElement>
-                                    <ui:Label text="Upgrade Cost: 100" display-tooltip-when-elided="true" name="UpgradeCost" style="margin-top: 16px; white-space: normal; font-size: 16px;" />
-                                    <ui:Button text="UPGRADE" display-tooltip-when-elided="true" name="UpgradeButton" class="button" />
                                     <ui:Label text="Money Recovered after destroyed: 100" display-tooltip-when-elided="true" name="MoneyRecoveredText" style="white-space: normal; margin-top: 16px; font-size: 16px;" />
                                     <ui:Button text="DESTROY" display-tooltip-when-elided="true" name="DestroyButton" class="button" />
                                 </ui:VisualElement>

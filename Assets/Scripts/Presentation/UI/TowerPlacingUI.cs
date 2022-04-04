@@ -30,6 +30,7 @@ public class TowerPlacingUI : MonoBehaviour {
 	private const string MoneyRecoveredText = "MoneyRecoveredText";
 	private const string UpgradeButton = "UpgradeButton";
 	private const string UpgradeCost = "UpgradeCost";
+	private const string UpgradeContainer = "UpgradeContainer";
 
 	private const string SelectedButtonClass = "selected-button";
 
@@ -70,6 +71,7 @@ public class TowerPlacingUI : MonoBehaviour {
 	}
 
 	public void ShowInstructions() {
+		HideTabs();
 		RootElement.Q(InstructionsText).style.display = DisplayStyle.Flex;
 	}
 
@@ -140,13 +142,17 @@ public class TowerPlacingUI : MonoBehaviour {
 
 	private void ShowTowerTypeStats(TowerTypeData towerType, VisualElement statsContainer) {
 		statsContainer.Clear();
-		var stats = new[] {
-			$"Damage: {towerType.Damage}", $"Range: {towerType.Range}", $"Building Cost: {towerType.BuildingCost}",
-			$"Destroy Refund: {towerType.DestroyRefund}", $"Cooldown Time: {towerType.CooldownTime}",
-			$"UpgradeCost: {towerType.UpgradeCost}",
-		};
-		foreach (string stat in stats) {
-			statsContainer.Add(new Label(stat) { style = { marginTop = 2, marginBottom = 0 } });
+		if (towerType != null) {
+			var stats = new[] {
+				$"Damage: {towerType.Damage}", $"Range: {towerType.Range}", $"Building Cost: {towerType.BuildingCost}",
+				$"Destroy Refund: {towerType.DestroyRefund}", $"Cooldown Time: {towerType.CooldownTime}",
+				$"UpgradeCost: {towerType.UpgradeCost}",
+			};
+			foreach (string stat in stats) {
+				statsContainer.Add(new Label(stat) { style = { marginTop = 2, marginBottom = 0 } });
+			}
+		} else {
+			Debug.Log("The tower type was null");
 		}
 	}
 
@@ -197,10 +203,19 @@ public class TowerPlacingUI : MonoBehaviour {
 		} else {
 			manageContainer.style.display = DisplayStyle.Flex;
 			statsContainer.style.display = DisplayStyle.None;
-			ShowTowerTypeStats(tower.Type.AfterUpgradeType as TowerTypeData, manageContainer.Q(AfterUpgrade));
+			var afterUpgrade = tower.Type.AfterUpgradeType as TowerTypeData;
+			var container = manageContainer.Q(UpgradeContainer);
+
+			if (afterUpgrade != null) {
+				container.style.display = DisplayStyle.Flex;
+				ShowTowerTypeStats(afterUpgrade, manageContainer.Q(AfterUpgrade));
+				manageContainer.Q<Label>(UpgradeCost).text = $"Upgrade Cost: {tower.Type.UpgradeCost}";
+			} else {
+				container.style.display = DisplayStyle.None;
+			}
+
 			manageContainer.Q<Label>(MoneyRecoveredText).text =
 				$"Money Recovered after destroyed: {tower.Type.DestroyRefund}";
-			manageContainer.Q<Label>(UpgradeCost).text = $"Upgrade Cost: {tower.Type.UpgradeCost}";
 		}
 	}
 
