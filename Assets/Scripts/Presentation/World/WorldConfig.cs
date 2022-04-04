@@ -13,8 +13,12 @@ public class WorldConfig : ScriptableObject, IGameWorldConfig {
 	[Min(0.01f)]
 	private float castleStartingHealth;
 
+	[SerializeField]
+	[Min(0)]
+	private int maxBuildingDistance;
 	public float BarrackSpawnCooldownTime => barrackSpawnCooldownTime;
 	public float CastleStartingHealth => castleStartingHealth;
+	public int MaxBuildingDistance => maxBuildingDistance;
 }
 
 }

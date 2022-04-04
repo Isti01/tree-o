@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Logic.Command;
+﻿using Logic.Command;
 using Logic.Command.Tower;
 using Logic.Data;
 using Logic.Data.World;
 
 namespace Logic.Handler {
-
 public class ManageTowerHandler : BaseHandler {
 	public override void RegisterConsumers(CommandDispatcher dispatcher) {
 		dispatcher.RegisterConsumer<BuildTowerCommand, BuildTowerCommand.CommandResult>(Handle);
@@ -17,28 +14,12 @@ public class ManageTowerHandler : BaseHandler {
 	private BuildTowerCommand.CommandResult Handle(BuildTowerCommand command) {
 		if (command.Team.Overview.CurrentPhase != GamePhase.Prepare) return BuildTowerCommand.CommandResult.MiscFailure;
 
-		IGameOverview overview = command.Team.Overview;
 		GameWorld world = command.Team.Overview.World;
 
 		if (command.Team.Money < command.Type.BuildingCost) return BuildTowerCommand.CommandResult.NotEnoughMoney;
 
-		if (world[command.Position] != null) return BuildTowerCommand.CommandResult.TileAlreadyOccupied;
-
-		if (world.Units.Any(unit => unit.TilePosition.Equals(command.Position)))
-			return BuildTowerCommand.CommandResult.TileAlreadyOccupied;
-
-		ICollection<TilePosition> blockedTiles = new List<TilePosition>();
-		blockedTiles.Add(command.Position);
-
-		foreach (GameTeam team in overview.Teams) {
-			TilePosition to = overview.GetEnemyTeam(team).Castle.Position;
-			foreach (TilePosition from in team.Barracks.Select(b => b.Position)
-				.Concat(team.Units.Select(u => u.TilePosition))) {
-				if (!world.Navigation.IsPositionReachable(from, to, blockedTiles)) {
-					return BuildTowerCommand.CommandResult.LeavesNoPathForUnit;
-				}
-			}
-		}
+		if (!world.GetAvailableTilePositions(command.Team).Contains(command.Position))
+			return BuildTowerCommand.CommandResult.TileUnavailable;
 
 		command.Team.SpendMoney(command.Type.BuildingCost);
 		command.Team.IncrementBuiltTowerCount();
@@ -65,5 +46,4 @@ public class ManageTowerHandler : BaseHandler {
 		return UpgradeTowerCommand.CommandResult.Success;
 	}
 }
-
 }
