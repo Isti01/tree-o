@@ -35,7 +35,7 @@ public class SimulationManager : MonoBehaviour {
 			Debug.LogError($"[Logic Exception]: ${e}");
 		}
 
-		GameOverview = new GameOverview(ExceptionHandler, seed, worldWidth, worldHeight,
+		GameOverview = new GameOverview(ExceptionHandler, UnityEngine.Random.Range(0, 9999), worldWidth, worldHeight,
 			overviewConfig, economyConfig, worldConfig);
 	}
 

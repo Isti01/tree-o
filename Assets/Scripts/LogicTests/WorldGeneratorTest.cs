@@ -68,7 +68,7 @@ public class WorldGeneratorTest {
 		Assert.IsTrue(world.TileObjects
 			.Where(o => o is Obstacle)
 			.Select(o => o.Position)
-			.All(o => castles.All(p => o.Distance2(p) > 4)));
+			.All(o => castles.All(p => o.FirstNormDistance(p) > 3)));
 	}
 
 	[Test]
@@ -84,7 +84,7 @@ public class WorldGeneratorTest {
 		Assert.IsTrue(world.TileObjects
 			.Where(o => o is Obstacle)
 			.Select(o => o.Position)
-			.All(o => barracks.All(p => o.Distance2(p) > 2)));
+			.All(o => barracks.All(p => o.FirstNormDistance(p) > 3)));
 	}
 
 	[Test]
