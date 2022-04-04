@@ -605,12 +605,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5895d66a18c34b22a2a30b9da3831f80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Tile: {fileID: 1691539168291297187, guid: 846a201408892e848b6101f9025eadd3, type: 3}
-  Barrack: {fileID: 1733402779209516526, guid: 0353290a5d72b7741b57f1ba3d700f9e, type: 3}
-  Obstacle: {fileID: 75571796123299443, guid: 00a3c959845a40a4cbe845f0810fb4af, type: 3}
-  Tower: {fileID: 1091641560809420229, guid: 7453f2c5b0de1434f8b333c2b8f45a29, type: 3}
-  Castle: {fileID: 9084711428161005313, guid: 14fe3b5463cc4d24c8a07b1d1f912fd7, type: 3}
-  Unit: {fileID: 8268301215112136559, guid: 89351f8508198b049a8fa60e02fb638d, type: 3}
+  tilePrefab: {fileID: 1691539168291297187, guid: 846a201408892e848b6101f9025eadd3, type: 3}
+  barrackPrefab: {fileID: 1733402779209516526, guid: 0353290a5d72b7741b57f1ba3d700f9e, type: 3}
+  obstaclePrefab: {fileID: 75571796123299443, guid: 00a3c959845a40a4cbe845f0810fb4af, type: 3}
+  towerPrefab: {fileID: 1091641560809420229, guid: 7453f2c5b0de1434f8b333c2b8f45a29, type: 3}
+  castlePrefab: {fileID: 9084711428161005313, guid: 14fe3b5463cc4d24c8a07b1d1f912fd7, type: 3}
+  unitPrefab: {fileID: 8268301215112136559, guid: 89351f8508198b049a8fa60e02fb638d, type: 3}
 --- !u!1 &1799972800
 GameObject:
   m_ObjectHideFlags: 0
