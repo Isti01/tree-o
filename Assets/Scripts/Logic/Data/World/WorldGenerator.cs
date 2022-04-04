@@ -62,7 +62,7 @@ public class WorldGenerator {
 
 		occupieds.Add(_constructors.CreateBarrack(new TilePosition(x, y), Color.Red));
 
-		int obstacleCount = (_random.Next() % ((_width * _height) / 60)) + 1;
+		int obstacleCount = (_random.Next() % ((_width * _height) / 60)) + 2;
 		int i = 0, rep = 0;
 		while (i < obstacleCount && rep < 1000) {
 			++rep;

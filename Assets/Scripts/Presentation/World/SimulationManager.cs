@@ -11,7 +11,6 @@ namespace Presentation.World {
 public class SimulationManager : MonoBehaviour {
 	public int worldWidth = 10;
 	public int worldHeight = 10;
-	public int seed = 1337;
 
 	[SerializeField]
 	private OverviewConfig overviewConfig;
