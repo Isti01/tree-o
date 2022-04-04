@@ -62,6 +62,41 @@ public class GameWorld {
 		return TileObjects.Where(o => o is T).Cast<T>();
 	}
 
+	public ISet<TilePosition> GetAvailableTilePositions(GameTeam buildingTeam) {
+		HashSet<TilePosition> positions = new HashSet<TilePosition>();
+		foreach (var building in TileObjects.Where(to => to is Building building && building.Owner == buildingTeam)) {
+			for (int i = -Config.MaxBuildingDistance; i <= Config.MaxBuildingDistance; i++) {
+				for (int j = -3; j < 4; j++) {
+					TilePosition pos = new TilePosition(building.Position.X + i, building.Position.Y + j);
+					if (pos.X >= 0 && pos.X < Width && pos.Y >= 0 && pos.Y < Height
+						&& Math.Abs(i) + Math.Abs(j) <= Config.MaxBuildingDistance)
+						if (_grid[pos.X, pos.Y] == null
+							&& !Units.Any(unit => unit.TilePosition.Equals(pos)))
+							positions.Add(pos);
+				}
+			}
+		}
+		HashSet<TilePosition> wrongs = new HashSet<TilePosition>();
+		ICollection<TilePosition> blockedTiles = new List<TilePosition>();
+		foreach (var t in positions) {
+			blockedTiles.Clear();
+			blockedTiles.Add(t);
+			foreach (GameTeam sourceTeam in Overview.Teams) {
+				TilePosition to = Overview.GetEnemyTeam(sourceTeam).Castle.Position;
+				foreach (TilePosition from in sourceTeam.Barracks.Select(b => b.Position)
+					.Concat(sourceTeam.Units.Select(u => u.TilePosition))) {
+					if (!Navigation.IsPositionReachable(from, to, blockedTiles)) {
+						wrongs.Add(t);
+					}
+				}
+			}
+		}
+
+		positions.ExceptWith(wrongs);
+
+		return positions;
+	}
+
 	public void BuildTower(GameTeam team, ITowerTypeData type, TilePosition position) {
 		if (_grid[position.X, position.Y] != null)
 			throw new ArgumentException($"Position {position} is already occupied");
@@ -81,8 +116,6 @@ public class GameWorld {
 		// This is done on purpose: we don't want to lose reference to the tower.
 		_grid[tower.Position.X, tower.Position.Y] = null;
 	}
-
-
 
 	public void DeployUnit(Barrack barrack, IUnitTypeData type) {
 		Vector2 position = barrack.Position.ToVectorCentered();

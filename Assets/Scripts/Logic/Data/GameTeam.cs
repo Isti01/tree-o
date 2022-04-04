@@ -32,6 +32,8 @@ public class GameTeam {
 
 	public int BuiltTowerCount { get; private set; }
 
+
+
 	#endregion
 
 	#region Methods

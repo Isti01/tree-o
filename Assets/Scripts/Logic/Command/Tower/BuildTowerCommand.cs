@@ -17,8 +17,7 @@ public class BuildTowerCommand : BaseCommand<BuildTowerCommand.CommandResult> {
 	public sealed class CommandResult : ICommandResult {
 		public static readonly CommandResult Success = new CommandResult();
 		public static readonly CommandResult NotEnoughMoney = new CommandResult();
-		public static readonly CommandResult TileAlreadyOccupied = new CommandResult();
-		public static readonly CommandResult LeavesNoPathForUnit = new CommandResult();
+		public static readonly CommandResult TileUnavailable = new CommandResult();
 		public static readonly CommandResult MiscFailure = new CommandResult();
 
 		public bool IsSuccess => this == Success;
