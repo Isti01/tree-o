@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   barrackSpawnCooldownTime: 1
   castleStartingHealth: 10
+  maxBuildingDistance: 3
