@@ -340,9 +340,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf7c5a8235d14edca54533665a0d3ee8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  WorldWidth: 15
-  WorldHeight: 15
-  Seed: 1337
+  worldWidth: 15
+  worldHeight: 15
+  seed: 1337
   overviewConfig: {fileID: 11400000, guid: 7c8cbf053badd4b41b80657b3ac3f9b0, type: 2}
   economyConfig: {fileID: 11400000, guid: 81bfec33eeaebc34587067be5f4845a9, type: 2}
   worldConfig: {fileID: 11400000, guid: 4295ad0f99658094795e3a4c95b62f83, type: 2}

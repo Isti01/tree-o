@@ -169,9 +169,9 @@ public class SimulationUI : MonoBehaviour {
 			var gameView = ui.rootVisualElement.Q<VisualElement>(GameView);
 			if (gameView == null) continue;
 
-			gameView.RegisterCallback<MouseDownEvent>(e => OnGameViewPanStart?.Invoke(e));
-			gameView.RegisterCallback<MouseUpEvent>(e => OnGameViewPanEnd?.Invoke(e));
-			gameView.RegisterCallback<MouseMoveEvent>(e => OnGameViewPanUpdate?.Invoke(e));
+			gameView.RegisterCallback<MouseDownEvent>(e => OnGameViewMouseDown?.Invoke(e));
+			gameView.RegisterCallback<MouseUpEvent>(e => OnGameViewMouseUp?.Invoke(e));
+			gameView.RegisterCallback<MouseMoveEvent>(e => OnGameViewMouseMove?.Invoke(e));
 			gameView.RegisterCallback<MouseEnterEvent>(e => OnGameViewMouseEnter?.Invoke(e));
 			gameView.RegisterCallback<MouseLeaveEvent>(e => OnGameViewMouseLeave?.Invoke(e));
 		}
@@ -287,8 +287,8 @@ public class SimulationUI : MonoBehaviour {
 
 	public event Action<MouseEnterEvent> OnGameViewMouseEnter;
 	public event Action<MouseLeaveEvent> OnGameViewMouseLeave;
-	public event Action<MouseDownEvent> OnGameViewPanStart;
-	public event Action<MouseUpEvent> OnGameViewPanEnd;
-	public event Action<MouseMoveEvent> OnGameViewPanUpdate;
+	public event Action<MouseDownEvent> OnGameViewMouseDown;
+	public event Action<MouseUpEvent> OnGameViewMouseUp;
+	public event Action<MouseMoveEvent> OnGameViewMouseMove;
 }
 }

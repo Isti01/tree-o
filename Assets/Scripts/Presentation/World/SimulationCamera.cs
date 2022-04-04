@@ -52,14 +52,14 @@ public class SimulationCamera : MonoBehaviour {
 		var simulationUI = FindObjectOfType<SimulationUI>();
 
 		Vector2 mousePosition = Vector2.zero;
-		simulationUI.OnGameViewPanStart += e => {
+		simulationUI.OnGameViewMouseDown += e => {
 			mousePosition = e.mousePosition;
 			_isRightButtonDown |= e.button == 1;
 		};
 
-		simulationUI.OnGameViewPanEnd += e => { _isRightButtonDown &= e.button != 1; };
+		simulationUI.OnGameViewMouseUp += e => { _isRightButtonDown &= e.button != 1; };
 
-		simulationUI.OnGameViewPanUpdate += e => {
+		simulationUI.OnGameViewMouseMove += e => {
 			if (!_isRightButtonDown) return;
 			var mouseDelta = e.mousePosition - mousePosition;
 			_panTarget -= new Vector3(mouseDelta.x * panSensitivity.x, -mouseDelta.y * panSensitivity.y, 0);
