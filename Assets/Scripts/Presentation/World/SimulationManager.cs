@@ -2,14 +2,16 @@ using System;
 using Logic.Command;
 using Logic.Data;
 using Logic.Data.World;
+using Presentation.UI;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Vector2 = UnityEngine.Vector2;
 
 namespace Presentation.World {
 public class SimulationManager : MonoBehaviour {
-	public int WorldWidth = 10;
-	public int WorldHeight = 10;
-	public int Seed = 1337;
+	public int worldWidth = 10;
+	public int worldHeight = 10;
+	public int seed = 1337;
 
 	[SerializeField]
 	private OverviewConfig overviewConfig;
@@ -26,31 +28,39 @@ public class SimulationManager : MonoBehaviour {
 	public bool IsPaused { get; private set; }
 
 	public GameOverview GameOverview { get; private set; }
+	private SimulationUI _simulationUI;
 
 	private void Awake() {
 		void ExceptionHandler(Exception e) {
 			Debug.LogError($"[Logic Exception]: ${e}");
 		}
 
-		GameOverview = new GameOverview(ExceptionHandler, Seed, WorldWidth, WorldHeight,
+		GameOverview = new GameOverview(ExceptionHandler, seed, worldWidth, worldHeight,
 			overviewConfig, economyConfig, worldConfig);
 	}
 
-	private void Update() {
-		Tile tile = GetClickedTile();
-		if (tile != null) OnTileSelected?.Invoke(tile.Position);
+	private void Start() {
+		_simulationUI = FindObjectOfType<SimulationUI>();
+		_simulationUI.OnGameViewMouseUp += SelectTile;
+	}
+
+	private void OnDestroy() {
+		_simulationUI.OnGameViewMouseUp -= SelectTile;
 	}
 
 	private void FixedUpdate() {
 		GameOverview?.Commands?.Issue(new AdvanceTimeCommand(GameOverview, Time.fixedDeltaTime));
 	}
 
-	private Tile GetClickedTile() {
-		if (!Input.GetMouseButtonDown(0)) return null;
-		Vector3 mousePosition = Input.mousePosition;
-		RaycastHit2D result = Physics2D.Raycast(mainCamera.ScreenToWorldPoint(mousePosition), Vector2.zero);
+	private void SelectTile(MouseUpEvent e) {
+		if (e.button != 0) return;
 
-		return !result ? null : result.collider.gameObject.GetComponent<Tile>();
+		Vector2 rayOrigin = mainCamera.ScreenToWorldPoint(Input.mousePosition); // It's Input.mouse position on purpose
+		RaycastHit2D result = Physics2D.Raycast(rayOrigin, Vector2.zero);
+		if (!result) return;
+
+		var tile = result.collider.gameObject.GetComponent<Tile>();
+		OnTileSelected?.Invoke(tile.Position);
 	}
 
 	public void ResumeGame() {
