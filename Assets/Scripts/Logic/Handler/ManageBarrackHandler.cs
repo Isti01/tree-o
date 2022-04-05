@@ -32,7 +32,7 @@ public class ManageBarrackHandler : BaseHandler {
 
 		if (!barrack.CheckPoints.Contains(position)) return BiCommandResult.Failure;
 
-		barrack.PushCheckPoint(position);
+		barrack.DeleteCheckPoint(position);
 		return BiCommandResult.Success;
 	}
 }
