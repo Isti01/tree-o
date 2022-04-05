@@ -13,7 +13,9 @@ public class Tile : MonoBehaviour {
 
 	private void Start() {
 		_spriteRenderer = GetComponent<SpriteRenderer>();
-		_spriteRenderer.color = tileData.Color;
+		_spriteRenderer.color = (Position.X + Position.Y) % 2 == 0
+			? tileData.OddColor //position 0,0 is the first tile, which is an "odd" position
+			: tileData.EvenColor;
 		_spriteRenderer.sprite = tileData.Sprite;
 	}
 }

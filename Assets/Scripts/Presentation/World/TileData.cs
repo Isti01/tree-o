@@ -4,7 +4,10 @@ namespace Presentation.World {
 [CreateAssetMenu(fileName = "New Tile", menuName = "World/Tile", order = 1)]
 public class TileData : ScriptableObject {
 	[SerializeField]
-	private Color color;
+	private Color evenColor;
+
+	[SerializeField]
+	private Color oddColor;
 
 	[SerializeField]
 	private Sprite sprite;
@@ -12,7 +15,8 @@ public class TileData : ScriptableObject {
 	[SerializeField]
 	private GameObject ambientEffect;
 
-	public Color Color => color;
+	public Color EvenColor => evenColor;
+	public Color OddColor => oddColor;
 	public Sprite Sprite => sprite;
 	public GameObject AmbientEffect => ambientEffect;
 }
