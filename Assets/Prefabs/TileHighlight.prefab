@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1db61c820ce04a0fa8f07b406cfe89df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileData: {fileID: 0}
+  highlightData: {fileID: 11400000, guid: bceeb4d2b42e7fa4f8a016f88a9d6691, type: 2}
 --- !u!114 &-1408226947352233787
 MonoBehaviour:
   m_ObjectHideFlags: 0

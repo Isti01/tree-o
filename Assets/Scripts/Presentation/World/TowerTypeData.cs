@@ -2,7 +2,6 @@ using Logic.Data.World;
 using UnityEngine;
 
 namespace Presentation.World {
-
 [CreateAssetMenu(fileName = "New Tower Type", menuName = "World/Structures/Tower Type", order = 1)]
 public class TowerTypeData : ScriptableObject, ITowerTypeData {
 	[Header("Presentation-specific values")]
@@ -20,12 +19,6 @@ public class TowerTypeData : ScriptableObject, ITowerTypeData {
 
 	[SerializeField]
 	private GameObject ambientEffect;
-
-	public Sprite Sprite => sprite;
-	public Color BlueColor => blueColor;
-	public Color RedColor => redColor;
-	public GameObject ShootingEffect => shootingEffect;
-	public GameObject AmbientEffect => ambientEffect;
 
 	[Header("ITowerTypeData values")]
 	[SerializeField]
@@ -58,6 +51,12 @@ public class TowerTypeData : ScriptableObject, ITowerTypeData {
 	[SerializeField]
 	private TowerTypeData afterUpgradeType;
 
+	public Sprite Sprite => sprite;
+	public Color BlueColor => blueColor;
+	public Color RedColor => redColor;
+	public GameObject ShootingEffect => shootingEffect;
+	public GameObject AmbientEffect => ambientEffect;
+
 	public string Name => name;
 	public float Damage => damage;
 	public float Range => range;
@@ -67,5 +66,4 @@ public class TowerTypeData : ScriptableObject, ITowerTypeData {
 	public int UpgradeCost => upgradeCost;
 	public ITowerTypeData AfterUpgradeType => afterUpgradeType;
 }
-
 }

@@ -1,5 +1,6 @@
 using System;
 using Logic.Command;
+using Logic.Command.Barrack;
 using Logic.Command.Tower;
 using Logic.Command.Unit;
 using Logic.Data;
@@ -8,6 +9,7 @@ using Logic.Event;
 using Presentation.World;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Barrack = Logic.Data.World.Barrack;
 using Color = UnityEngine.Color;
 using Tower = Logic.Data.World.Tower;
 
@@ -22,13 +24,14 @@ public class SimulationUI : MonoBehaviour {
 	private BattleUI _battleUI;
 	private GameManager _gameManager;
 	private GameOverOverlay _gameOverOverlay;
+	private UIState _lastUiState;
 	private PauseOverlay _pauseOverlay;
+	private Barrack _selectedBarrack;
 	private TowerTypeData _selectedTowerType;
 
 	private SimulationManager _simulationManager;
 	private TowerPlacingUI _towerPlacing;
 	private UIState _uiState = UIState.UnitDeployment;
-	private UIState _lastUiState;
 	private UnitDeploymentUI _unitDeployment;
 
 	private GameOverview GameOverview => _simulationManager.GameOverview;
@@ -88,12 +91,25 @@ public class SimulationUI : MonoBehaviour {
 
 	private void Update() {
 		if (Input.GetKeyDown(KeyCode.Escape)) {
-			if (_simulationManager.IsPaused) {
+			if (_simulationManager.IsPaused)
 				ResumeGame();
-			} else {
+			else
 				UpdateUiState(UIState.Paused);
-			}
 		}
+	}
+
+	private void OnDestroy() {
+		_simulationManager.OnTileSelected -= OnTileSelected;
+
+		_battleUI.OnPauseClicked -= OnPauseClicked;
+
+		_towerPlacing.OnNextClicked -= StepTowerPlacing;
+		_towerPlacing.OnTowerTypeSelected -= OnTowerTypeSelected;
+		_towerPlacing.OnTowerDestroyed -= OnTowerDestroyed;
+		_towerPlacing.OnTowerUpgraded -= OnTowerUpgraded;
+
+		_unitDeployment.OnNextClicked -= StepUnitDeployment;
+		_unitDeployment.OnUnitPurchased -= OnUnitPurchased;
 	}
 
 	private void OnTowerUpgraded(Tower tower) {
@@ -116,20 +132,6 @@ public class SimulationUI : MonoBehaviour {
 		} else {
 			Debug.Log($"Failed to destroy: {tower}");
 		}
-	}
-
-	private void OnDestroy() {
-		_simulationManager.OnTileSelected -= OnTileSelected;
-
-		_battleUI.OnPauseClicked -= OnPauseClicked;
-
-		_towerPlacing.OnNextClicked -= StepTowerPlacing;
-		_towerPlacing.OnTowerTypeSelected -= OnTowerTypeSelected;
-		_towerPlacing.OnTowerDestroyed -= OnTowerDestroyed;
-		_towerPlacing.OnTowerUpgraded -= OnTowerUpgraded;
-
-		_unitDeployment.OnNextClicked -= StepUnitDeployment;
-		_unitDeployment.OnUnitPurchased -= OnUnitPurchased;
 	}
 
 	private void OnResumeClicked() {
@@ -213,13 +215,34 @@ public class SimulationUI : MonoBehaviour {
 		_towerPlacing.ShowTowerTypeStats(towerType);
 	}
 
-	private void OnTileSelected(TilePosition position) {
-		if (_uiState == UIState.TowerPlacing) HandleTowerPlacingTileSelection(position);
+	private void OnTileSelected(TilePosition position, SimulationManager.MouseButton button) {
+		switch (_uiState) {
+			case UIState.TowerPlacing:
+				if (button == SimulationManager.MouseButton.Left) HandleTowerPlacingTileSelection(position);
+
+				break;
+			case UIState.UnitDeployment:
+				HandleUnitDeploymentTileSelection(position, button);
+				break;
+		}
+	}
+
+	private void HandleUnitDeploymentTileSelection(TilePosition position, SimulationManager.MouseButton mouseButton) {
+		if (mouseButton == SimulationManager.MouseButton.Left) {
+			if (GameOverview.World[position] is Barrack barrack && barrack.OwnerColor == _activePlayer) {
+				_selectedBarrack = barrack;
+				OnBarrackSelected?.Invoke(barrack);
+			} else if (_selectedBarrack != null) {
+				GameOverview.Commands.Issue(new AddBarrackCheckpointCommand(_selectedBarrack, position));
+			}
+		} else if (_selectedBarrack != null) {
+			GameOverview.Commands.Issue(new RemoveBarrackCheckpointCommand(_selectedBarrack, position));
+		}
 	}
 
 	private void HandleTowerPlacingTileSelection(TilePosition position) {
 		GameTeam playerData = GameOverview.GetTeam(_activePlayer);
-		TileObject tileObject = GameOverview.World[position.X, position.Y];
+		TileObject tileObject = GameOverview.World[position];
 		if (tileObject is Tower tower && tower.OwnerColor == _activePlayer) {
 			_towerPlacing.ShowTowerStats(tower);
 			Debug.Log($"[TowerPlacing]: A tower has been selected: {tower} at position {position}");
@@ -230,6 +253,7 @@ public class SimulationUI : MonoBehaviour {
 	}
 
 	private void StepUnitDeployment() {
+		_selectedBarrack = null;
 		if (_activePlayer == Logic.Data.Color.Blue) {
 			StartUnitDeployment(Logic.Data.Color.Red);
 		} else {
@@ -242,6 +266,7 @@ public class SimulationUI : MonoBehaviour {
 
 	private void StartUnitDeployment(Logic.Data.Color player) {
 		_activePlayer = player;
+		OnBarrackSelected?.Invoke(null);
 		GameTeam playerData = GameOverview.GetTeam(_activePlayer);
 
 		_unitDeployment.Show();
@@ -259,9 +284,7 @@ public class SimulationUI : MonoBehaviour {
 
 	private void UpdateUiState(UIState uiState) {
 		Debug.Log($"Updated UI state to: {uiState}");
-		if (_uiState != uiState) {
-			_lastUiState = _uiState;
-		}
+		if (_uiState != uiState) _lastUiState = _uiState;
 
 		_uiState = uiState;
 		switch (_uiState) {
@@ -287,6 +310,7 @@ public class SimulationUI : MonoBehaviour {
 		}
 	}
 
+	public event Action<Barrack> OnBarrackSelected;
 	public event Action<MouseEnterEvent> OnGameViewMouseEnter;
 	public event Action<MouseLeaveEvent> OnGameViewMouseLeave;
 	public event Action<MouseDownEvent> OnGameViewMouseDown;

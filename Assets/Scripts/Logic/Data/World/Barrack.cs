@@ -50,7 +50,7 @@ public class Barrack : Building {
 			throw new ArgumentException("Position is not a checkpoint");
 		}
 
-		World.Overview.Events.Raise(new BarrackRemovedEvent(this, tile));
+		World.Overview.Events.Raise(new BarrackCheckpointRemovedEvent(this, tile));
 	}
 
 	public void UpdateCooldown(float delta) {
