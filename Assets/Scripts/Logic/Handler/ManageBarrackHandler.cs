@@ -15,7 +15,7 @@ public class ManageBarrackHandler : BaseHandler {
 		Barrack barrack = command.Barrack;
 		TilePosition position = command.Position;
 
-		if (!barrack.CheckPoints.Contains(position)) return AddBarrackCheckpointCommand.CommandResult.AlreadyCheckpoint;
+		if (barrack.CheckPoints.Contains(position)) return AddBarrackCheckpointCommand.CommandResult.AlreadyCheckpoint;
 
 		if (barrack.World[position] != null) return AddBarrackCheckpointCommand.CommandResult.InvalidPosition;
 
