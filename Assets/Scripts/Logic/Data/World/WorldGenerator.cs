@@ -7,11 +7,6 @@ public class WorldGenerator {
 	public static TileObject[,] GenerateGrid(int seed, int width, int height, ITileObjectConstructors constructors) {
 		WorldGenerator generator = new WorldGenerator(seed, width, height, constructors);
 		generator.GenerateWorld();
-
-		//TODO probably use this approach for the real implementation:
-		// - generate half a map
-		// - mirror the map
-
 		return generator._grid;
 	}
 
