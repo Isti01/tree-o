@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Logic.Data.World;
 using NUnit.Framework;
 
@@ -84,17 +85,19 @@ public class WorldNavigationTest {
 	[Repeat(HighRepeatCount)]
 	public void TestNoObstacles() {
 		GameWorld world = WorldTestUtils.GenerateWorld();
-		Random random = new Random();
-		Vector2 from = new Vector2((random.Next() % world.Width) + 0.5F, (random.Next() % world.Height) + 0.5F);
-		Vector2 to = new Vector2(0.5F, 0.5F);
-		List<Vector2> path = world.Navigation.TryGetPathDeltas(from, to, 0);
-		float x = from.X;
-		float y = from.Y;
-		if (path.Count > 0) path.RemoveAt(path.Count - 1);
-		foreach (var delta in path) {
-			x += delta.X;
-			y += delta.Y;
-			Assert.IsNull(world[(int) x, (int) y]);
+		foreach (var to in world.GetTileObjectsOfType<Castle>()) {
+			foreach (var from in world.GetTileObjectsOfType<Barrack>().Where(obj => !obj.OwnerColor.Equals(to.OwnerColor))) {
+				List<Vector2> path = world.Navigation.TryGetPathDeltas(from.Position.ToVectorCentered(),
+					to.Position.ToVectorCentered(), 0);
+				float x = from.Position.X;
+				float y = from.Position.Y;
+				path.RemoveAt(path.Count - 1);
+				foreach (var delta in path) {
+					x += delta.X;
+					y += delta.Y;
+					Assert.IsNull(world[(int) x, (int) y]);
+				}
+			}
 		}
 	}
 
