@@ -83,7 +83,7 @@ public class WorldNavigationTest {
 
 	[Test]
 	[Repeat(HighRepeatCount)]
-	public void TestNoObjectsInPath() {
+	public void TestNoObjectInPath() {
 		GameWorld world = WorldTestUtils.GenerateWorld();
 		foreach (var to in world.GetTileObjectsOfType<Castle>()) {
 			foreach (var from in world.GetTileObjectsOfType<Barrack>().Where(obj => !obj.OwnerColor.Equals(to.OwnerColor))) {
