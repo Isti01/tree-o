@@ -23,13 +23,6 @@ public class UnitTypeData : ScriptableObject, IUnitTypeData {
 	[SerializeField]
 	private GameObject destroyedEffect;
 
-	public Color BlueColor => blueColor;
-	public Color RedColor => redColor;
-	public Sprite AliveSprite => aliveSprite;
-	public Sprite DestroyedSprite => destroyedSprite;
-	public GameObject AttackEffect => attackEffect;
-	public GameObject DestroyedEffect => destroyedEffect;
-
 	[Header("IUnitTypeData values")]
 	[SerializeField]
 	private new string name;
@@ -49,6 +42,13 @@ public class UnitTypeData : ScriptableObject, IUnitTypeData {
 	[SerializeField]
 	[Min(0)]
 	private int cost;
+
+	public Color BlueColor => blueColor;
+	public Color RedColor => redColor;
+	public Sprite AliveSprite => aliveSprite;
+	public Sprite DestroyedSprite => destroyedSprite;
+	public GameObject AttackEffect => attackEffect;
+	public GameObject DestroyedEffect => destroyedEffect;
 
 	public string Name => name;
 	public float Health => health;

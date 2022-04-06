@@ -3,7 +3,8 @@
     "rootNamespace": "",
     "references": [
         "Logic",
-        "UnityEngine.UIElementsModule"
+        "UnityEngine.UIElementsModule",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

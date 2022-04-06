@@ -9,6 +9,11 @@ using Vector2 = UnityEngine.Vector2;
 
 namespace Presentation.World {
 public class SimulationManager : MonoBehaviour {
+	public enum MouseButton {
+		Left,
+		Right
+	}
+
 	public int worldWidth = 10;
 	public int worldHeight = 10;
 	public int seed = 1337;
@@ -25,14 +30,15 @@ public class SimulationManager : MonoBehaviour {
 	[SerializeField]
 	private Camera mainCamera;
 
+	private SimulationUI _simulationUI;
+
 	public bool IsPaused { get; private set; }
 
 	public GameOverview GameOverview { get; private set; }
-	private SimulationUI _simulationUI;
 
 	private void Awake() {
 		void ExceptionHandler(Exception e) {
-			Debug.LogError($"[Logic Exception]: ${e}");
+			Debug.LogError($"[Logic Exception]: ${e} {e.InnerException}");
 		}
 
 		GameOverview = new GameOverview(ExceptionHandler, seed, worldWidth, worldHeight,
@@ -44,23 +50,24 @@ public class SimulationManager : MonoBehaviour {
 		_simulationUI.OnGameViewMouseUp += SelectTile;
 	}
 
-	private void OnDestroy() {
-		_simulationUI.OnGameViewMouseUp -= SelectTile;
-	}
-
 	private void FixedUpdate() {
 		GameOverview?.Commands?.Issue(new AdvanceTimeCommand(GameOverview, Time.fixedDeltaTime));
 	}
 
+	private void OnDestroy() {
+		_simulationUI.OnGameViewMouseUp -= SelectTile;
+	}
+
 	private void SelectTile(MouseUpEvent e) {
-		if (e.button != 0) return;
+		if (e.button != 0 && e.button != 1) return;
+		MouseButton button = e.button == 0 ? MouseButton.Left : MouseButton.Right;
 
 		Vector2 rayOrigin = mainCamera.ScreenToWorldPoint(Input.mousePosition); // It's Input.mouse position on purpose
 		RaycastHit2D result = Physics2D.Raycast(rayOrigin, Vector2.zero);
 		if (!result) return;
 
 		var tile = result.collider.gameObject.GetComponent<Tile>();
-		OnTileSelected?.Invoke(tile.Position);
+		OnTileSelected?.Invoke(tile.Position, button);
 	}
 
 	public void ResumeGame() {
@@ -73,6 +80,6 @@ public class SimulationManager : MonoBehaviour {
 		IsPaused = true;
 	}
 
-	public event Action<TilePosition> OnTileSelected;
+	public event Action<TilePosition, MouseButton> OnTileSelected;
 }
 }

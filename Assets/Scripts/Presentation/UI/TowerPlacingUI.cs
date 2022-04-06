@@ -46,21 +46,20 @@ public class TowerPlacingUI : MonoBehaviour {
 	private readonly List<VisualElement> _tabs = new List<VisualElement>();
 
 	private Color _activePlayer = Color.Red;
+	private Tower _selectedDeployedTower;
+
+	private bool _showDeployedStats = true;
 	private UnityEngine.Color _teamBlueColor = UnityEngine.Color.magenta;
 	private UnityEngine.Color _teamRedColor = UnityEngine.Color.green;
 
 	private VisualElement RootElement => ui.rootVisualElement;
 
-	private bool _showDeployedStats = true;
-	private Tower _selectedDeployedTower;
-
 	private void Start() {
 		SetupCards();
 		RootElement.Q<Button>(NextButton).clicked += () => OnNextClicked?.Invoke();
 
-		foreach (string tabSelector in new[] { InstructionsText, TowerTypeStats, DeployedTowerStats }) {
+		foreach (string tabSelector in new[] { InstructionsText, TowerTypeStats, DeployedTowerStats })
 			_tabs.Add(RootElement.Q(tabSelector));
-		}
 
 		ResetUI();
 		SetupTabs();
@@ -134,7 +133,7 @@ public class TowerPlacingUI : MonoBehaviour {
 
 	public void ShowTowerTypeStats(TowerTypeData towerType) {
 		HideTabs();
-		var tab = RootElement.Q(TowerTypeStats);
+		VisualElement tab = RootElement.Q(TowerTypeStats);
 		tab.style.display = DisplayStyle.Flex;
 		tab.Q<Label>(TowerName).text = towerType.Name;
 		ShowTowerTypeStats(towerType, tab.Q<VisualElement>(TowerStats));
@@ -146,18 +145,17 @@ public class TowerPlacingUI : MonoBehaviour {
 			var stats = new[] {
 				$"Damage: {towerType.Damage}", $"Range: {towerType.Range}", $"Building Cost: {towerType.BuildingCost}",
 				$"Destroy Refund: {towerType.DestroyRefund}", $"Cooldown Time: {towerType.CooldownTime}",
-				$"UpgradeCost: {towerType.UpgradeCost}",
+				$"UpgradeCost: {towerType.UpgradeCost}"
 			};
-			foreach (string stat in stats) {
+			foreach (string stat in stats)
 				statsContainer.Add(new Label(stat) { style = { marginTop = 2, marginBottom = 0 } });
-			}
 		} else {
 			Debug.Log("The tower type was null");
 		}
 	}
 
 	private void SetupTabs() {
-		var element = RootElement.Q(DeployedTowerStats);
+		VisualElement element = RootElement.Q(DeployedTowerStats);
 		var statsButton = element.Q<Button>(StatsButton);
 		var manageButton = element.Q<Button>(ManageButton);
 
@@ -166,7 +164,6 @@ public class TowerPlacingUI : MonoBehaviour {
 			statsButton.AddToClassList(SelectedButtonClass);
 			_showDeployedStats = true;
 			ShowTowerStats(_selectedDeployedTower);
-			Debug.Log("Clicked stats");
 		};
 
 		manageButton.clicked += () => {
@@ -174,7 +171,6 @@ public class TowerPlacingUI : MonoBehaviour {
 			manageButton.AddToClassList(SelectedButtonClass);
 			_showDeployedStats = false;
 			ShowTowerStats(_selectedDeployedTower);
-			Debug.Log("Clicked manage");
 		};
 
 		element.Q<Button>(DestroyButton).clicked += () => {
@@ -190,12 +186,12 @@ public class TowerPlacingUI : MonoBehaviour {
 	public void ShowTowerStats(Tower tower) {
 		HideTabs();
 		_selectedDeployedTower = tower;
-		var tab = RootElement.Q(DeployedTowerStats);
+		VisualElement tab = RootElement.Q(DeployedTowerStats);
 		tab.style.display = DisplayStyle.Flex;
 		tab.Q<Label>(TowerName).text = tower.Type.Name;
 
-		var statsContainer = tab.Q(StatsContainer);
-		var manageContainer = tab.Q(ManageContainer);
+		VisualElement statsContainer = tab.Q(StatsContainer);
+		VisualElement manageContainer = tab.Q(ManageContainer);
 		if (_showDeployedStats) {
 			manageContainer.style.display = DisplayStyle.None;
 			statsContainer.style.display = DisplayStyle.Flex;
@@ -204,7 +200,7 @@ public class TowerPlacingUI : MonoBehaviour {
 			manageContainer.style.display = DisplayStyle.Flex;
 			statsContainer.style.display = DisplayStyle.None;
 			var afterUpgrade = tower.Type.AfterUpgradeType as TowerTypeData;
-			var container = manageContainer.Q(UpgradeContainer);
+			VisualElement container = manageContainer.Q(UpgradeContainer);
 
 			if (afterUpgrade != null) {
 				container.style.display = DisplayStyle.Flex;

@@ -6,9 +6,9 @@ namespace Presentation.World {
 public class Unit : MonoBehaviour {
 	private Logic.Data.World.Unit _data;
 
-	private SpriteRenderer _spriteRenderer;
-
 	private Vector3 _lastPosition = Vector3.zero;
+
+	private SpriteRenderer _spriteRenderer;
 
 	private void Awake() {
 		_spriteRenderer = GetComponent<SpriteRenderer>();
@@ -17,7 +17,7 @@ public class Unit : MonoBehaviour {
 	private void FixedUpdate() {
 		var newPosition = new Vector3(_data.Position.X - 0.5f, _data.Position.Y - 0.5f);
 		if (_lastPosition == newPosition) return;
-		var direction = (newPosition - _lastPosition).normalized;
+		Vector3 direction = (newPosition - _lastPosition).normalized;
 		float angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x);
 		_lastPosition = newPosition;
 		Transform cachedTransform;
@@ -27,7 +27,7 @@ public class Unit : MonoBehaviour {
 
 	public void SetData(Logic.Data.World.Unit data) {
 		_data = data;
-		UnitTypeData unitData = (UnitTypeData) _data.Type;
+		var unitData = (UnitTypeData) _data.Type;
 		_spriteRenderer.sprite = unitData.AliveSprite;
 		_spriteRenderer.color = _data.Owner.TeamColor == Color.Blue ? unitData.BlueColor : unitData.RedColor;
 	}

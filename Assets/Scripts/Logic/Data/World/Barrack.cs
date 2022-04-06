@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Logic.Event.World.Barrack;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
 public class Barrack : Building {
-
 	#region Fields
 
 	private readonly IList<TilePosition> _checkPoints = new List<TilePosition>();
@@ -39,15 +39,18 @@ public class Barrack : Building {
 	public void PushCheckPoint(TilePosition tile) {
 		if (_checkPoints.Contains(tile)) {
 			throw new ArgumentException("Position is already a checkpoint");
-		} else {
-			_checkPoints.Add(tile);
 		}
+
+		_checkPoints.Add(tile);
+		World.Overview.Events.Raise(new BarrackCheckpointCreatedEvent(this, tile));
 	}
 
 	public void DeleteCheckPoint(TilePosition tile) {
 		if (!_checkPoints.Remove(tile)) {
 			throw new ArgumentException("Position is not a checkpoint");
 		}
+
+		World.Overview.Events.Raise(new BarrackCheckpointRemovedEvent(this, tile));
 	}
 
 	public void UpdateCooldown(float delta) {
@@ -62,11 +65,9 @@ public class Barrack : Building {
 	}
 
 	public void Spawn() {
-		if (!QueuedUnits.Any())
-			throw new InvalidOperationException($"No queued units exist; nothing to spawn");
+		if (!QueuedUnits.Any()) throw new InvalidOperationException($"No queued units exist; nothing to spawn");
 
-		if (IsOnCooldown)
-			throw new InvalidOperationException($"Spawning is on cooldown: {RemainingCooldownTime}");
+		if (IsOnCooldown) throw new InvalidOperationException($"Spawning is on cooldown: {RemainingCooldownTime}");
 
 		RemainingCooldownTime = World.Config.BarrackSpawnCooldownTime;
 		IUnitTypeData type = _queuedUnits[0];

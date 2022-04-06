@@ -1,7 +1,5 @@
 using Presentation.UI;
 using UnityEngine;
-using Vector2 = UnityEngine.Vector2;
-using Vector3 = UnityEngine.Vector3;
 
 namespace Presentation.World {
 [RequireComponent(typeof(Camera))]
@@ -27,8 +25,8 @@ public class SimulationCamera : MonoBehaviour {
 	private Camera _cam;
 	private bool _isRightButtonDown;
 	private Vector3 _panTarget;
-	private float _zoomTarget;
 	private bool _shouldZoom = true;
+	private float _zoomTarget;
 
 	private void Start() {
 		_cam = GetComponent<Camera>();
@@ -61,7 +59,7 @@ public class SimulationCamera : MonoBehaviour {
 
 		simulationUI.OnGameViewMouseMove += e => {
 			if (!_isRightButtonDown) return;
-			var mouseDelta = e.mousePosition - mousePosition;
+			Vector2 mouseDelta = e.mousePosition - mousePosition;
 			_panTarget -= new Vector3(mouseDelta.x * panSensitivity.x, -mouseDelta.y * panSensitivity.y, 0);
 			mousePosition = e.mousePosition;
 		};

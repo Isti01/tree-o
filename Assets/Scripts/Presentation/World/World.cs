@@ -1,10 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Logic.Data;
 using Logic.Data.World;
 using Logic.Event;
+using Logic.Event.World.Barrack;
 using Logic.Event.World.Tower;
 using Logic.Event.World.Unit;
+using Presentation.UI;
 using UnityEngine;
 
 namespace Presentation.World {
@@ -15,16 +18,24 @@ public class World : MonoBehaviour {
 	public GameObject towerPrefab;
 	public GameObject castlePrefab;
 	public GameObject unitPrefab;
+	public GameObject tileHighlightPrefab;
 
 	private GameObject[,] _map;
+	private Logic.Data.World.Barrack _selectedBarrack;
+	private SimulationManager _simulationManager;
+
+	private Dictionary<TilePosition, GameObject> _tileHighlights;
 	private Dictionary<Logic.Data.World.Unit, Unit> _units;
 
-	private void Start() {
-		var simulation = FindObjectOfType<SimulationManager>();
+	private GameOverview GameOverview => _simulationManager.GameOverview;
 
+	private void Start() {
+		_simulationManager = FindObjectOfType<SimulationManager>();
+
+		_tileHighlights = new Dictionary<TilePosition, GameObject>();
 		_units = new Dictionary<Logic.Data.World.Unit, Unit>();
 
-		EventDispatcher events = simulation.GameOverview.Events;
+		EventDispatcher events = _simulationManager.GameOverview.Events;
 		events.AddListener<TowerBuiltEvent>(OnTowerBuilt);
 		events.AddListener<TowerShotEvent>(OnTowerShot);
 		events.AddListener<TowerCooledDownEvent>(OnTowerCooledDown);
@@ -35,12 +46,46 @@ public class World : MonoBehaviour {
 		events.AddListener<UnitMovedTileEvent>(OnUnitMovedTile);
 		events.AddListener<UnitDestroyedEvent>(OnUnitDestroyed);
 
-		GameWorld world = simulation.GameOverview.World;
+		events.AddListener<BarrackCheckpointCreatedEvent>(OnBarrackCheckpointCreated);
+		events.AddListener<BarrackCheckpointRemovedEvent>(OnBarrackCheckpointRemoved);
+
+		var simulationUI = FindObjectOfType<SimulationUI>();
+		simulationUI.OnBarrackSelected += OnBarrackSelected;
+
+		GameWorld world = GameOverview.World;
 		transform.position = new Vector3(-world.Width / 2.0f, -world.Width / 2.0f, 0);
 		_map = new GameObject[world.Width, world.Height];
 
 		for (var x = 0; x < world.Width; x++) {
 			for (var y = 0; y < world.Height; y++) InstantiateTile(x, y, world);
+		}
+	}
+
+	private void OnBarrackCheckpointRemoved(BarrackCheckpointRemovedEvent e) {
+		if (e.Barrack == _selectedBarrack) VisualizeBarrackCheckpoints();
+	}
+
+	private void OnBarrackCheckpointCreated(BarrackCheckpointCreatedEvent e) {
+		if (e.Barrack == _selectedBarrack) VisualizeBarrackCheckpoints();
+	}
+
+	private void OnBarrackSelected(Logic.Data.World.Barrack barrack) {
+		if (_selectedBarrack == barrack) return;
+
+		_selectedBarrack = barrack;
+		VisualizeBarrackCheckpoints();
+	}
+
+	private void VisualizeBarrackCheckpoints() {
+		RemoveHighlights();
+		if (_selectedBarrack == null) return;
+
+		HighlightTile(_selectedBarrack.Position);
+		TileHighlight lastHighlight = null;
+		foreach (TilePosition position in _selectedBarrack.CheckPoints) {
+			if (lastHighlight) lastHighlight.SetDimmed();
+
+			lastHighlight = HighlightTile(position);
 		}
 	}
 
@@ -62,6 +107,37 @@ public class World : MonoBehaviour {
 		var tower = LogicToPresentation<Tower>(e.Tower);
 		tower.DestroyTower();
 		Debug.Log($"Removed Tower: {e.Tower}");
+	}
+
+	public TileHighlight HighlightTile(TilePosition pos) {
+		GameObject highlight = Instantiate(tileHighlightPrefab, _map[pos.X, pos.Y].transform);
+		_tileHighlights.Add(pos, highlight);
+		return highlight.GetComponent<TileHighlight>();
+	}
+
+	public TileHighlight HighlightTile(GameObject tile) {
+		TilePosition pos = tile.GetComponent<Tile>().Position;
+		return HighlightTile(pos);
+	}
+
+	public void RemoveHighlight(TilePosition pos) {
+		if (_tileHighlights.TryGetValue(pos, out GameObject obj)) {
+			_tileHighlights.Remove(pos);
+			Destroy(obj);
+		} else {
+			Debug.Log($"Failed to retrieve tile on position {pos}");
+		}
+	}
+
+	public void RemoveHighlight(GameObject tile) {
+		TilePosition pos = tile.GetComponent<Tile>().Position;
+		RemoveHighlight(pos);
+	}
+
+	public void RemoveHighlights() {
+		foreach (GameObject obj in _tileHighlights.Values) Destroy(obj);
+
+		_tileHighlights.Clear();
 	}
 
 	private void OnUnitDeployed(UnitDeployedEvent e) {
