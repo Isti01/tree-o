@@ -253,6 +253,7 @@ public class SimulationUI : MonoBehaviour {
 	}
 
 	private void StepUnitDeployment() {
+		OnBarrackSelected?.Invoke(null);
 		_selectedBarrack = null;
 		if (_activePlayer == Logic.Data.Color.Blue) {
 			StartUnitDeployment(Logic.Data.Color.Red);
@@ -266,7 +267,6 @@ public class SimulationUI : MonoBehaviour {
 
 	private void StartUnitDeployment(Logic.Data.Color player) {
 		_activePlayer = player;
-		OnBarrackSelected?.Invoke(null);
 		GameTeam playerData = GameOverview.GetTeam(_activePlayer);
 
 		_unitDeployment.Show();
