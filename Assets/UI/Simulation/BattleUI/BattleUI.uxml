@@ -9,8 +9,9 @@
                         <ui:VisualElement name="BottomPanel" class="BottomPanelStyle" />
                     </ui:VisualElement>
                     <ui:VisualElement name="TopPanel" class="TopPanelStyle">
-                        <ui:VisualElement name="PauseButtonContainer" class="NextButtonStyle">
-                            <ui:Button text="Pause" display-tooltip-when-elided="true" name="Pause" class="button" style="bottom: auto; position: relative; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px; flex-grow: 1; font-size: 32px;" />
+                        <ui:VisualElement name="ButtonContainer" class="NextButtonStyle">
+                            <ui:Button text="PAUSE" display-tooltip-when-elided="true" name="Pause" class="button" style="bottom: auto; position: relative; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px; flex-grow: 1; font-size: 32px; display: none;" />
+                            <ui:Button text="EXIT" display-tooltip-when-elided="true" name="Exit" class="button" style="bottom: auto; position: relative; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px; flex-grow: 1; font-size: 32px; display: none;" />
                         </ui:VisualElement>
                         <ui:Label text="Round Stats" display-tooltip-when-elided="true" class="TitleStyle" />
                         <ui:VisualElement name="DeployedUnitsContainer" />

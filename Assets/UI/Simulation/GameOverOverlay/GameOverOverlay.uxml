@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="/Assets/UI/DialogStyles.uss" />
+    <ui:VisualElement name="GameOverOverlayRoot" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.25); justify-content: center; align-items: center;">
+        <ui:VisualElement name="GameOverDialog" style="height: auto; padding-left: 64px; padding-right: 64px; padding-top: 16px; padding-bottom: 16px; background-color: rgb(255, 255, 255); border-top-left-radius: 12px; border-bottom-left-radius: 12px; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
+            <ui:Label text="Game Over!" display-tooltip-when-elided="true" name="GameOverText" class="DialogTitle" style="margin-right: 4px; margin-left: 4px; margin-bottom: 4px;" />
+            <ui:Label text="Player Red has won the battle!" display-tooltip-when-elided="true" name="Message" style="margin-bottom: 20px; -unity-text-align: upper-center; font-size: 16px;" />
+            <ui:Button text="OK" display-tooltip-when-elided="true" name="OkButton" class="DialogButton" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

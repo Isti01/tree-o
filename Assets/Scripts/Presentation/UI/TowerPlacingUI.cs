@@ -7,6 +7,7 @@ using Color = Logic.Data.Color;
 using Tower = Logic.Data.World.Tower;
 
 namespace Presentation.UI {
+[RequireComponent(typeof(UIDocument))]
 public class TowerPlacingUI : MonoBehaviour {
 	private const string TopPanel = "TopPanel";
 	private const string NextButton = "Next";
