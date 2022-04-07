@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace Presentation.UI {
+[RequireComponent(typeof(UIDocument))]
 public class PauseOverlay : MonoBehaviour {
 	private const string ResumeButton = "ResumeButton";
 	private const string NewGameButton = "NewGameButton";

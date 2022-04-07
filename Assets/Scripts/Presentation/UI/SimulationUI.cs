@@ -6,11 +6,13 @@ using Logic.Command.Unit;
 using Logic.Data;
 using Logic.Data.World;
 using Logic.Event;
+using Logic.Event.World.Castle;
 using Presentation.World;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Barrack = Logic.Data.World.Barrack;
 using Color = UnityEngine.Color;
+using EventDispatcher = Logic.Event.EventDispatcher;
 using Tower = Logic.Data.World.Tower;
 
 namespace Presentation.UI {
@@ -45,8 +47,11 @@ public class SimulationUI : MonoBehaviour {
 
 		_battleUI = GetComponentInChildren<BattleUI>();
 		_battleUI.OnPauseClicked += OnPauseClicked;
+		_battleUI.OnExitClicked += OnExitClicked;
 
 		_gameOverOverlay = GetComponentInChildren<GameOverOverlay>();
+
+		_gameOverOverlay.OnOkClicked += HideGameOverOverlay;
 
 		_pauseOverlay = GetComponentInChildren<PauseOverlay>();
 
@@ -68,21 +73,8 @@ public class SimulationUI : MonoBehaviour {
 		_unitDeployment.OnNextClicked += StepUnitDeployment;
 		_unitDeployment.OnUnitPurchased += OnUnitPurchased;
 
-		GameOverview.Events.AddListener<PhaseAdvancedEvent>(args => {
-			switch (GameOverview.CurrentPhase) {
-				case GamePhase.Prepare:
-					UpdateUiState(UIState.TowerPlacing);
-					break;
-				case GamePhase.Fight:
-					UpdateUiState(UIState.Battle);
-					break;
-				case GamePhase.Finished:
-					UpdateUiState(UIState.GameOver);
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		});
+		GameOverview.Events.AddListener<PhaseAdvancedEvent>(EventDispatcher.Ordering.Normal, OnPhaseAdvanced);
+		GameOverview.Events.AddListener<CastleDestroyedEvent>(EventDispatcher.Ordering.Normal, OnCastleDestroyed);
 
 		HideUIs();
 		SetupMousePanning();
@@ -101,15 +93,52 @@ public class SimulationUI : MonoBehaviour {
 	private void OnDestroy() {
 		_simulationManager.OnTileSelected -= OnTileSelected;
 
+		_gameOverOverlay.OnOkClicked -= HideGameOverOverlay;
+
 		_battleUI.OnPauseClicked -= OnPauseClicked;
+		_battleUI.OnExitClicked -= OnExitClicked;
 
 		_towerPlacing.OnNextClicked -= StepTowerPlacing;
 		_towerPlacing.OnTowerTypeSelected -= OnTowerTypeSelected;
 		_towerPlacing.OnTowerDestroyed -= OnTowerDestroyed;
 		_towerPlacing.OnTowerUpgraded -= OnTowerUpgraded;
 
+		_pauseOverlay.OnResumeClicked -= OnResumeClicked;
+		_pauseOverlay.OnNewGameClicked -= OnNewGameClicked;
+		_pauseOverlay.OnExitClicked -= OnExitClicked;
+
 		_unitDeployment.OnNextClicked -= StepUnitDeployment;
 		_unitDeployment.OnUnitPurchased -= OnUnitPurchased;
+
+		GameOverview.Events.RemoveListener<PhaseAdvancedEvent>(EventDispatcher.Ordering.Normal, OnPhaseAdvanced);
+		GameOverview.Events.RemoveListener<CastleDestroyedEvent>(EventDispatcher.Ordering.Normal, OnCastleDestroyed);
+	}
+
+	private void OnCastleDestroyed(CastleDestroyedEvent e) {
+		Logic.Data.Color winner =
+			e.Castle.OwnerColor == Logic.Data.Color.Red ? Logic.Data.Color.Blue : Logic.Data.Color.Red;
+		_gameOverOverlay.UpdateMessage(winner);
+	}
+
+	private void OnPhaseAdvanced(PhaseAdvancedEvent e) {
+		switch (GameOverview.CurrentPhase) {
+			case GamePhase.Prepare:
+				UpdateUiState(UIState.TowerPlacing);
+				break;
+			case GamePhase.Fight:
+				UpdateUiState(UIState.Battle);
+				break;
+			case GamePhase.Finished:
+				UpdateUiState(UIState.GameOver);
+				break;
+			default:
+				throw new ArgumentOutOfRangeException();
+		}
+	}
+
+	private void HideGameOverOverlay() {
+		_simulationManager.ResumeGame();
+		_gameOverOverlay.Hide();
 	}
 
 	private void OnTowerUpgraded(Tower tower) {
@@ -155,6 +184,7 @@ public class SimulationUI : MonoBehaviour {
 	}
 
 	private void HideUIs() {
+		_gameOverOverlay.Hide();
 		_pauseOverlay.Hide();
 		_battleUI.Hide();
 		_unitDeployment.Hide();
@@ -276,10 +306,18 @@ public class SimulationUI : MonoBehaviour {
 
 	private void StartBattle() {
 		_battleUI.Show();
+		_battleUI.ShowPauseButton();
 	}
 
 	private void ShowPauseOverlay() {
 		_pauseOverlay.Show();
+	}
+
+	private void ShowGameOverUI() {
+		_battleUI.Show();
+		_battleUI.ShowExitButton();
+		_gameOverOverlay.Show();
+		_simulationManager.PauseGame();
 	}
 
 	private void UpdateUiState(UIState uiState) {
@@ -304,6 +342,8 @@ public class SimulationUI : MonoBehaviour {
 				ShowPauseOverlay();
 				break;
 			case UIState.GameOver:
+				HideUIs();
+				ShowGameOverUI();
 				break;
 			default:
 				throw new ArgumentOutOfRangeException();

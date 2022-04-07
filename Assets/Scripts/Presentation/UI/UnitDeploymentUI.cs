@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 using Color = Logic.Data.Color;
 
 namespace Presentation.UI {
+[RequireComponent(typeof(UIDocument))]
 public class UnitDeploymentUI : MonoBehaviour {
 	private const string PlayerNameTurn = "PlayerNameTurn";
 	private const string NextButton = "Next";
