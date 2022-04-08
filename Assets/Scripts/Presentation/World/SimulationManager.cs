@@ -16,7 +16,6 @@ public class SimulationManager : MonoBehaviour {
 
 	public int worldWidth = 10;
 	public int worldHeight = 10;
-	public int seed = 1337;
 
 	[SerializeField]
 	private OverviewConfig overviewConfig;
@@ -41,7 +40,7 @@ public class SimulationManager : MonoBehaviour {
 			Debug.LogError($"[Logic Exception]: ${e} {e.InnerException}");
 		}
 
-		GameOverview = new GameOverview(ExceptionHandler, seed, worldWidth, worldHeight,
+		GameOverview = new GameOverview(ExceptionHandler, UnityEngine.Random.Range(0, 9999), worldWidth, worldHeight,
 			overviewConfig, economyConfig, worldConfig);
 	}
 

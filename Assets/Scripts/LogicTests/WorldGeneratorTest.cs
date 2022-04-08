@@ -68,7 +68,7 @@ public class WorldGeneratorTest {
 		Assert.IsTrue(world.TileObjects
 			.Where(o => o is Obstacle)
 			.Select(o => o.Position)
-			.All(o => castles.All(p => o.Distance2(p) > 4)));
+			.All(o => castles.All(p => o.FirstNormDistance(p) >= 4)));
 	}
 
 	[Test]
@@ -84,7 +84,7 @@ public class WorldGeneratorTest {
 		Assert.IsTrue(world.TileObjects
 			.Where(o => o is Obstacle)
 			.Select(o => o.Position)
-			.All(o => barracks.All(p => o.Distance2(p) > 2)));
+			.All(o => barracks.All(p => o.FirstNormDistance(p) >= 4)));
 	}
 
 	[Test]
@@ -132,16 +132,10 @@ public class WorldGeneratorTest {
 	public void TestBarrackCastleDistance() {
 		GameWorld world = WorldTestUtils.GenerateWorld();
 
-		foreach (Barrack barrack in world.TileObjects.Where(o => o is Barrack).Cast<Barrack>()) {
-			double friendly = world.TileObjects
-				.Where(o => o is Castle c && c.OwnerColor == barrack.OwnerColor)
-				.Select(o => barrack.Position.Distance(o.Position))
-				.Max();
-			double enemy = world.TileObjects
-				.Where(o => o is Castle c && c.OwnerColor != barrack.OwnerColor)
-				.Select(o => barrack.Position.Distance(o.Position))
-				.Min();
-			Assert.Less(friendly, 1.5 * enemy);
+		foreach (Barrack barrack in world.GetTileObjectsOfType<Barrack>()) {
+			foreach (Castle castle in world.GetTileObjectsOfType<Castle>()) {
+				Assert.GreaterOrEqual(barrack.Position.FirstNormDistance(castle.Position),3);
+			}
 		}
 	}
 
