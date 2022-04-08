@@ -11,8 +11,8 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
+  - Tile
+  - Unit
   - 
   - 
   - 
@@ -58,6 +58,9 @@ TagManager:
     locked: 0
   - name: Unit
     uniqueID: 1800257023
+    locked: 0
+  - name: UnitHealthbar
+    uniqueID: 3357129243
     locked: 0
   - name: TowerRadiusCircle
     uniqueID: 2449439365

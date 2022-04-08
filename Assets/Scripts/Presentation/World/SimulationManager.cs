@@ -5,7 +5,6 @@ using Logic.Data.World;
 using Presentation.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Vector2 = UnityEngine.Vector2;
 
 namespace Presentation.World {
 public class SimulationManager : MonoBehaviour {
@@ -50,6 +49,10 @@ public class SimulationManager : MonoBehaviour {
 		_simulationUI.OnGameViewMouseUp += SelectTile;
 	}
 
+	private void Update() {
+		HandleHover();
+	}
+
 	private void FixedUpdate() {
 		GameOverview?.Commands?.Issue(new AdvanceTimeCommand(GameOverview, Time.fixedDeltaTime));
 	}
@@ -58,12 +61,23 @@ public class SimulationManager : MonoBehaviour {
 		_simulationUI.OnGameViewMouseUp -= SelectTile;
 	}
 
+	private void HandleHover() {
+		Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+		int layerMask = 1 << LayerMask.NameToLayer("Unit");
+		RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
+		if (!hit) return;
+
+		HealthbarController health = hit.transform.parent.GetComponent<HealthbarController>();
+		health.MakeVisible();
+	}
+
 	private void SelectTile(MouseUpEvent e) {
 		if (e.button != 0 && e.button != 1) return;
 		MouseButton button = e.button == 0 ? MouseButton.Left : MouseButton.Right;
 
-		Vector2 rayOrigin = mainCamera.ScreenToWorldPoint(Input.mousePosition); // It's Input.mouse position on purpose
-		RaycastHit2D result = Physics2D.Raycast(rayOrigin, Vector2.zero);
+		Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+		int layerMask = 1 << LayerMask.NameToLayer("Tile");
+		RaycastHit2D result = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
 		if (!result) return;
 
 		var tile = result.collider.gameObject.GetComponent<Tile>();

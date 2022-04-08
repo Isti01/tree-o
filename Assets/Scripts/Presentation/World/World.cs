@@ -44,6 +44,7 @@ public class World : MonoBehaviour {
 
 		events.AddListener<UnitDeployedEvent>(OnUnitDeployed);
 		events.AddListener<UnitMovedTileEvent>(OnUnitMovedTile);
+		events.AddListener<UnitDamagedEvent>(OnUnitDamaged);
 		events.AddListener<UnitDestroyedEvent>(OnUnitDestroyed);
 
 		events.AddListener<BarrackCheckpointCreatedEvent>(OnBarrackCheckpointCreated);
@@ -157,6 +158,13 @@ public class World : MonoBehaviour {
 	private void OnUnitMovedTile(UnitMovedTileEvent e) {
 		if (_units.TryGetValue(e.Unit, out Unit unit))
 			unit.transform.localPosition = new Vector3(e.Unit.Position.X - 0.5f, e.Unit.Position.Y - 0.5f);
+		else
+			Debug.LogError($"Failed to retrieve the unit {e.Unit}");
+	}
+
+	private void OnUnitDamaged(UnitDamagedEvent e) {
+		if (_units.TryGetValue(e.Unit, out Unit unit))
+			unit.UpdateHealth();
 		else
 			Debug.LogError($"Failed to retrieve the unit {e.Unit}");
 	}
