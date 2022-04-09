@@ -18,6 +18,7 @@ public class UnitDamagesCastleSystem : BaseSystem {
 				enemyCastle.Damage(unit, unit.Type.Damage);
 			}
 
+			unit.Kill();
 			unit.World.DestroyUnit(unit);
 		}
 	}

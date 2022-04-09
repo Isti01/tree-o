@@ -76,7 +76,6 @@ public class GameWorld {
 				}
 			}
 		}
-
 		HashSet<TilePosition> wrongs = new HashSet<TilePosition>();
 		ICollection<TilePosition> blockedTiles = new List<TilePosition>();
 		foreach (var t in positions) {
@@ -128,7 +127,6 @@ public class GameWorld {
 	public void DestroyUnit(Unit unit) {
 		if (!_units.Contains(unit)) throw new ArgumentException("Unit is not among this world's units");
 
-		unit.Kill();
 		Overview.Events.Raise(new UnitDestroyedEvent(unit));
 
 		//This event is special: we modify stuff after dispatching the event.
