@@ -31,8 +31,7 @@ public class GameTeam {
 	public int PurchasedUnitCount { get; private set; }
 
 	public int BuiltTowerCount { get; private set; }
-
-
+	public int AliveUnits => Units.Count();
 
 	#endregion
 

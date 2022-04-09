@@ -98,7 +98,7 @@ public class BattleUI : MonoBehaviour {
 		stats.Clear();
 
 		var texts = new[] {
-			$"Active towers: {team.PresentTowerCount}", $"Alive Units: {team.Units.Count(unit => true)}"
+			$"Active towers: {team.PresentTowerCount}", $"Alive Units: {team.AliveUnits}"
 		};
 
 		foreach (string text in texts) {
