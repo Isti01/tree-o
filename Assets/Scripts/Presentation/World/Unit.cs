@@ -2,16 +2,21 @@ using UnityEngine;
 using Color = Logic.Data.Color;
 
 namespace Presentation.World {
-[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(HealthbarController))]
 public class Unit : MonoBehaviour {
 	private Logic.Data.World.Unit _data;
 
 	private Vector3 _lastPosition = Vector3.zero;
 
+	[SerializeField]
+	private Transform rotatingChild;
+
 	private SpriteRenderer _spriteRenderer;
+	private HealthbarController _healthbarController;
 
 	private void Awake() {
-		_spriteRenderer = GetComponent<SpriteRenderer>();
+		_spriteRenderer = rotatingChild.GetComponent<SpriteRenderer>();
+		_healthbarController = GetComponent<HealthbarController>();
 	}
 
 	private void FixedUpdate() {
@@ -20,9 +25,8 @@ public class Unit : MonoBehaviour {
 		Vector3 direction = (newPosition - _lastPosition).normalized;
 		float angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x);
 		_lastPosition = newPosition;
-		Transform cachedTransform;
-		(cachedTransform = transform).rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-		cachedTransform.localPosition = newPosition;
+		rotatingChild.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+		transform.localPosition = newPosition;
 	}
 
 	public void SetData(Logic.Data.World.Unit data) {
@@ -30,6 +34,11 @@ public class Unit : MonoBehaviour {
 		var unitData = (UnitTypeData) _data.Type;
 		_spriteRenderer.sprite = unitData.AliveSprite;
 		_spriteRenderer.color = _data.Owner.TeamColor == Color.Blue ? unitData.BlueColor : unitData.RedColor;
+		UpdateHealth();
+	}
+
+	public void UpdateHealth() {
+		_healthbarController.SetHealth(_data.CurrentHealth / _data.Type.Health);
 	}
 
 	public void DestroyUnit() {
