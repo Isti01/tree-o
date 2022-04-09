@@ -21,6 +21,11 @@ public class TileHighlight : MonoBehaviour {
 		UpdateTile();
 	}
 
+	public void SetRadius(float outerRadius, float innerRadius = 0.0f) {
+		_light.pointLightOuterRadius = outerRadius;
+		_light.pointLightInnerRadius = innerRadius;
+	}
+
 	public void SetData(TileHighlightData data) {
 		highlightData = data;
 		_dimmed = false;
