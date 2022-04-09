@@ -51,45 +51,57 @@ public class WorldNavigation {
 	}
 
 	private Dijkstra[,] RunDijkstra(int fromX, int fromY, ISet<TilePosition> to) {
-		Dijkstra[,] dgrid = new Dijkstra[_grid.GetLength(0), _grid.GetLength(1)];
-		for (int i = 0; i < dgrid.GetLength(0); i++) {
-			for (int j = 0; j < dgrid.GetLength(1); j++) {
+		int width = _grid.GetLength(0);
+		int height = _grid.GetLength(1);
+
+		Dijkstra[,] dgrid = new Dijkstra[width, height];
+		for (var i = 0; i < width; i++) {
+			for (var j = 0; j < height; j++) {
 				dgrid[i, j] = new Dijkstra(i, j);
 			}
 		}
 
 		dgrid[fromX, fromY].D = 0;
-		List<Dijkstra> q = new List<Dijkstra>();
-		foreach (var item in dgrid) {
-			q.Add(item);
-		}
+		IList<Dijkstra> queue = new List<Dijkstra>(width * height);
+		queue.Add(dgrid[fromX, fromY]);
+		dgrid[fromX, fromY].Queued = true;
 
-		int[] difx = { 0, 0, -1, 1 };
-		int[] dify = { 1, -1, 0, 0 };
-		Dijkstra u = dgrid[fromX, fromY];
-		q.Remove(u);
-		while (u.D < Int32.MaxValue && q.Count > 0) {
-			//'to' positions have finite cost but can be blocked
-			if ((u.Ox == fromX && u.Oy == fromY) || _grid[u.Ox, u.Oy] == null) {
-				for (int i = 0; i < 4; i++) {
-					int newx = u.Ox + difx[i];
-					int newy = u.Oy + dify[i];
-					if (Math.Min(newx, newy) >= 0
-						&& newx < dgrid.GetLength(0)
-						&& newy < dgrid.GetLength(1)) {
-						if (dgrid[newx, newy].D > dgrid[u.Ox, u.Oy].D + 1
-							&& (_grid[newx, newy] == null || to.Contains(new TilePosition(newx, newy)))) {
-							dgrid[newx, newy].D = dgrid[u.Ox, u.Oy].D + 1;
-							dgrid[newx, newy].Px = u.Ox;
-							dgrid[newx, newy].Py = u.Oy;
-						}
-					}
-				}
+		int[] diffX = { 0, 0, -1, 1 };
+		int[] diffY = { 1, -1, 0, 0 };
+
+		while (queue.Count > 0) {
+			int minValue = queue[0].D;
+			var minIndex = 0;
+			for (var i = 1; i < queue.Count; i++) {
+				if (minValue <= queue[i].D) continue;
+				minValue = queue[i].D;
+				minIndex = i;
 			}
 
-			int min = q.Min(y => y.D);
-			u = q.Where(x => x.D == min).First();
-			q.Remove(u);
+			Dijkstra u = queue[minIndex];
+			queue.RemoveAt(minIndex);
+
+			if (u.D == int.MaxValue) break;
+
+			//'to' positions have finite cost but can be blocked
+			if ((u.Ox == fromX && u.Oy == fromY) || _grid[u.Ox, u.Oy] == null) {
+				for (var i = 0; i < 4; i++) {
+					int newX = u.Ox + diffX[i];
+					int newY = u.Oy + diffY[i];
+					if (newX < 0 || newY < 0 || newX >= width || newY >= height) continue;
+
+					Dijkstra newU = dgrid[newX, newY];
+					if (newU.D <= u.D + 1) continue;
+					if (_grid[newX, newY] != null && !to.Contains(new TilePosition(newX, newY))) continue;
+					newU.D = u.D + 1;
+					newU.Px = u.Ox;
+					newU.Py = u.Oy;
+
+					if (newU.Queued) continue;
+					newU.Queued = true;
+					queue.Add(newU);
+				}
+			}
 		}
 
 		return dgrid;
