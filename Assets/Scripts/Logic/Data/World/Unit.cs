@@ -100,6 +100,10 @@ public class Unit {
 		World.Overview.Events.Raise(new UnitDamagedEvent(this, attacker));
 	}
 
+	public void Kill() {
+		CurrentHealth = 0;
+	}
+
 	#endregion
 
 	private class CachedPath {
