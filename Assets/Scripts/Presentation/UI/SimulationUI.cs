@@ -234,15 +234,19 @@ public class SimulationUI : MonoBehaviour {
 	}
 
 	private void StepTowerPlacing() {
-		if (_activePlayer == Logic.Data.Color.Blue)
+		if (_activePlayer == Logic.Data.Color.Blue) {
+			OnBuildingPossibleChanges?.Invoke(null);
 			StartTowerPlacing(Logic.Data.Color.Red);
-		else
+		} else {
+			OnBuildingPossibleChanges?.Invoke(null);
 			UpdateUiState(UIState.UnitDeployment);
+		}
 	}
 
 	private void OnTowerTypeSelected(TowerTypeData towerType) {
 		_selectedTowerType = towerType;
 		_towerPlacing.ShowTowerTypeStats(towerType);
+		OnBuildingPossibleChanges?.Invoke(GameOverview.GetTeam(_activePlayer));
 	}
 
 	private void OnTileSelected(TilePosition position, SimulationManager.MouseButton button) {
@@ -350,6 +354,7 @@ public class SimulationUI : MonoBehaviour {
 		}
 	}
 
+	public event Action<GameTeam> OnBuildingPossibleChanges;
 	public event Action<Barrack> OnBarrackSelected;
 	public event Action<MouseEnterEvent> OnGameViewMouseEnter;
 	public event Action<MouseLeaveEvent> OnGameViewMouseLeave;

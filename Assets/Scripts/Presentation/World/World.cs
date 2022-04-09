@@ -21,6 +21,7 @@ public class World : MonoBehaviour {
 	public GameObject tileHighlightPrefab;
 
 	private GameObject[,] _map;
+	private GameTeam buildingPossibleTeam;
 	private Logic.Data.World.Barrack _selectedBarrack;
 	private SimulationManager _simulationManager;
 
@@ -51,6 +52,7 @@ public class World : MonoBehaviour {
 		events.AddListener<BarrackCheckpointRemovedEvent>(OnBarrackCheckpointRemoved);
 
 		var simulationUI = FindObjectOfType<SimulationUI>();
+		simulationUI.OnBuildingPossibleChanges += OnBuildingPossibleChanges;
 		simulationUI.OnBarrackSelected += OnBarrackSelected;
 
 		GameWorld world = GameOverview.World;
@@ -90,6 +92,21 @@ public class World : MonoBehaviour {
 		}
 	}
 
+	private void OnBuildingPossibleChanges(GameTeam team) {
+		if (buildingPossibleTeam == team) return;
+		buildingPossibleTeam = team;
+		VisualizeValidTowerPositions();
+	}
+
+	private void VisualizeValidTowerPositions() {
+		RemoveHighlights();
+		if (buildingPossibleTeam == null) return;
+
+		foreach (TilePosition position in GameOverview.World.GetAvailableTilePositions(buildingPossibleTeam)) {
+			HighlightTile(position);
+		}
+	}
+
 	public T LogicToPresentation<T>(TileObject tileObject) where T : Structure {
 		return _map[tileObject.Position.X, tileObject.Position.Y].GetComponentInChildren<T>();
 	}
@@ -107,6 +124,7 @@ public class World : MonoBehaviour {
 	private void OnTowerDestroyed(TowerDestroyedEvent e) {
 		var tower = LogicToPresentation<Tower>(e.Tower);
 		tower.DestroyTower();
+		VisualizeValidTowerPositions();
 		Debug.Log($"Removed Tower: {e.Tower}");
 	}
 
@@ -181,6 +199,7 @@ public class World : MonoBehaviour {
 		TilePosition tilePosition = tower.Position;
 
 		InstantiateTower(_map[tilePosition.X, tilePosition.Y], tower);
+		VisualizeValidTowerPositions();
 	}
 
 	private void OnTowerShot(TowerShotEvent e) {
