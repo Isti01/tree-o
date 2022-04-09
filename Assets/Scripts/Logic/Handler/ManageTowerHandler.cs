@@ -18,7 +18,7 @@ public class ManageTowerHandler : BaseHandler {
 
 		if (command.Team.Money < command.Type.BuildingCost) return BuildTowerCommand.CommandResult.NotEnoughMoney;
 
-		if (!world.GetAvailableTilePositions(command.Team).Contains(command.Position))
+		if (!command.Team.AvailableTowerPositions.Contains(command.Position))
 			return BuildTowerCommand.CommandResult.TileUnavailable;
 
 		command.Team.SpendMoney(command.Type.BuildingCost);

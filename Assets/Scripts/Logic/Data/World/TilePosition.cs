@@ -30,6 +30,22 @@ public readonly struct TilePosition {
 		return (float) Math.Sqrt(Distance2(from));
 	}
 
+	public TilePosition Added(TilePosition other) {
+		return Added(other.X, other.Y);
+	}
+
+	public TilePosition Added(int x, int y) {
+		return new TilePosition(X + x, Y + y);
+	}
+
+	public TilePosition Subtracted(TilePosition other) {
+		return Subtracted(other.X, other.Y);
+	}
+
+	public TilePosition Subtracted(int x, int y) {
+		return Added(-x, -y);
+	}
+
 	public override string ToString() {
 		return $"({X};{Y})";
 	}

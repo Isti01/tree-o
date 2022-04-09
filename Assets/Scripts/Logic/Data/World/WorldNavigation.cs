@@ -10,12 +10,19 @@ public class WorldNavigation {
 		_grid = grid;
 	}
 
-	public bool IsPositionReachable(TilePosition from, TilePosition to,
-		ICollection<TilePosition> blockedTiles) {
-		return IsPositionReachable(from.ToVectorCentered(), to.ToVectorCentered(), blockedTiles);
+	public bool IsPositionReachable(TilePosition from, TilePosition to, ISet<TilePosition> blockedTiles) {
+		return GetReachablePositionSubset(from, new HashSet<TilePosition> { to }, blockedTiles).Any();
 	}
 
-	public bool IsPositionReachable(Vector2 from, Vector2 to, ICollection<TilePosition> blockedTiles) {
+	public bool IsPositionReachable(TilePosition from, TilePosition to) {
+		return GetReachablePositionSubset(from, new HashSet<TilePosition> { to }).Any();
+	}
+
+	public ISet<TilePosition> GetReachablePositionSubset(TilePosition from, ISet<TilePosition> to,
+		ISet<TilePosition> blockedTiles) {
+		if (blockedTiles.Overlaps(to))
+			throw new ArgumentException("Positions can't be blocked and be 'to' positions at the same time");
+
 		//We modify the grid. We must be careful not to call any "foreign" code here:
 		// outside observers mustn't see the grid in this modified state.
 
@@ -25,7 +32,7 @@ public class WorldNavigation {
 			}
 		}
 
-		bool result = IsPositionReachable(from, to);
+		ISet<TilePosition> result = GetReachablePositionSubset(from, to);
 
 		foreach (TilePosition tile in blockedTiles) {
 			if (_grid[tile.X, tile.Y] is FillerTileObject) {
@@ -36,53 +43,65 @@ public class WorldNavigation {
 		return result;
 	}
 
-	public bool IsPositionReachable(TilePosition from, TilePosition to) {
-		return IsPositionReachable(from.ToVectorCentered(), to.ToVectorCentered());
+	public ISet<TilePosition> GetReachablePositionSubset(TilePosition from, ISet<TilePosition> to) {
+		Dijkstra[,] dgrid = RunDijkstra(from.X, from.Y, to);
+		HashSet<TilePosition> result = new HashSet<TilePosition>(to);
+		result.RemoveWhere(pos => dgrid[pos.X, pos.Y].D == int.MaxValue);
+		return result;
 	}
 
-	public bool IsPositionReachable(Vector2 from, Vector2 to) {
-		Dijkstra[,] dgrid = RunDijkstra((int) from.X, (int) from.Y, (int) to.X, (int) to.Y);
-		return dgrid[(int) to.X, (int) to.Y].D != int.MaxValue;
-	}
+	private Dijkstra[,] RunDijkstra(int fromX, int fromY, ISet<TilePosition> to) {
+		int width = _grid.GetLength(0);
+		int height = _grid.GetLength(1);
 
-	private Dijkstra[,] RunDijkstra(int fromX, int fromY, int toX, int toY) {
-		Dijkstra[,] dgrid = new Dijkstra[_grid.GetLength(0), _grid.GetLength(1)];
-		for (int i = 0; i < dgrid.GetLength(0); i++) {
-			for (int j = 0; j < dgrid.GetLength(1); j++) {
+		Dijkstra[,] dgrid = new Dijkstra[width, height];
+		for (var i = 0; i < width; i++) {
+			for (var j = 0; j < height; j++) {
 				dgrid[i, j] = new Dijkstra(i, j);
 			}
 		}
 
 		dgrid[fromX, fromY].D = 0;
-		List<Dijkstra> q = new List<Dijkstra>();
-		foreach (var item in dgrid) {
-			q.Add(item);
-		}
+		IList<Dijkstra> queue = new List<Dijkstra>(width * height);
+		queue.Add(dgrid[fromX, fromY]);
+		dgrid[fromX, fromY].Queued = true;
 
-		int[] difx = { 0, 0, -1, 1 };
-		int[] dify = { 1, -1, 0, 0 };
-		Dijkstra u = dgrid[fromX, fromY];
-		q.Remove(u);
-		while (u.D < Int32.MaxValue && q.Count > 0) {
-			for (int i = 0; i < 4; i++) {
-				int newx = u.Ox + difx[i];
-				int newy = u.Oy + dify[i];
-				if (Math.Min(newx, newy) >= 0
-					&& newx < dgrid.GetLength(0)
-					&& newy < dgrid.GetLength(1)) {
-					if ((_grid[newx, newy] == null || (newx == toX && newy == toY))
-						&& dgrid[newx, newy].D > dgrid[u.Ox, u.Oy].D + 1) {
-						//üres vagy célpont
-						dgrid[newx, newy].D = dgrid[u.Ox, u.Oy].D + 1;
-						dgrid[newx, newy].Px = u.Ox;
-						dgrid[newx, newy].Py = u.Oy;
-					}
-				}
+		int[] diffX = { 0, 0, -1, 1 };
+		int[] diffY = { 1, -1, 0, 0 };
+
+		while (queue.Count > 0) {
+			int minValue = queue[0].D;
+			var minIndex = 0;
+			for (var i = 1; i < queue.Count; i++) {
+				if (minValue <= queue[i].D) continue;
+				minValue = queue[i].D;
+				minIndex = i;
 			}
 
-			int min = q.Min(y => y.D);
-			u = q.Where(x => x.D == min).First();
-			q.Remove(u);
+			Dijkstra u = queue[minIndex];
+			queue.RemoveAt(minIndex);
+
+			if (u.D == int.MaxValue) break;
+
+			//'to' positions have finite cost but can be blocked
+			if ((u.Ox == fromX && u.Oy == fromY) || _grid[u.Ox, u.Oy] == null) {
+				for (var i = 0; i < 4; i++) {
+					int newX = u.Ox + diffX[i];
+					int newY = u.Oy + diffY[i];
+					if (newX < 0 || newY < 0 || newX >= width || newY >= height) continue;
+
+					Dijkstra newU = dgrid[newX, newY];
+					if (newU.D <= u.D + 1) continue;
+					if (_grid[newX, newY] != null && !to.Contains(new TilePosition(newX, newY))) continue;
+					newU.D = u.D + 1;
+					newU.Px = u.Ox;
+					newU.Py = u.Oy;
+
+					if (newU.Queued) continue;
+					newU.Queued = true;
+					queue.Add(newU);
+				}
+			}
 		}
 
 		return dgrid;
@@ -91,7 +110,8 @@ public class WorldNavigation {
 	public List<Vector2> TryGetPathDeltas(Vector2 from, Vector2 to, float colliderRadius) {
 		if (from.ToTilePosition().Equals(to.ToTilePosition())) return new List<Vector2>();
 
-		Dijkstra[,] dgrid = RunDijkstra((int) from.X, (int) from.Y, (int) to.X, (int) to.Y);
+		Dijkstra[,] dgrid = RunDijkstra((int) from.X, (int) from.Y,
+			new HashSet<TilePosition> { to.ToTilePosition() });
 		if (dgrid[(int) to.X, (int) to.Y].D == int.MaxValue) return null;
 
 		List<Vector2> pathDeltas = new List<Vector2>();

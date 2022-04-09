@@ -5,6 +5,7 @@ public class Dijkstra {
 	public int Oy { get; set; }
 	public int Px { get; set; }
 	public int Py { get; set; }
+	public bool Queued { get; set; }
 
 	public Dijkstra(int x, int y) {
 		D = int.MaxValue;

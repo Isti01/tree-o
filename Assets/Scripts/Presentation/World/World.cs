@@ -141,7 +141,7 @@ public class World : MonoBehaviour {
 		RemoveHighlights();
 		if (buildingPossibleTeam == null) return;
 
-		foreach (TilePosition position in GameOverview.World.GetAvailableTilePositions(buildingPossibleTeam)) {
+		foreach (TilePosition position in buildingPossibleTeam.AvailableTowerPositions) {
 			HighlightTile(position);
 		}
 	}

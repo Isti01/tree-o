@@ -6,6 +6,12 @@ using Logic.Event.Team;
 
 namespace Logic.Data {
 public class GameTeam {
+	#region Fields
+
+	private HashSet<TilePosition> _availableTowerPositionsCache;
+
+	#endregion
+
 	#region Properties
 
 	public IGameOverview Overview { get; }
@@ -21,6 +27,13 @@ public class GameTeam {
 
 	public IEnumerable<Unit> Units => Overview.World.Units
 		.Where(t => t.Owner == this);
+
+	public ISet<TilePosition> AvailableTowerPositions {
+		get {
+			if (_availableTowerPositionsCache == null) RecalculateAvailableTowerPositions();
+			return new HashSet<TilePosition>(_availableTowerPositionsCache);
+		}
+	}
 
 	public int Money { get; private set; }
 
@@ -71,6 +84,46 @@ public class GameTeam {
 	public void IncrementBuiltTowerCount() {
 		BuiltTowerCount++;
 		Overview.Events.Raise(new TeamStatisticsUpdatedEvent(this));
+	}
+
+	public void InvalidateCachedAvailableTowerPositions() {
+		_availableTowerPositionsCache = null;
+	}
+
+	private void RecalculateAvailableTowerPositions() {
+		GameWorld world = Overview.World;
+		_availableTowerPositionsCache = new HashSet<TilePosition>();
+
+		foreach (Building building in world.GetTileObjectsOfType<Building>()
+			.Where(b => b.OwnerColor == TeamColor)) {
+			int maxDelta = world.Config.MaxBuildingDistance;
+			for (int dx = -maxDelta; dx <= maxDelta; dx++) {
+				for (int dy = -maxDelta; dy <= maxDelta; dy++) {
+					TilePosition pos = building.Position.Added(dx, dy);
+					if (pos.X < 0 || pos.X >= world.Width || pos.Y < 0 || pos.Y >= world.Height) continue;
+					if (Math.Abs(dx) + Math.Abs(dy) > maxDelta) continue;
+					if (world[pos] != null) continue;
+					_availableTowerPositionsCache.Add(pos);
+				}
+			}
+		}
+
+		_availableTowerPositionsCache.ExceptWith(world.Units.Select(u => u.TilePosition));
+
+		_availableTowerPositionsCache.RemoveWhere(position => {
+			ISet<TilePosition> blocked = new HashSet<TilePosition> { position };
+
+			foreach (GameTeam sourceTeam in Overview.Teams) {
+				TilePosition from = Overview.GetEnemyTeam(sourceTeam).Castle.Position;
+				ISet<TilePosition> to = new HashSet<TilePosition>();
+				to.UnionWith(sourceTeam.Barracks.Select(b => b.Position));
+				to.UnionWith(sourceTeam.Units.Select(u => u.TilePosition));
+				ISet<TilePosition> reachable = world.Navigation.GetReachablePositionSubset(from, to, blocked);
+				if (reachable.Count != to.Count) return true;
+			}
+
+			return false;
+		});
 	}
 
 	#endregion
