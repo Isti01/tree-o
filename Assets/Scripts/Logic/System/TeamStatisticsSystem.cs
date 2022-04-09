@@ -4,7 +4,7 @@ using Logic.Event.Team;
 using Logic.Event.World.Castle;
 using Logic.Event.World.Unit;
 
-namespace Logic.System;
+namespace Logic.System {
 
 public class TeamStatisticsSystem : BaseSystem {
 	public override void RegisterListeners(EventDispatcher dispatcher) {
@@ -18,4 +18,6 @@ public class TeamStatisticsSystem : BaseSystem {
 	private void On(GameTeam team) {
 		team.Overview.Events.Raise(new TeamStatisticsUpdatedEvent(team));
 	}
+}
+
 }
