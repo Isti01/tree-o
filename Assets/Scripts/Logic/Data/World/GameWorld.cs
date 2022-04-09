@@ -110,11 +110,8 @@ public class GameWorld {
 		if (_grid[tower.Position.X, tower.Position.Y] != tower)
 			throw new ArgumentException("Tower is not at the position it says it is");
 
-		Overview.Events.Raise(new TowerDestroyedEvent(tower));
-
-		//This event is special: we modify stuff after dispatching the event.
-		// This is done on purpose: we don't want to lose reference to the tower.
 		_grid[tower.Position.X, tower.Position.Y] = null;
+		Overview.Events.Raise(new TowerDestroyedEvent(tower));
 	}
 
 	public void DeployUnit(Barrack barrack, IUnitTypeData type) {
@@ -127,11 +124,8 @@ public class GameWorld {
 	public void DestroyUnit(Unit unit) {
 		if (!_units.Contains(unit)) throw new ArgumentException("Unit is not among this world's units");
 
-		Overview.Events.Raise(new UnitDestroyedEvent(unit));
-
-		//This event is special: we modify stuff after dispatching the event.
-		// This is done on purpose: we don't want to lose reference to the unit.
 		_units.Remove(unit);
+		Overview.Events.Raise(new UnitDestroyedEvent(unit));
 	}
 
 	#endregion
