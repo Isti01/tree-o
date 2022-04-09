@@ -71,10 +71,6 @@ public class GameOverview : IGameOverview {
 
 		_redTeam = CreateTeam(Color.Red);
 		_blueTeam = CreateTeam(Color.Blue);
-
-		foreach (GameTeam team in Teams) {
-			team.RecalculateAvailableTowerPositions();
-		}
 	}
 
 	public GameTeam GetTeam(Color color) {

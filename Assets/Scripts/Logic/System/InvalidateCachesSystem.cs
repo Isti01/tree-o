@@ -39,7 +39,7 @@ public class InvalidateCachesSystem : BaseSystem {
 
 	private void RecalculateAvailableTowerPositions(IGameOverview overview) {
 		foreach (GameTeam team in overview.Teams) {
-			team.RecalculateAvailableTowerPositions();
+			team.InvalidateCachedAvailableTowerPositions();
 		}
 	}
 }

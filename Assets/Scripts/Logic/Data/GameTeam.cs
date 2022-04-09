@@ -8,7 +8,7 @@ namespace Logic.Data {
 public class GameTeam {
 	#region Fields
 
-	private readonly HashSet<TilePosition> _availableTowerPositionsCache = new HashSet<TilePosition>();
+	private HashSet<TilePosition> _availableTowerPositionsCache;
 
 	#endregion
 
@@ -28,7 +28,12 @@ public class GameTeam {
 	public IEnumerable<Unit> Units => Overview.World.Units
 		.Where(t => t.Owner == this);
 
-	public ISet<TilePosition> AvailableTowerPositions => new HashSet<TilePosition>(_availableTowerPositionsCache);
+	public ISet<TilePosition> AvailableTowerPositions {
+		get {
+			if (_availableTowerPositionsCache == null) RecalculateAvailableTowerPositions();
+			return new HashSet<TilePosition>(_availableTowerPositionsCache);
+		}
+	}
 
 	public int Money { get; private set; }
 
@@ -81,9 +86,13 @@ public class GameTeam {
 		Overview.Events.Raise(new TeamStatisticsUpdatedEvent(this));
 	}
 
-	public void RecalculateAvailableTowerPositions() {
+	public void InvalidateCachedAvailableTowerPositions() {
+		_availableTowerPositionsCache = null;
+	}
+
+	private void RecalculateAvailableTowerPositions() {
 		GameWorld world = Overview.World;
-		_availableTowerPositionsCache.Clear();
+		_availableTowerPositionsCache = new HashSet<TilePosition>();
 
 		foreach (Building building in world.GetTileObjectsOfType<Building>()
 			.Where(b => b.OwnerColor == TeamColor)) {
