@@ -133,7 +133,6 @@ public class GameWorld {
 		//This event is special: we modify stuff after dispatching the event.
 		// This is done on purpose: we don't want to lose reference to the unit.
 		_units.Remove(unit);
-		Overview.Events.Raise(new TeamStatisticsUpdatedEvent(unit.Owner));
 	}
 
 	#endregion
