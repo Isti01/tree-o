@@ -98,8 +98,8 @@ public class TowerPlacingUI : MonoBehaviour {
 		RootElement.Q<Label>(PlayerNameTurn).text = $"Player {playerName}'s turn";
 	}
 
-	public void SetPlayerMoney(int playerMoney) {
-		RootElement.Q<Label>(BudgetText).text = $"Budget: {playerMoney}";
+	public void SetPlayerMoney(Color teamColor, int playerMoney) {
+		if (teamColor == _activePlayer) RootElement.Q<Label>(BudgetText).text = $"Budget: {playerMoney}";
 	}
 
 	public void Show() {

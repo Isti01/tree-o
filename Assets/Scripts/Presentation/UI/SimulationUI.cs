@@ -6,14 +6,15 @@ using Logic.Command.Unit;
 using Logic.Data;
 using Logic.Data.World;
 using Logic.Event;
+using Logic.Event.Team;
 using Logic.Event.World.Castle;
 using Presentation.World;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Barrack = Logic.Data.World.Barrack;
 using Color = UnityEngine.Color;
-using EventDispatcher = Logic.Event.EventDispatcher;
 using Tower = Logic.Data.World.Tower;
+using Ordering = Logic.Event.EventDispatcher.Ordering;
 
 namespace Presentation.UI {
 public class SimulationUI : MonoBehaviour {
@@ -73,8 +74,10 @@ public class SimulationUI : MonoBehaviour {
 		_unitDeployment.OnNextClicked += StepUnitDeployment;
 		_unitDeployment.OnUnitPurchased += OnUnitPurchased;
 
-		GameOverview.Events.AddListener<PhaseAdvancedEvent>(EventDispatcher.Ordering.Normal, OnPhaseAdvanced);
-		GameOverview.Events.AddListener<CastleDestroyedEvent>(EventDispatcher.Ordering.Normal, OnCastleDestroyed);
+		GameOverview.Events.AddListener<PhaseAdvancedEvent>(Ordering.Normal, OnPhaseAdvanced);
+		GameOverview.Events.AddListener<CastleDestroyedEvent>(Ordering.Normal, OnCastleDestroyed);
+		GameOverview.Events.AddListener<TeamMoneyUpdatedEvent>(Ordering.Normal, OnTeamMoneyUpdated);
+		GameOverview.Events.AddListener<TeamStatisticsUpdatedEvent>(Ordering.Normal, OnTeamStatisticsUpdated);
 
 		HideUIs();
 		SetupMousePanning();
@@ -88,6 +91,8 @@ public class SimulationUI : MonoBehaviour {
 			else
 				UpdateUiState(UIState.Paused);
 		}
+
+		_battleUI.UpdateRemainingTime(GameOverview.TimeLeftFromPhase);
 	}
 
 	private void OnDestroy() {
@@ -110,8 +115,22 @@ public class SimulationUI : MonoBehaviour {
 		_unitDeployment.OnNextClicked -= StepUnitDeployment;
 		_unitDeployment.OnUnitPurchased -= OnUnitPurchased;
 
-		GameOverview.Events.RemoveListener<PhaseAdvancedEvent>(EventDispatcher.Ordering.Normal, OnPhaseAdvanced);
-		GameOverview.Events.RemoveListener<CastleDestroyedEvent>(EventDispatcher.Ordering.Normal, OnCastleDestroyed);
+		GameOverview.Events.RemoveListener<PhaseAdvancedEvent>(Ordering.Normal, OnPhaseAdvanced);
+		GameOverview.Events.RemoveListener<CastleDestroyedEvent>(Ordering.Normal, OnCastleDestroyed);
+		GameOverview.Events.RemoveListener<TeamMoneyUpdatedEvent>(Ordering.Normal, OnTeamMoneyUpdated);
+		GameOverview.Events.RemoveListener<TeamStatisticsUpdatedEvent>(Ordering.Normal, OnTeamStatisticsUpdated);
+	}
+
+	private void OnTeamStatisticsUpdated(TeamStatisticsUpdatedEvent e) {
+		_battleUI.SetTeamStatistics(e.Team);
+	}
+
+	private void OnTeamMoneyUpdated(TeamMoneyUpdatedEvent e) {
+		int money = e.Team.Money;
+		Logic.Data.Color color = e.Team.TeamColor;
+		_towerPlacing.SetPlayerMoney(color, money);
+		_unitDeployment.SetPlayerMoney(color, money);
+		_battleUI.SetPlayerMoney(color, money);
 	}
 
 	private void OnCastleDestroyed(CastleDestroyedEvent e) {
@@ -146,18 +165,15 @@ public class SimulationUI : MonoBehaviour {
 			? $"Upgraded: {tower}"
 			: $"Failed to upgrade: {tower}");
 		_towerPlacing.ShowTowerStats(tower);
-		_towerPlacing.SetPlayerMoney(GameOverview.GetTeam(_activePlayer).Money);
 	}
 
 	private void OnTowerDestroyed(Tower tower) {
 		if (GameOverview.Commands.Issue(new DestroyTowerCommand(tower))) {
 			Debug.Log($"Destroyed: {tower}");
-			if (_selectedTowerType != null) {
+			if (_selectedTowerType != null)
 				_towerPlacing.ShowTowerTypeStats(_selectedTowerType);
-				_towerPlacing.SetPlayerMoney(GameOverview.GetTeam(_activePlayer).Money);
-			} else {
+			else
 				_towerPlacing.ShowInstructions();
-			}
 		} else {
 			Debug.Log($"Failed to destroy: {tower}");
 		}
@@ -213,12 +229,10 @@ public class SimulationUI : MonoBehaviour {
 
 	private void OnUnitPurchased(UnitTypeData unitType) {
 		var command = new PurchaseUnitCommand(GameOverview.GetTeam(_activePlayer), unitType);
-		if (GameOverview.Commands.Issue(command)) {
+		if (GameOverview.Commands.Issue(command))
 			_unitDeployment.OnUnitBought(unitType);
-			_unitDeployment.SetPlayerMoney(GameOverview.GetTeam(_activePlayer).Money);
-		} else {
+		else
 			Debug.Log("Failed to deploy unit"); // TODO maybe show this on the UI
-		}
 	}
 
 	private void StartTowerPlacing(Logic.Data.Color player) {
@@ -230,7 +244,7 @@ public class SimulationUI : MonoBehaviour {
 		_towerPlacing.ResetUI();
 		_towerPlacing.Show();
 		_towerPlacing.SetActivePlayer(_activePlayer);
-		_towerPlacing.SetPlayerMoney(playerData.Money);
+		_towerPlacing.SetPlayerMoney(playerData.TeamColor, playerData.Money);
 	}
 
 	private void StepTowerPlacing() {
@@ -282,7 +296,6 @@ public class SimulationUI : MonoBehaviour {
 			Debug.Log($"[TowerPlacing]: A tower has been selected: {tower} at position {position}");
 		} else if (_selectedTowerType != null) {
 			GameOverview.Commands.Issue(new BuildTowerCommand(playerData, _selectedTowerType, position));
-			_towerPlacing.SetPlayerMoney(playerData.Money); // TODO maybe handle the possible outcomes
 		}
 	}
 
@@ -305,12 +318,15 @@ public class SimulationUI : MonoBehaviour {
 
 		_unitDeployment.Show();
 		_unitDeployment.SetActivePlayer(_activePlayer);
-		_unitDeployment.SetPlayerMoney(playerData.Money);
+		_unitDeployment.SetPlayerMoney(player, playerData.Money);
 	}
 
 	private void StartBattle() {
 		_battleUI.Show();
 		_battleUI.ShowPauseButton();
+		foreach (var team in GameOverview.Teams) {
+			_battleUI.SetTeamStatistics(team);
+		}
 	}
 
 	private void ShowPauseOverlay() {
