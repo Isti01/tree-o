@@ -235,10 +235,12 @@ public class World : MonoBehaviour {
 	}
 
 	private void OnUnitDestroyed(UnitDestroyedEvent e) {
-		if (_units.TryGetValue(e.Unit, out Unit unit))
+		if (_units.TryGetValue(e.Unit, out Unit unit)) {
 			unit.DestroyUnit();
-		else
+			_units.Remove(e.Unit);
+		} else {
 			Debug.LogError($"Failed to retrieve the unit {e.Unit}");
+		}
 	}
 
 	private void OnTowerBuilt(TowerBuiltEvent e) {
