@@ -249,9 +249,11 @@ public class SimulationUI : MonoBehaviour {
 
 	private void StepTowerPlacing() {
 		if (_activePlayer == Logic.Data.Color.Blue) {
+			OnTowerSelected?.Invoke(null);
 			OnBuildingPossibleChanges?.Invoke(null);
 			StartTowerPlacing(Logic.Data.Color.Red);
 		} else {
+			OnTowerSelected?.Invoke(null);
 			OnBuildingPossibleChanges?.Invoke(null);
 			UpdateUiState(UIState.UnitDeployment);
 		}
@@ -260,6 +262,7 @@ public class SimulationUI : MonoBehaviour {
 	private void OnTowerTypeSelected(TowerTypeData towerType) {
 		_selectedTowerType = towerType;
 		_towerPlacing.ShowTowerTypeStats(towerType);
+		OnTowerSelected?.Invoke(null);
 		OnBuildingPossibleChanges?.Invoke(GameOverview.GetTeam(_activePlayer));
 	}
 
@@ -293,6 +296,9 @@ public class SimulationUI : MonoBehaviour {
 		TileObject tileObject = GameOverview.World[position];
 		if (tileObject is Tower tower && tower.OwnerColor == _activePlayer) {
 			_towerPlacing.ShowTowerStats(tower);
+			_selectedTowerType = null;
+			OnBuildingPossibleChanges?.Invoke(null);
+			OnTowerSelected?.Invoke(tower);
 			Debug.Log($"[TowerPlacing]: A tower has been selected: {tower} at position {position}");
 		} else if (_selectedTowerType != null) {
 			GameOverview.Commands.Issue(new BuildTowerCommand(playerData, _selectedTowerType, position));
@@ -370,6 +376,7 @@ public class SimulationUI : MonoBehaviour {
 		}
 	}
 
+	public event Action<Tower> OnTowerSelected;
 	public event Action<GameTeam> OnBuildingPossibleChanges;
 	public event Action<Barrack> OnBarrackSelected;
 	public event Action<MouseEnterEvent> OnGameViewMouseEnter;

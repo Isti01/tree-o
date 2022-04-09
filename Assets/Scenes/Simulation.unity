@@ -683,6 +683,7 @@ MonoBehaviour:
   castlePrefab: {fileID: 9084711428161005313, guid: 14fe3b5463cc4d24c8a07b1d1f912fd7, type: 3}
   unitPrefab: {fileID: 8268301215112136559, guid: 89351f8508198b049a8fa60e02fb638d, type: 3}
   tileHighlightPrefab: {fileID: 1691539168291297187, guid: 7784762b60ea8a84580dfd13cebd6afb, type: 3}
+  towerRadiusHighlightPrefab: {fileID: 7967503270793754117, guid: f9c1e45b237058c49ae2d4c09f8715dd, type: 3}
 --- !u!1 &1799972800
 GameObject:
   m_ObjectHideFlags: 0

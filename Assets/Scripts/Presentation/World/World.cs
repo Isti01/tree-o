@@ -12,17 +12,35 @@ using UnityEngine;
 
 namespace Presentation.World {
 public class World : MonoBehaviour {
-	public GameObject tilePrefab;
-	public GameObject barrackPrefab;
-	public GameObject obstaclePrefab;
-	public GameObject towerPrefab;
-	public GameObject castlePrefab;
-	public GameObject unitPrefab;
-	public GameObject tileHighlightPrefab;
+	[SerializeField]
+	private GameObject tilePrefab;
+
+	[SerializeField]
+	private GameObject barrackPrefab;
+
+	[SerializeField]
+	private GameObject obstaclePrefab;
+
+	[SerializeField]
+	private GameObject towerPrefab;
+
+	[SerializeField]
+	private GameObject castlePrefab;
+
+	[SerializeField]
+	private GameObject unitPrefab;
+
+	[SerializeField]
+	private GameObject tileHighlightPrefab;
+
+	[SerializeField]
+	private GameObject towerRadiusHighlightPrefab;
 
 	private GameObject[,] _map;
 	private GameTeam buildingPossibleTeam;
 	private Logic.Data.World.Barrack _selectedBarrack;
+	private Logic.Data.World.Tower _selectedTower;
+	private GameObject _selectedTowerRadiusHighlight;
 	private SimulationManager _simulationManager;
 
 	private Dictionary<TilePosition, GameObject> _tileHighlights;
@@ -54,6 +72,7 @@ public class World : MonoBehaviour {
 		var simulationUI = FindObjectOfType<SimulationUI>();
 		simulationUI.OnBuildingPossibleChanges += OnBuildingPossibleChanges;
 		simulationUI.OnBarrackSelected += OnBarrackSelected;
+		simulationUI.OnTowerSelected += OnTowerSelected;
 
 		GameWorld world = GameOverview.World;
 		transform.position = new Vector3(-world.Width / 2.0f, -world.Width / 2.0f, 0);
@@ -62,6 +81,26 @@ public class World : MonoBehaviour {
 		for (var x = 0; x < world.Width; x++) {
 			for (var y = 0; y < world.Height; y++) InstantiateTile(x, y, world);
 		}
+	}
+
+	private void OnTowerSelected(Logic.Data.World.Tower tower) {
+		if (_selectedTower == tower) return;
+		_selectedTower = tower;
+
+		HighlightTowerRadius(tower);
+	}
+
+	private void HighlightTowerRadius(Logic.Data.World.Tower tower) {
+		if (_selectedTowerRadiusHighlight != null) {
+			Destroy(_selectedTowerRadiusHighlight);
+		}
+
+		if (tower == null) return;
+
+		var position = tower.Position;
+		var parentTile = _map[position.X, position.Y];
+		_selectedTowerRadiusHighlight = Instantiate(towerRadiusHighlightPrefab, parentTile.transform);
+		_selectedTowerRadiusHighlight.GetComponent<TileHighlight>().SetRadius(tower.Type.Range);
 	}
 
 	private void OnBarrackCheckpointRemoved(BarrackCheckpointRemovedEvent e) {
@@ -116,12 +155,20 @@ public class World : MonoBehaviour {
 	}
 
 	private void OnTowerUpgraded(TowerUpgradedEvent e) {
+		if (_selectedTower == e.Tower) {
+			HighlightTowerRadius(e.Tower);
+		}
+
 		var tower = LogicToPresentation<Tower>(e.Tower);
 		tower.SetData(e.Tower);
 		Debug.Log($"Tower Upgraded {e.Tower}");
 	}
 
 	private void OnTowerDestroyed(TowerDestroyedEvent e) {
+		if (_selectedTower == e.Tower) {
+			HighlightTowerRadius(null);
+		}
+
 		var tower = LogicToPresentation<Tower>(e.Tower);
 		tower.DestroyTower();
 		VisualizeValidTowerPositions();
@@ -231,7 +278,7 @@ public class World : MonoBehaviour {
 
 	private void OnTowerCooledDown(TowerCooledDownEvent e) {
 		var tower = LogicToPresentation<Tower>(e.Tower);
-		//Disable the laser renderer when the tower is ready to shoot again:
+		// Disable the laser renderer when the tower is ready to shoot again:
 		// we want to avoid activating a new laser pulse and then deactivating the old one
 		tower.GetComponent<LineRenderer>().enabled = false;
 	}
