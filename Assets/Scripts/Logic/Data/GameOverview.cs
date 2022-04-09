@@ -133,6 +133,7 @@ public class GameOverview : IGameOverview {
 		_systems.Add(new TowerDamagesUnitSystem());
 		_systems.Add(new UnitDamagesCastleSystem());
 		_systems.Add(new InvalidateCachesSystem());
+		_systems.Add(new TeamStatisticsSystem());
 		foreach (BaseSystem system in _systems) system.RegisterListeners(Events);
 	}
 

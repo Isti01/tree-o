@@ -2,7 +2,6 @@
 using Logic.Event.World.Castle;
 
 namespace Logic.Data.World {
-
 public class Castle : Building {
 	#region Properties
 
@@ -36,5 +35,4 @@ public class Castle : Building {
 
 	#endregion
 }
-
 }
