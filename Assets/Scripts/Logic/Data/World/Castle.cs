@@ -1,8 +1,8 @@
 ﻿using System;
+using Logic.Event.Team;
 using Logic.Event.World.Castle;
 
 namespace Logic.Data.World {
-
 public class Castle : Building {
 	#region Properties
 
@@ -32,9 +32,11 @@ public class Castle : Building {
 			// we can just replace the texture with different one.
 			World.Overview.Events.Raise(new CastleDestroyedEvent(this));
 		}
+
+		World.Overview.Events.Raise(new TeamStatisticsUpdatedEvent(attacker.Owner));
+		World.Overview.Events.Raise(new TeamStatisticsUpdatedEvent(Owner));
 	}
 
 	#endregion
 }
-
 }
