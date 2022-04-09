@@ -1,5 +1,4 @@
 ﻿using System;
-using Logic.Event.Team;
 using Logic.Event.World.Castle;
 
 namespace Logic.Data.World {
