@@ -87,9 +87,11 @@ public class Unit {
 	public void UpdatePlannedPath() {
 		_cachedCheckpointPath = null;
 
-		//TODO performance could be greatly improved by caching pathfinding stuff here
+		ISet<TilePosition> reachableCheckpoints = World.Navigation.GetReachablePositionSubset(TilePosition,
+			new HashSet<TilePosition>(_checkPoints));
+
 		for (var i = 0; i < _checkPoints.Count - 1; i++) {
-			if (World.Navigation.IsPositionReachable(Position, _checkPoints[i].ToVectorCentered())) continue;
+			if (reachableCheckpoints.Contains(_checkPoints[i])) continue;
 			_checkPoints.RemoveAt(i);
 			i--;
 		}
