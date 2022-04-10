@@ -13,9 +13,6 @@ public class SimulationManager : MonoBehaviour {
 		Right
 	}
 
-	public int worldWidth = 10;
-	public int worldHeight = 10;
-
 	[SerializeField]
 	private OverviewConfig overviewConfig;
 
@@ -39,7 +36,7 @@ public class SimulationManager : MonoBehaviour {
 			Debug.LogError($"[Logic Exception]: ${e} {e.InnerException}");
 		}
 
-		GameOverview = new GameOverview(ExceptionHandler, UnityEngine.Random.Range(0, 9999), worldWidth, worldHeight,
+		GameOverview = new GameOverview(ExceptionHandler, UnityEngine.Random.Range(0, 9999),
 			overviewConfig, economyConfig, worldConfig);
 		// GameOverview.Events.AddListener<Logic.Event.BaseEvent>(Logic.Event.EventDispatcher.Ordering.First,
 		// 	e => Debug.Log($"Event raised ('First' priority): {e}"));

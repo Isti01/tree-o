@@ -18,9 +18,9 @@ public class GameWorld {
 
 	public IGameOverview Overview { get; }
 
-	public int Width { get; }
+	public int Width => Config.Width;
 
-	public int Height { get; }
+	public int Height => Config.Height;
 
 	public TileObject this[int x, int y] => GetTile(x, y);
 
@@ -45,11 +45,9 @@ public class GameWorld {
 
 	#region Methods
 
-	internal GameWorld(IGameOverview overview, IGameWorldConfig config, int width, int height) {
+	internal GameWorld(IGameOverview overview, IGameWorldConfig config) {
 		Overview = overview;
 		Config = config;
-		Width = width;
-		Height = height;
 		_grid = WorldGenerator.GenerateGrid(overview.Random.Next(), Width, Height, new TileObjectConstructors(this));
 		Navigation = new WorldNavigation(_grid);
 	}

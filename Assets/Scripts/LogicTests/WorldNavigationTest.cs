@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Logic.Data.World;
 using NUnit.Framework;
@@ -66,9 +65,10 @@ public class WorldNavigationTest {
 	[Repeat((LowRepeatCount))]
 	public void TestPathLeadsToTarget() {
 		GameWorld world = WorldTestUtils.GenerateWorld();
-		Random random = RandomUtils.CreateRandomlySeededRandom();
-		Vector2 from = new Vector2((random.Next() % world.Width) + 0.5F, (random.Next() % world.Height) + 0.5F);
-		Vector2 to = new Vector2((random.Next() % world.Width) + 0.5F, (random.Next() % world.Height) + 0.5F);
+		Barrack fromBarrack = world.GetTileObjectsOfType<Barrack>().First();
+		Vector2 from = fromBarrack.Position.ToVectorCentered();
+		Vector2 to = world.GetTileObjectsOfType<Castle>()
+			.First(c => c.OwnerColor != fromBarrack.OwnerColor).Position.ToVectorCentered();
 		List<Vector2> path = world.Navigation.TryGetPathDeltas(from, to, 0);
 		float x = from.X;
 		float y = from.Y;

@@ -4,18 +4,12 @@
 /// instances, <see cref="Success"/> and <see cref="Failure"/>,
 /// corresponding to the possible values of <see cref="ICommandResult.IsSuccess"/>.
 /// </summary>
-public sealed class BiCommandResult : ICommandResult {
-	public static readonly BiCommandResult Success = new BiCommandResult();
-	public static readonly BiCommandResult Failure = new BiCommandResult();
+public sealed class BiCommandResult : AbstractCommandResult {
+	public static readonly BiCommandResult Success = new BiCommandResult("Success");
+	public static readonly BiCommandResult Failure = new BiCommandResult("Failure");
 
-	public bool IsSuccess => this == Success;
+	public override bool IsSuccess => this == Success;
 
-	public static implicit operator bool(BiCommandResult result) {
-		return result.IsSuccess;
-	}
-
-	private BiCommandResult() {
-		//Disallow construction
-	}
+	private BiCommandResult(string name) : base(name) {}
 }
 }

@@ -17,7 +17,9 @@ public static class WorldTestUtils {
 
 		Mock<IGameWorldConfig> config = new Mock<IGameWorldConfig>();
 		config.Setup(c => c.BarrackSpawnCooldownTime).Returns(1);
-		GameWorld world = new GameWorld(overview.Object, config.Object, width, height);
+		config.Setup(c => c.Width).Returns(width);
+		config.Setup(c => c.Height).Returns(height);
+		GameWorld world = new GameWorld(overview.Object, config.Object);
 
 		TestContext.Out.WriteLine("Generated world:");
 		TestContext.Out.WriteLine(WorldAsMultilineString(world));

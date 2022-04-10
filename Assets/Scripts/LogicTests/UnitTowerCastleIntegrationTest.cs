@@ -19,12 +19,12 @@ public class UnitTowerCastleIntegrationTest {
 			Damage = overview.World.Config.CastleStartingHealth * 0.5f,
 			Speed = overview.World.Width * overview.World.Height
 		};
-		overview.Commands.Issue(new PurchaseUnitCommand(attacker, unitType));
+		Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(attacker, unitType)));
 
 		//Enter fighting phase and move the unit
 		overview.AdvancePhase();
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
-		for (var i = 0; i < 10; i++) overview.Commands.Issue(new AdvanceTimeCommand(overview, 1));
+		for (var i = 0; i < 10; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, 1)));
 
 		//Validate the results
 		Assert.AreEqual(0, overview.World.Units.Count);
@@ -43,7 +43,8 @@ public class UnitTowerCastleIntegrationTest {
 			Damage = overview.World.Config.CastleStartingHealth * 1.1f,
 			Speed = overview.World.Width * overview.World.Height
 		};
-		foreach (GameTeam team in overview.Teams) overview.Commands.Issue(new PurchaseUnitCommand(team, unitType));
+		foreach (GameTeam team in overview.Teams)
+			Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(team, unitType)));
 
 		//Enter fighting phase and move the units
 		overview.AdvancePhase();
@@ -58,20 +59,24 @@ public class UnitTowerCastleIntegrationTest {
 
 	[Test]
 	public void TestTowerDestroysUnit() {
-		GameOverview overview = GameTestUtils.CreateOverview();
+		GameOverview overview = GameTestUtils.CreateOverview(((overviewConfig, economyConfig, worldConfig) => {
+			worldConfig.MaxBuildingDistance = worldConfig.Width * worldConfig.Height;
+		}));
+
 		GameTeam unitTeam = overview.GetTeam(Color.Blue);
 		GameTeam towerTeam = overview.GetEnemyTeam(unitTeam);
 
 		//Purchase a unit
 		GameTestUtils.UnitTypeData unitType = new GameTestUtils.UnitTypeData();
-		overview.Commands.Issue(new PurchaseUnitCommand(unitTeam, unitType));
+		Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(unitTeam, unitType)));
 
 		//Build a tower with high damage and range
 		GameTestUtils.TowerTypeData towerType = new GameTestUtils.TowerTypeData {
 			Damage = unitType.Health * 1.1f, Range = overview.World.Width * overview.World.Height
 		};
 		TilePosition towerPosition = WorldTestUtils.FindAnyEmptyPosition(overview.World);
-		overview.Commands.Issue(new BuildTowerCommand(towerTeam, towerType, towerPosition));
+		Assert.AreEqual(BuildTowerCommand.CommandResult.Success,
+			overview.Commands.Issue(new BuildTowerCommand(towerTeam, towerType, towerPosition)));
 
 		//Set up event listener
 		var unitDestroyedEvent = false;
@@ -80,7 +85,7 @@ public class UnitTowerCastleIntegrationTest {
 		//Enter fighting phase and let the tower kill the unit
 		overview.AdvancePhase();
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
-		for (var i = 0; i < 10; i++) overview.Commands.Issue(new AdvanceTimeCommand(overview, 0.1f));
+		for (var i = 0; i < 10; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, 0.1f)));
 
 		//Validate the results
 		Assert.AreEqual(0, overview.World.Units.Count);
