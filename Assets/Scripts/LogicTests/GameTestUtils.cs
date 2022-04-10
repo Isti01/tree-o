@@ -11,17 +11,19 @@ public static class GameTestUtils {
 
 	public static GameOverview CreateOverview(Action<GameOverviewConfig,
 		GameEconomyConfig, GameWorldConfig> configInitializer) {
-		Random random = RandomUtils.CreateRandomlySeededRandom();
-		Action<Exception> errorHandler = e => throw e;
-		int seed = random.Next();
-		int width = random.Next(10, 20);
-		int height = random.Next(10, 20);
 		GameOverviewConfig overviewConfig = new GameOverviewConfig();
 		GameEconomyConfig economyConfig = new GameEconomyConfig();
 		GameWorldConfig worldConfig = new GameWorldConfig();
+
+		Random random = RandomUtils.CreateRandomlySeededRandom();
+		int rngSeed = random.Next();
+		worldConfig.Width = random.Next(10, 20);
+		worldConfig.Height = random.Next(10, 20);
+
 		configInitializer(overviewConfig, economyConfig, worldConfig);
-		return new GameOverview(errorHandler, seed, width, height,
-			overviewConfig, economyConfig, worldConfig);
+
+		Action<Exception> errorHandler = e => throw e;
+		return new GameOverview(errorHandler, rngSeed, overviewConfig, economyConfig, worldConfig);
 	}
 
 	public class GameOverviewConfig : IGameOverviewConfig {
@@ -36,6 +38,8 @@ public static class GameTestUtils {
 	}
 
 	public class GameWorldConfig : IGameWorldConfig {
+		public int Width { get; set; } = 10;
+		public int Height { get; set; } = 10;
 		public float BarrackSpawnCooldownTime { get; set; } = 1;
 		public float CastleStartingHealth { get; set; } = 10;
 		public int MaxBuildingDistance { get; set; } = 5;

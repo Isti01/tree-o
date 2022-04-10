@@ -43,9 +43,8 @@ public class GameOverview : IGameOverview {
 
 	#region Methods
 
-	public GameOverview(Action<Exception> eventExceptionHandler, int seed,
-		int worldWidth, int worldHeight, IGameOverviewConfig overviewConfig,
-		IGameEconomyConfig economyConfig, IGameWorldConfig worldConfig) {
+	public GameOverview(Action<Exception> eventExceptionHandler, int rngSeed,
+		IGameOverviewConfig overviewConfig, IGameEconomyConfig economyConfig, IGameWorldConfig worldConfig) {
 		OverviewConfig = overviewConfig;
 		EconomyConfig = economyConfig;
 
@@ -59,9 +58,9 @@ public class GameOverview : IGameOverview {
 		Commands = new CommandDispatcher();
 		RegisterHandlers();
 
-		Random = new Random(seed);
+		Random = new Random(rngSeed);
 
-		World = new GameWorld(this, worldConfig, worldWidth, worldHeight);
+		World = new GameWorld(this, worldConfig);
 
 		GameTeam CreateTeam(Color color) {
 			return new GameTeam(this, color,
