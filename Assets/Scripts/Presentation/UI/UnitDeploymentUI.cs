@@ -1,5 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Logic.Data;
+using Logic.Data.World;
+using Logic.Event.Team;
 using Presentation.World;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -16,6 +20,7 @@ public class UnitDeploymentUI : MonoBehaviour {
 	private const string TopChipText = "TopChipText";
 	private const string CardContent = "CardContent";
 	private const string BottomChipText = "BottomChipText";
+	private const string DeployedUnitsContainer = "DeployedUnitsContainer";
 
 	[SerializeField]
 	private VisualTreeAsset cardComponent;
@@ -112,6 +117,17 @@ public class UnitDeploymentUI : MonoBehaviour {
 	}
 
 	public event Action<UnitTypeData> OnUnitPurchased;
+
+	public void UpdateUnitStatistics(GameTeam team) {
+		if (team.TeamColor != _activePlayer) return;
+
+		var container = RootElement.Q(DeployedUnitsContainer);
+		container.Clear();
+		foreach (var pair in team.DeployedUnitTypeCounts) {
+			container.Add(new Label { text = $"{pair.Key.Name}: {pair.Value}" });
+		}
+	}
+
 	public event Action OnNextClicked;
 }
 }

@@ -13,7 +13,7 @@
                 <ui:Label text="Deploy Units" display-tooltip-when-elided="true" class="TitleStyle" />
                 <ui:Label text="Player Red&apos;s turn" display-tooltip-when-elided="true" name="PlayerNameTurn" />
                 <ui:Label text="Budget: 123" display-tooltip-when-elided="true" name="BudgetText" />
-                <ui:Label text="Deployed Units" display-tooltip-when-elided="true" class="SubtitleStyle" />
+                <ui:Label text="Units Deployed" display-tooltip-when-elided="true" class="SubtitleStyle" style="font-size: 16px; -unity-font-style: bold;" />
                 <ui:VisualElement name="DeployedUnitsContainer" />
             </ui:VisualElement>
         </ui:VisualElement>
