@@ -31,7 +31,7 @@ public class Tower : Structure {
 		_spriteRenderer.sprite = type.Sprite;
 		_spriteRenderer.color = color;
 
-		_world = GetComponentInParent<World>();
+		_world = FindObjectOfType<World>();
 
 		var laserRenderer = GetComponent<LineRenderer>();
 		var laserGradient = new Gradient();
