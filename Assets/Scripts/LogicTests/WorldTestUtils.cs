@@ -24,6 +24,16 @@ public static class WorldTestUtils {
 		return world;
 	}
 
+	public static TilePosition FindAnyEmptyPosition(GameWorld world) {
+		for (var x = 0; x < world.Width; x++) {
+			for (var y = 0; y < world.Height; y++) {
+				if (world[x, y] == null) return new TilePosition(x, y);
+			}
+		}
+
+		throw new InvalidOperationException("There aren't any empty positions");
+	}
+
 	private static string WorldAsMultilineString(GameWorld world) {
 		const char boundary = '#';
 		StringBuilder result = new StringBuilder();
