@@ -4,7 +4,7 @@ public abstract class TileObject {
 	public GameWorld World { get; }
 	public TilePosition Position { get; }
 
-	protected TileObject(GameWorld world, TilePosition position) {
+	private protected TileObject(GameWorld world, TilePosition position) {
 		World = world;
 		Position = position;
 	}

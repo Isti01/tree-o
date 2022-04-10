@@ -35,7 +35,7 @@ public class Unit {
 
 	#region Methods
 
-	public Unit(IUnitTypeData type, GameTeam owner, GameWorld world, Vector2 position,
+	internal Unit(IUnitTypeData type, GameTeam owner, GameWorld world, Vector2 position,
 		IEnumerable<TilePosition> checkpoints) {
 		Type = type;
 		Owner = owner;
@@ -46,7 +46,7 @@ public class Unit {
 		_checkPoints.Add(Owner.Overview.GetEnemyTeam(Owner).Castle.Position);
 	}
 
-	public void Move(float delta) {
+	internal void Move(float delta) {
 		TilePosition oldPosition = TilePosition;
 
 		float remainingDistance = Type.Speed * delta;
@@ -84,7 +84,7 @@ public class Unit {
 		return true; //Checkpoint reached
 	}
 
-	public void UpdatePlannedPath() {
+	internal void UpdatePlannedPath() {
 		_cachedCheckpointPath = null;
 
 		ISet<TilePosition> reachableCheckpoints = World.Navigation.GetReachablePositionSubset(TilePosition,
@@ -97,12 +97,12 @@ public class Unit {
 		}
 	}
 
-	public void InflictDamage(Tower attacker, float damage) {
+	internal void InflictDamage(Tower attacker, float damage) {
 		CurrentHealth = Math.Max(CurrentHealth - damage, 0);
 		World.Overview.Events.Raise(new UnitDamagedEvent(this, attacker));
 	}
 
-	public void Kill() {
+	internal void Kill() {
 		CurrentHealth = 0;
 	}
 

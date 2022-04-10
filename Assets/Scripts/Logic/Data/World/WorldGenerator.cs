@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Logic.Data.World {
-public class WorldGenerator {
+internal class WorldGenerator {
 	public static TileObject[,] GenerateGrid(int seed, int width, int height, ITileObjectConstructors constructors) {
 		WorldGenerator generator = new WorldGenerator(seed, width, height, constructors);
 		generator.GenerateWorld();
@@ -23,16 +23,6 @@ public class WorldGenerator {
 		_height = height;
 		_constructors = constructors;
 		_grid = new TileObject[width, height];
-	}
-
-	private IEnumerable<T> EnumerateType<T>() where T : TileObject {
-		for (var x = 0; x < _width; x++) {
-			for (var y = 0; y < _height; y++) {
-				if (_grid[x, y] is T obj) {
-					yield return obj;
-				}
-			}
-		}
 	}
 
 	private void GenerateWorld() {
@@ -105,26 +95,6 @@ public class WorldGenerator {
 		}
 
 		foreach (var obj in otherside) {
-			_grid[obj.Position.X, obj.Position.Y] = obj;
-		}
-	}
-
-	private void GenerateHardcodedWorld() {
-		Castle castleA = _constructors.CreateCastle(new TilePosition(0, 0), Color.Blue);
-		Barrack barrackA1 = _constructors.CreateBarrack(new TilePosition(0, 2), Color.Blue);
-		Barrack barrackA2 = _constructors.CreateBarrack(new TilePosition(2, 0), Color.Blue);
-
-		Castle castleB = _constructors.CreateCastle(new TilePosition(_width - 1, _height - 1), Color.Red);
-		Barrack barrackB1 = _constructors.CreateBarrack(new TilePosition(_width - 1, _height - 3), Color.Red);
-		Barrack barrackB2 = _constructors.CreateBarrack(new TilePosition(_width - 3, _height - 1), Color.Red);
-
-		Obstacle obstacle1 = _constructors.CreateObstacle(new TilePosition(2, 2));
-		Obstacle obstacle2 = _constructors.CreateObstacle(new TilePosition(_width - 3, _height - 3));
-		Obstacle obstacle3 = _constructors.CreateObstacle(new TilePosition(_width / 2, _height / 2));
-
-		foreach (TileObject obj in new TileObject[] {
-				castleA, barrackA1, barrackA2, castleB, barrackB1, barrackB2, obstacle1, obstacle2, obstacle3
-			}) {
 			_grid[obj.Position.X, obj.Position.Y] = obj;
 		}
 	}

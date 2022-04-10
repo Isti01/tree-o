@@ -5,7 +5,7 @@ using Logic.Event.World.Tower;
 
 namespace Logic.System {
 
-public class InvalidateCachesSystem : BaseSystem {
+internal class InvalidateCachesSystem : BaseSystem {
 	public override void RegisterListeners(EventDispatcher dispatcher) {
 		dispatcher.AddListener<PhaseAdvancedEvent>(OnPreparePhaseStarted);
 		dispatcher.AddListener<PhaseAdvancedEvent>(OnFightPhaseStarted);

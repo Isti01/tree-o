@@ -21,19 +21,19 @@ public class Tower : Building {
 
 	#region Methods
 
-	public Tower(GameWorld world, TilePosition position, Color owner, ITowerTypeData type)
+	internal Tower(GameWorld world, TilePosition position, Color owner, ITowerTypeData type)
 		: base(world, position, owner) {
 		Type = type;
 	}
 
-	public void Upgrade() {
+	internal void Upgrade() {
 		if (Type.AfterUpgradeType == null) throw new InvalidOperationException($"{Type} is not upgradeable");
 		ITowerTypeData oldType = Type;
 		Type = Type.AfterUpgradeType;
 		World.Overview.Events.Raise(new TowerUpgradedEvent(this, oldType));
 	}
 
-	public void UpdateTarget() {
+	internal void UpdateTarget() {
 		if (Target != null && Position.ToVectorCentered().Distance(Target.Position) <= Type.Range
 			&& Target.IsAlive)
 			return;
@@ -49,17 +49,17 @@ public class Tower : Building {
 		if (Target != oldTarget) World.Overview.Events.Raise(new TowerTargetChangedEvent(this, oldTarget));
 	}
 
-	public void UpdateCooldown(float delta) {
+	internal void UpdateCooldown(float delta) {
 		if (RemainingCooldownTime == 0) return;
 		RemainingCooldownTime = Math.Max(RemainingCooldownTime - delta, 0);
 		if (!IsOnCooldown) World.Overview.Events.Raise(new TowerCooledDownEvent(this));
 	}
 
-	public void ResetCooldown() {
+	internal void ResetCooldown() {
 		RemainingCooldownTime = 0;
 	}
 
-	public void Shoot() {
+	internal void Shoot() {
 		if (Target == null) throw new InvalidOperationException("No target in tower range");
 		if (IsOnCooldown) throw new InvalidOperationException($"Shooting is on cooldown: {RemainingCooldownTime}");
 

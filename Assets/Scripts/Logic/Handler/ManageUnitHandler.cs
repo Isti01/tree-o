@@ -6,7 +6,7 @@ using Logic.Data.World;
 
 namespace Logic.Handler {
 
-public class ManageUnitHandler : BaseHandler {
+internal class ManageUnitHandler : BaseHandler {
 	public override void RegisterConsumers(CommandDispatcher dispatcher) {
 		dispatcher.RegisterConsumer<PurchaseUnitCommand, BiCommandResult>(Handle);
 	}

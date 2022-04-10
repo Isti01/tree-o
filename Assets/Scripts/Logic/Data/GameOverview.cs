@@ -91,7 +91,7 @@ public class GameOverview : IGameOverview {
 		}
 	}
 
-	public void AdvancePhase() {
+	internal void AdvancePhase() {
 		GamePhase oldPhase = CurrentPhase;
 
 		if (CurrentPhase == GamePhase.Prepare) {
@@ -121,7 +121,7 @@ public class GameOverview : IGameOverview {
 		Events.Raise(new PhaseAdvancedEvent(this, oldPhase));
 	}
 
-	public void DecreaseTimeLeftFromPhase(float deltaTime) {
+	internal void DecreaseTimeLeftFromPhase(float deltaTime) {
 		TimeLeftFromPhase -= deltaTime;
 		if (TimeLeftFromPhase <= 0) {
 			AdvancePhase();

@@ -1,5 +1,5 @@
 ﻿namespace Logic.Data.World {
-public class Dijkstra {
+internal class Dijkstra {
 	public int D { get; set; }
 	public int Ox { get; set; }
 	public int Oy { get; set; }

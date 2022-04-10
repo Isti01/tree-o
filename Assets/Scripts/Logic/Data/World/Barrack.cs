@@ -28,15 +28,15 @@ public class Barrack : Building {
 
 	#region Methods
 
-	public Barrack(GameWorld world, TilePosition position, Color owner)
+	internal Barrack(GameWorld world, TilePosition position, Color owner)
 		: base(world, position, owner) {}
 
-	public void QueueUnit(IUnitTypeData type) {
+	internal void QueueUnit(IUnitTypeData type) {
 		_queuedUnits.Add(type);
 		World.Overview.Events.Raise(new UnitQueuedEvent(type, this));
 	}
 
-	public void PushCheckPoint(TilePosition tile) {
+	internal void PushCheckPoint(TilePosition tile) {
 		if (_checkPoints.Contains(tile)) {
 			throw new ArgumentException("Position is already a checkpoint");
 		}
@@ -45,7 +45,7 @@ public class Barrack : Building {
 		World.Overview.Events.Raise(new BarrackCheckpointCreatedEvent(this, tile));
 	}
 
-	public void DeleteCheckPoint(TilePosition tile) {
+	internal void DeleteCheckPoint(TilePosition tile) {
 		if (!_checkPoints.Remove(tile)) {
 			throw new ArgumentException("Position is not a checkpoint");
 		}
@@ -53,18 +53,18 @@ public class Barrack : Building {
 		World.Overview.Events.Raise(new BarrackCheckpointRemovedEvent(this, tile));
 	}
 
-	public void UpdateCooldown(float delta) {
+	internal void UpdateCooldown(float delta) {
 		RemainingCooldownTime -= delta;
 		if (RemainingCooldownTime < 0) {
 			RemainingCooldownTime = 0;
 		}
 	}
 
-	public void ResetCooldown() {
+	internal void ResetCooldown() {
 		RemainingCooldownTime = 0;
 	}
 
-	public void Spawn() {
+	internal void Spawn() {
 		if (!QueuedUnits.Any()) throw new InvalidOperationException($"No queued units exist; nothing to spawn");
 
 		if (IsOnCooldown) throw new InvalidOperationException($"Spawning is on cooldown: {RemainingCooldownTime}");

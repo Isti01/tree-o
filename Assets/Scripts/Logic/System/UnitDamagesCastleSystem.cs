@@ -4,7 +4,7 @@ using Logic.Event.World.Unit;
 
 namespace Logic.System {
 
-public class UnitDamagesCastleSystem : BaseSystem {
+internal class UnitDamagesCastleSystem : BaseSystem {
 	public override void RegisterListeners(EventDispatcher dispatcher) {
 		dispatcher.AddListener<UnitMovedTileEvent>(On);
 	}

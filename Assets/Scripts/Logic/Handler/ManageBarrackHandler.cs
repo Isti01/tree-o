@@ -5,7 +5,7 @@ using Logic.Data.World;
 
 namespace Logic.Handler {
 
-public class ManageBarrackHandler : BaseHandler {
+internal class ManageBarrackHandler : BaseHandler {
 	public override void RegisterConsumers(CommandDispatcher dispatcher) {
 		dispatcher.RegisterConsumer<AddBarrackCheckpointCommand, AddBarrackCheckpointCommand.CommandResult>(Handle);
 		dispatcher.RegisterConsumer<RemoveBarrackCheckpointCommand, BiCommandResult>(Handle);
