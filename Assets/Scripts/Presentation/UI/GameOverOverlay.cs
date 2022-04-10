@@ -1,4 +1,5 @@
 using System;
+using Logic.Data;
 using UnityEngine;
 using UnityEngine.UIElements;
 using Color = Logic.Data.Color;
@@ -18,9 +19,14 @@ public class GameOverOverlay : MonoBehaviour {
 		RootElement.Q<Button>(OkButton).clicked += () => OnOkClicked?.Invoke();
 	}
 
-	public void UpdateMessage(Color winner) {
-		string winnerText = winner == Color.Red ? "Red" : "Blue";
-		RootElement.Q<Label>(Message).text = $"Player {winnerText} has won the game!";
+	public void UpdateMessage(GameTeam winner) {
+		var text = "It's a tie!";
+		if (winner != null) {
+			string winnerText = winner.TeamColor == Color.Red ? "Red" : "Blue";
+			text = $"Player {winnerText} has won the game!";
+		}
+
+		RootElement.Q<Label>(Message).text = text;
 	}
 
 	public void Show() {

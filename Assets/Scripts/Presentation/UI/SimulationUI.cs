@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Logic.Command;
 using Logic.Command.Barrack;
 using Logic.Command.Tower;
@@ -134,8 +135,7 @@ public class SimulationUI : MonoBehaviour {
 	}
 
 	private void OnCastleDestroyed(CastleDestroyedEvent e) {
-		Logic.Data.Color winner =
-			e.Castle.OwnerColor == Logic.Data.Color.Red ? Logic.Data.Color.Blue : Logic.Data.Color.Red;
+		var winner = e.Castle.World.Overview.Teams.FirstOrDefault(team => !team.Castle.IsDestroyed);
 		_gameOverOverlay.UpdateMessage(winner);
 	}
 
