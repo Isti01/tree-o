@@ -6,7 +6,9 @@ namespace Logic.System {
 
 public class UnitDamagesCastleSystem : BaseSystem {
 	public override void RegisterListeners(EventDispatcher dispatcher) {
-		dispatcher.AddListener<UnitMovedTileEvent>(On);
+		//Call later than usual: let listeners get notified about the damaged event
+		// before the destroyed event is invoked.
+		dispatcher.AddListener<UnitMovedTileEvent>(EventDispatcher.Ordering.Later, On);
 	}
 
 	private void On(UnitMovedTileEvent e) {
