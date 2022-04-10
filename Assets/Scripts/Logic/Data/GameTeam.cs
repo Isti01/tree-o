@@ -36,8 +36,6 @@ public class GameTeam {
 		}
 	}
 
-	public IReadOnlyDictionary<IUnitTypeData, int> DeployedUnitTypeCounts => _deployedUnitTypeCounts;
-
 	public int Money { get; private set; }
 
 	public int PresentTowerCount => Towers.Count();
@@ -77,6 +75,10 @@ public class GameTeam {
 		int oldMoney = Money;
 		Money += amount;
 		Overview.Events.Raise(new TeamMoneyUpdatedEvent(this, oldMoney));
+	}
+
+	public int GetDeployedUnitTypeCount(IUnitTypeData unitTypeData) {
+		return _deployedUnitTypeCounts.TryGetValue(unitTypeData, out int count) ? count : 0;
 	}
 
 	internal void IncrementPurchasedUnitCount(IUnitTypeData unitTypeData) {

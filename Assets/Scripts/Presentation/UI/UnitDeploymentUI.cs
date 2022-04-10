@@ -123,8 +123,8 @@ public class UnitDeploymentUI : MonoBehaviour {
 
 		var container = RootElement.Q(DeployedUnitsContainer);
 		container.Clear();
-		foreach (var pair in team.DeployedUnitTypeCounts) {
-			container.Add(new Label { text = $"{pair.Key.Name}: {pair.Value}" });
+		foreach (var type in unitTypes) {
+			container.Add(new Label { text = $"{type.Name}: {team.GetDeployedUnitTypeCount(type)}" });
 		}
 	}
 
