@@ -9,8 +9,8 @@ public class InvalidateCachesSystem : BaseSystem {
 	public override void RegisterListeners(EventDispatcher dispatcher) {
 		dispatcher.AddListener<PhaseAdvancedEvent>(OnPreparePhaseStarted);
 		dispatcher.AddListener<PhaseAdvancedEvent>(OnFightPhaseStarted);
-		dispatcher.AddListener<TowerBuiltEvent>(e => RecalculateAvailableTowerPositions(e.Tower.World.Overview));
-		dispatcher.AddListener<TowerDestroyedEvent>(e => RecalculateAvailableTowerPositions(e.Tower.World.Overview));
+		dispatcher.AddListener<TowerBuiltEvent>(OnTowerBuilt);
+		dispatcher.AddListener<TowerDestroyedEvent>(OnTowerDestroyed);
 	}
 
 	private void OnPreparePhaseStarted(PhaseAdvancedEvent e) {
@@ -35,6 +35,18 @@ public class InvalidateCachesSystem : BaseSystem {
 		foreach (Barrack barrack in world.GetTileObjectsOfType<Barrack>()) {
 			barrack.ResetCooldown();
 		}
+	}
+
+	private void OnTowerBuilt(TowerBuiltEvent e) {
+		foreach (Barrack barrack in e.Tower.World.GetTileObjectsOfType<Barrack>()) {
+			barrack.DeleteUnreachableCheckpoints();
+		}
+
+		RecalculateAvailableTowerPositions(e.Tower.World.Overview);
+	}
+
+	private void OnTowerDestroyed(TowerDestroyedEvent e) {
+		RecalculateAvailableTowerPositions(e.Tower.World.Overview);
 	}
 
 	private void RecalculateAvailableTowerPositions(IGameOverview overview) {

@@ -75,6 +75,23 @@ public class Barrack : Building {
 		World.DeployUnit(this, type);
 	}
 
+	public void DeleteUnreachableCheckpoints() {
+		ISet<TilePosition> oldCheckpoints = new HashSet<TilePosition>(_checkPoints);
+		ISet<TilePosition> reachableCheckpoints = World.Navigation.GetReachablePositionSubset(Position,
+			oldCheckpoints);
+
+		for (var i = 0; i < _checkPoints.Count - 1; i++) {
+			if (reachableCheckpoints.Contains(_checkPoints[i])) continue;
+			_checkPoints.RemoveAt(i);
+			i--;
+		}
+
+		oldCheckpoints.ExceptWith(reachableCheckpoints);
+		foreach (TilePosition unreachable in oldCheckpoints) {
+			World.Overview.Events.Raise(new BarrackCheckpointRemovedEvent(this, unreachable));
+		}
+	}
+
 	#endregion
 }
 }
