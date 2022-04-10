@@ -7,7 +7,7 @@ namespace Logic.Handler {
 /// Handlers are responsible for consuming the different commands.
 /// Handlers should be stateless if possible.
 /// </summary>
-public abstract class BaseHandler {
+internal abstract class BaseHandler {
 	public abstract void RegisterConsumers(CommandDispatcher dispatcher);
 }
 

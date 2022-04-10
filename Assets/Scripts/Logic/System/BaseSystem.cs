@@ -9,7 +9,7 @@ namespace Logic.System {
 /// for connecting different classes.
 /// Systems should be stateless if possible.
 /// </summary>
-public abstract class BaseSystem {
+internal abstract class BaseSystem {
 	public abstract void RegisterListeners(EventDispatcher dispatcher);
 }
 

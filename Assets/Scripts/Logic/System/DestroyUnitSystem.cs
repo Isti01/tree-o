@@ -3,7 +3,7 @@ using Logic.Event;
 using Logic.Event.World.Unit;
 
 namespace Logic.System {
-public class DestroyUnitSystem : BaseSystem {
+internal class DestroyUnitSystem : BaseSystem {
 	public override void RegisterListeners(EventDispatcher dispatcher) {
 		//Call later than usual: let listeners get notified about the damaged event
 		// before the destroyed event is invoked.

@@ -5,13 +5,13 @@ using Logic.Data.World;
 
 namespace Logic.Handler {
 
-public class AdvanceTimeHandler : BaseHandler {
+internal class AdvanceTimeHandler : BaseHandler {
 	public override void RegisterConsumers(CommandDispatcher dispatcher) {
 		dispatcher.RegisterConsumer<AdvanceTimeCommand, BiCommandResult>(Handle);
 	}
 
 	private BiCommandResult Handle(AdvanceTimeCommand command) {
-		IGameOverview overview = command.Overview;
+		GameOverview overview = (GameOverview) command.Overview;
 		GameWorld world = command.Overview.World;
 		float deltaTime = command.DeltaTime;
 

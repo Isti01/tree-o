@@ -4,7 +4,7 @@ using Logic.Event.World.Unit;
 
 namespace Logic.System {
 
-public class UnitDamagesCastleSystem : BaseSystem {
+internal class UnitDamagesCastleSystem : BaseSystem {
 	public override void RegisterListeners(EventDispatcher dispatcher) {
 		//Call later than usual: let listeners get notified about the damaged event
 		// before the destroyed event is invoked.

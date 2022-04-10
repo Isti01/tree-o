@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Logic.Data.World {
-public class WorldNavigation {
+internal class WorldNavigation {
 	private readonly TileObject[,] _grid;
 
 	public WorldNavigation(TileObject[,] grid) {

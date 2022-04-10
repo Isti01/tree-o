@@ -7,7 +7,7 @@ public abstract class Building : TileObject {
 	// a Castle needed, so a Castle mustn't require a GameTeam instance.
 	public GameTeam Owner => World.Overview.GetTeam(OwnerColor);
 
-	protected Building(GameWorld world, TilePosition position, Color owner)
+	private protected Building(GameWorld world, TilePosition position, Color owner)
 		: base(world, position) {
 		OwnerColor = owner;
 	}

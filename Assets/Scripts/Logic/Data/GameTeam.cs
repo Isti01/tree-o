@@ -50,7 +50,7 @@ public class GameTeam {
 
 	#region Methods
 
-	public GameTeam(IGameOverview overview, Color color, Castle castle, IEnumerable<Barrack> barracks) {
+	internal GameTeam(IGameOverview overview, Color color, Castle castle, IEnumerable<Barrack> barracks) {
 		Overview = overview;
 		TeamColor = color;
 		Castle = castle;
@@ -58,7 +58,7 @@ public class GameTeam {
 		Money = overview.EconomyConfig.StartingBalance;
 	}
 
-	public void SpendMoney(int amount) {
+	internal void SpendMoney(int amount) {
 		if (amount <= 0) throw new ArgumentException($"Cannot spend non-positive amount {amount}");
 		if (amount > Money) throw new ArgumentException($"Cannot spend {amount} when balance is {Money}");
 
@@ -68,7 +68,7 @@ public class GameTeam {
 		Overview.Events.Raise(new TeamMoneyUpdatedEvent(this, oldMoney));
 	}
 
-	public void GiveMoney(int amount) {
+	internal void GiveMoney(int amount) {
 		if (amount <= 0) throw new ArgumentException($"Cannot give non-positive amount {amount}");
 
 		int oldMoney = Money;
@@ -76,17 +76,17 @@ public class GameTeam {
 		Overview.Events.Raise(new TeamMoneyUpdatedEvent(this, oldMoney));
 	}
 
-	public void IncrementPurchasedUnitCount() {
+	internal void IncrementPurchasedUnitCount() {
 		PurchasedUnitCount++;
 		Overview.Events.Raise(new TeamStatisticsUpdatedEvent(this));
 	}
 
-	public void IncrementBuiltTowerCount() {
+	internal void IncrementBuiltTowerCount() {
 		BuiltTowerCount++;
 		Overview.Events.Raise(new TeamStatisticsUpdatedEvent(this));
 	}
 
-	public void InvalidateCachedAvailableTowerPositions() {
+	internal void InvalidateCachedAvailableTowerPositions() {
 		_availableTowerPositionsCache = null;
 	}
 

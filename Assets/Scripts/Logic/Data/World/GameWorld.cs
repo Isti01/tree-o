@@ -35,7 +35,7 @@ public class GameWorld {
 		}
 	}
 
-	public WorldNavigation Navigation { get; }
+	internal WorldNavigation Navigation { get; }
 
 	public IReadOnlyCollection<Unit> Units => new List<Unit>(_units);
 
@@ -45,7 +45,7 @@ public class GameWorld {
 
 	#region Methods
 
-	public GameWorld(IGameOverview overview, IGameWorldConfig config, int width, int height) {
+	internal GameWorld(IGameOverview overview, IGameWorldConfig config, int width, int height) {
 		Overview = overview;
 		Config = config;
 		Width = width;
@@ -62,7 +62,7 @@ public class GameWorld {
 		return TileObjects.Where(o => o is T).Cast<T>();
 	}
 
-	public void BuildTower(GameTeam team, ITowerTypeData type, TilePosition position) {
+	internal void BuildTower(GameTeam team, ITowerTypeData type, TilePosition position) {
 		if (_grid[position.X, position.Y] != null)
 			throw new ArgumentException($"Position {position} is already occupied");
 
@@ -71,7 +71,7 @@ public class GameWorld {
 		Overview.Events.Raise(new TowerBuiltEvent(tower));
 	}
 
-	public void DestroyTower(Tower tower) {
+	internal void DestroyTower(Tower tower) {
 		if (_grid[tower.Position.X, tower.Position.Y] != tower)
 			throw new ArgumentException("Tower is not at the position it says it is");
 
@@ -79,14 +79,14 @@ public class GameWorld {
 		Overview.Events.Raise(new TowerDestroyedEvent(tower));
 	}
 
-	public void DeployUnit(Barrack barrack, IUnitTypeData type) {
+	internal void DeployUnit(Barrack barrack, IUnitTypeData type) {
 		Vector2 position = barrack.Position.ToVectorCentered();
 		Unit unit = new Unit(type, barrack.Owner, this, position, barrack.CheckPoints);
 		_units.Add(unit);
 		Overview.Events.Raise(new UnitDeployedEvent(unit, barrack));
 	}
 
-	public void DestroyUnit(Unit unit) {
+	internal void DestroyUnit(Unit unit) {
 		if (!_units.Contains(unit)) throw new ArgumentException("Unit is not among this world's units");
 
 		_units.Remove(unit);

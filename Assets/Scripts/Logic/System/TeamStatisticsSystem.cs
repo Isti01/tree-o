@@ -6,7 +6,7 @@ using Logic.Event.World.Unit;
 
 namespace Logic.System {
 
-public class TeamStatisticsSystem : BaseSystem {
+internal class TeamStatisticsSystem : BaseSystem {
 	public override void RegisterListeners(EventDispatcher dispatcher) {
 		dispatcher.AddListener<CastleDamagedEvent>(e => {
 			On(e.Attacker.Owner);

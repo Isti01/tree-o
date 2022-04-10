@@ -1,11 +1,8 @@
-﻿using System;
-using Logic.Data.World;
-using Logic.Event;
+﻿using Logic.Event;
 using Logic.Event.World.Tower;
-using Logic.Event.World.Unit;
 
 namespace Logic.System {
-public class TowerDamagesUnitSystem : BaseSystem {
+internal class TowerDamagesUnitSystem : BaseSystem {
 	public override void RegisterListeners(EventDispatcher dispatcher) {
 		dispatcher.AddListener<TowerShotEvent>(On);
 	}

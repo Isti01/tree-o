@@ -19,8 +19,6 @@ public interface IGameOverview {
 	public IGameEconomyConfig EconomyConfig { get; }
 	GameTeam GetTeam(Color color);
 	GameTeam GetEnemyTeam(GameTeam team);
-	void AdvancePhase();
-	void DecreaseTimeLeftFromPhase(float deltaTime);
 }
 
 }

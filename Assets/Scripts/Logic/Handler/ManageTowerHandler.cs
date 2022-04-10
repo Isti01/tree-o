@@ -4,7 +4,7 @@ using Logic.Data;
 using Logic.Data.World;
 
 namespace Logic.Handler {
-public class ManageTowerHandler : BaseHandler {
+internal class ManageTowerHandler : BaseHandler {
 	public override void RegisterConsumers(CommandDispatcher dispatcher) {
 		dispatcher.RegisterConsumer<BuildTowerCommand, BuildTowerCommand.CommandResult>(Handle);
 		dispatcher.RegisterConsumer<DestroyTowerCommand, BiCommandResult>(Handle);

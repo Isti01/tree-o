@@ -13,12 +13,12 @@ public class Castle : Building {
 
 	#region Methods
 
-	public Castle(GameWorld world, TilePosition position, Color owner)
+	internal Castle(GameWorld world, TilePosition position, Color owner)
 		: base(world, position, owner) {
 		Health = world.Config.CastleStartingHealth;
 	}
 
-	public void Damage(Unit attacker, float damage) {
+	internal void Damage(Unit attacker, float damage) {
 		if (damage <= 0) throw new ArgumentException("Damage must be positive");
 		if (IsDestroyed) throw new InvalidOperationException("Castle is already destroyed");
 
