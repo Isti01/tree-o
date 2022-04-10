@@ -41,6 +41,10 @@ public class SimulationManager : MonoBehaviour {
 
 		GameOverview = new GameOverview(ExceptionHandler, UnityEngine.Random.Range(0, 9999), worldWidth, worldHeight,
 			overviewConfig, economyConfig, worldConfig);
+		// GameOverview.Events.AddListener<Logic.Event.BaseEvent>(Logic.Event.EventDispatcher.Ordering.First,
+		// 	e => Debug.Log($"Event raised ('First' priority): {e}"));
+		// GameOverview.Events.AddListener<Logic.Event.BaseEvent>(Logic.Event.EventDispatcher.Ordering.Last,
+		// 	e => Debug.Log($"Event raised ('Last' priority): {e}"));
 	}
 
 	private void Start() {
