@@ -11,8 +11,6 @@ public class Tower : Building {
 	//TODO we need a CanBeNull annotation or some documentation here
 	public Unit Target { get; private set; }
 
-	public int Level { get; }
-
 	public float RemainingCooldownTime { get; private set; }
 
 	public bool IsOnCooldown => RemainingCooldownTime > 0;
@@ -62,15 +60,8 @@ public class Tower : Building {
 	internal void Shoot() {
 		if (Target == null) throw new InvalidOperationException("No target in tower range");
 		if (IsOnCooldown) throw new InvalidOperationException($"Shooting is on cooldown: {RemainingCooldownTime}");
-
-		World.Overview.Events.Raise(new TowerShotEvent(this, Target));
-		if (!Target.IsAlive) {
-			Unit oldTarget = Target;
-			Target = null;
-			World.Overview.Events.Raise(new TowerTargetChangedEvent(this, oldTarget));
-		}
-
 		RemainingCooldownTime = Type.CooldownTime;
+		World.Overview.Events.Raise(new TowerShotEvent(this, Target));
 	}
 
 	#endregion

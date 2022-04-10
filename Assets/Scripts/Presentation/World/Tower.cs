@@ -4,9 +4,23 @@ namespace Presentation.World {
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(LineRenderer))]
 public class Tower : Structure {
+	[SerializeField]
+	private Transform rotatingTurret;
+
 	private Logic.Data.World.Tower _data;
 
 	private SpriteRenderer _spriteRenderer;
+
+	private World _world;
+
+	private void FixedUpdate() {
+		if (_data.Target != null) {
+			Vector3 target = _world.LogicToPresentation(_data.Target).transform.position;
+			Vector3 direction = (target - rotatingTurret.position).normalized;
+			float angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x);
+			rotatingTurret.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+		}
+	}
 
 	public void SetData(Logic.Data.World.Tower data) {
 		_data = data;
@@ -16,6 +30,8 @@ public class Tower : Structure {
 		_spriteRenderer = GetComponent<SpriteRenderer>();
 		_spriteRenderer.sprite = type.Sprite;
 		_spriteRenderer.color = color;
+
+		_world = GetComponentInParent<World>();
 
 		var laserRenderer = GetComponent<LineRenderer>();
 		var laserGradient = new Gradient();
