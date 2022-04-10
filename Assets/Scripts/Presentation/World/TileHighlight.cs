@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
-using UnityEngine.PlayerLoop;
 
 namespace Presentation.World {
 [RequireComponent(typeof(Light2D))]
