@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
+using UnityEngine.PlayerLoop;
 
 namespace Presentation.World {
 [RequireComponent(typeof(Light2D))]
@@ -10,6 +11,7 @@ public class TileHighlight : MonoBehaviour {
 	private bool _dimmed;
 
 	private Light2D _light;
+	private float _scale = 1;
 
 	private void Awake() {
 		_light = GetComponent<Light2D>();
@@ -26,6 +28,11 @@ public class TileHighlight : MonoBehaviour {
 		_light.pointLightInnerRadius = innerRadius;
 	}
 
+	public void ScaleIntensity(float scale) {
+		_scale = scale;
+		UpdateTile();
+	}
+
 	public void SetData(TileHighlightData data) {
 		highlightData = data;
 		_dimmed = false;
@@ -34,7 +41,7 @@ public class TileHighlight : MonoBehaviour {
 
 	private void UpdateTile() {
 		_light.color = highlightData.LightColor;
-		_light.intensity = _dimmed ? highlightData.DimmedIntensity : highlightData.Intensity;
+		_light.intensity = (_dimmed ? highlightData.DimmedIntensity : highlightData.Intensity) * _scale;
 	}
 }
 }

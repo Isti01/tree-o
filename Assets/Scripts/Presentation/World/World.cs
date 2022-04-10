@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Logic.Data;
 using Logic.Data.World;
 using Logic.Event;
@@ -123,11 +124,13 @@ public class World : MonoBehaviour {
 		if (_selectedBarrack == null) return;
 
 		HighlightTile(_selectedBarrack.Position);
-		TileHighlight lastHighlight = null;
-		foreach (TilePosition position in _selectedBarrack.CheckPoints) {
-			if (lastHighlight) lastHighlight.SetDimmed();
 
-			lastHighlight = HighlightTile(position);
+		float checkpointCount = _selectedBarrack.CheckPoints.Count;
+		var current = 1;
+		foreach (TilePosition position in _selectedBarrack.CheckPoints) {
+			var highlight = HighlightTile(position);
+			highlight.ScaleIntensity(current / checkpointCount);
+			current++;
 		}
 	}
 
@@ -142,7 +145,8 @@ public class World : MonoBehaviour {
 		if (buildingPossibleTeam == null) return;
 
 		foreach (TilePosition position in buildingPossibleTeam.AvailableTowerPositions) {
-			HighlightTile(position);
+			var tile = HighlightTile(position);
+			tile.SetDimmed();
 		}
 	}
 
