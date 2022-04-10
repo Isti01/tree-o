@@ -24,7 +24,7 @@ internal class ManageUnitHandler : BaseHandler {
 		Barrack barrack = command.Team.Barracks[random.Next(command.Team.Barracks.Count)];
 
 		command.Team.SpendMoney(command.Type.Cost);
-		command.Team.IncrementPurchasedUnitCount();
+		command.Team.IncrementPurchasedUnitCount(command.Type);
 		barrack.QueueUnit(command.Type);
 		return BiCommandResult.Success;
 	}

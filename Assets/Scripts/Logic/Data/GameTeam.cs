@@ -9,6 +9,7 @@ public class GameTeam {
 	#region Fields
 
 	private HashSet<TilePosition> _availableTowerPositionsCache;
+	private readonly Dictionary<IUnitTypeData, int> _deployedUnitTypeCounts = new Dictionary<IUnitTypeData, int>();
 
 	#endregion
 
@@ -76,7 +77,17 @@ public class GameTeam {
 		Overview.Events.Raise(new TeamMoneyUpdatedEvent(this, oldMoney));
 	}
 
-	internal void IncrementPurchasedUnitCount() {
+	public int GetDeployedUnitTypeCount(IUnitTypeData unitTypeData) {
+		return _deployedUnitTypeCounts.TryGetValue(unitTypeData, out int count) ? count : 0;
+	}
+
+	internal void IncrementPurchasedUnitCount(IUnitTypeData unitTypeData) {
+		var newCount = 1;
+		if (_deployedUnitTypeCounts.TryGetValue(unitTypeData, out int count)) {
+			newCount += count;
+		}
+
+		_deployedUnitTypeCounts[unitTypeData] = newCount;
 		PurchasedUnitCount++;
 		Overview.Events.Raise(new TeamStatisticsUpdatedEvent(this));
 	}

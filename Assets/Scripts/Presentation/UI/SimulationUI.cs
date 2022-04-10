@@ -124,6 +124,7 @@ public class SimulationUI : MonoBehaviour {
 
 	private void OnTeamStatisticsUpdated(TeamStatisticsUpdatedEvent e) {
 		_battleUI.SetTeamStatistics(e.Team);
+		_unitDeployment.UpdateUnitStatistics(e.Team);
 	}
 
 	private void OnTeamMoneyUpdated(TeamMoneyUpdatedEvent e) {
@@ -325,6 +326,7 @@ public class SimulationUI : MonoBehaviour {
 		_unitDeployment.Show();
 		_unitDeployment.SetActivePlayer(_activePlayer);
 		_unitDeployment.SetPlayerMoney(player, playerData.Money);
+		_unitDeployment.UpdateUnitStatistics(GameOverview.GetTeam(_activePlayer));
 	}
 
 	private void StartBattle() {
