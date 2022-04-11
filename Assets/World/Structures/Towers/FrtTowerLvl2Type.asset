@@ -18,9 +18,9 @@ MonoBehaviour:
   shootingEffect: {fileID: 0}
   ambientEffect: {fileID: 0}
   name: Pew-Pew-Pew II
-  damage: 10
-  range: 10
-  cooldownTime: 1
+  damage: 12
+  range: 3
+  cooldownTime: 0.5
   buildingCost: 100
   destroyRefund: 50
   upgradeCost: 100

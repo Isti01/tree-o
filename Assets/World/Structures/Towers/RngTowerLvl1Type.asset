@@ -19,7 +19,7 @@ MonoBehaviour:
   ambientEffect: {fileID: 0}
   name: Sniper I
   damage: 10
-  range: 10
+  range: 5
   cooldownTime: 1
   buildingCost: 100
   destroyRefund: 50

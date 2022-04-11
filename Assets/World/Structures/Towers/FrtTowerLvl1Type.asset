@@ -19,8 +19,8 @@ MonoBehaviour:
   ambientEffect: {fileID: 0}
   name: Pew-Pew-Pew I
   damage: 10
-  range: 10
-  cooldownTime: 1
+  range: 3
+  cooldownTime: 0.6
   buildingCost: 100
   destroyRefund: 50
   upgradeCost: 100

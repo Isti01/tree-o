@@ -18,8 +18,8 @@ MonoBehaviour:
   shootingEffect: {fileID: 0}
   ambientEffect: {fileID: 0}
   name: Heavy Hitter II
-  damage: 10
-  range: 10
+  damage: 20
+  range: 3
   cooldownTime: 1
   buildingCost: 100
   destroyRefund: 50

@@ -19,7 +19,7 @@ MonoBehaviour:
   attackEffect: {fileID: 0}
   destroyedEffect: {fileID: 0}
   name: Glass Cannon
-  health: 30
+  health: 60
   damage: 0.5
   speed: 4
   cost: 70

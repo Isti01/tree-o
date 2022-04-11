@@ -18,8 +18,8 @@ MonoBehaviour:
   shootingEffect: {fileID: 0}
   ambientEffect: {fileID: 0}
   name: Sniper III
-  damage: 10
-  range: 10
+  damage: 15
+  range: 6
   cooldownTime: 1
   buildingCost: 100
   destroyRefund: 50
