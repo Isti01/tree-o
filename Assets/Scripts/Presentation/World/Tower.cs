@@ -17,14 +17,20 @@ public class Tower : Structure {
 	[SerializeField]
 	private SpriteRenderer coloredSprite;
 
+	[SerializeField]
+	private float turretRotationSpeed;
+
 	private World _world;
 
 	private void FixedUpdate() {
-		if (_data.Target != null) {
-			Vector3 target = _world.LogicToPresentation(_data.Target).transform.position;
+		Logic.Data.World.Unit logicTarget = _data.Target ?? _data.ClosestEnemy;
+		if (logicTarget != null && logicTarget.IsAlive) {
+			Vector3 target = _world.LogicToPresentation(logicTarget).transform.position;
 			Vector3 direction = (target - rotatingTurret.position).normalized;
 			float angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x);
-			rotatingTurret.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+			Quaternion desired = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+			rotatingTurret.rotation = Quaternion.RotateTowards(rotatingTurret.rotation, desired,
+				Time.fixedDeltaTime * turretRotationSpeed);
 		}
 	}
 
