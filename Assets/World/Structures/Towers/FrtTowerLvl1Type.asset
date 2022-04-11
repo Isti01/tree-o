@@ -20,8 +20,8 @@ MonoBehaviour:
   name: Pew-Pew-Pew I
   damage: 10
   range: 3
-  cooldownTime: 0.6
-  buildingCost: 100
-  destroyRefund: 50
+  cooldownTime: 1
+  buildingCost: 200
+  destroyRefund: 100
   upgradeCost: 100
   afterUpgradeType: {fileID: 11400000, guid: 93c2dbaed269cba45849d798cff0a066, type: 2}

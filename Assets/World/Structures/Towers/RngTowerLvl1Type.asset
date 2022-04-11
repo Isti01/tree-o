@@ -20,8 +20,8 @@ MonoBehaviour:
   name: Sniper I
   damage: 10
   range: 5
-  cooldownTime: 1
-  buildingCost: 100
-  destroyRefund: 50
+  cooldownTime: 2
+  buildingCost: 200
+  destroyRefund: 100
   upgradeCost: 100
   afterUpgradeType: {fileID: 11400000, guid: 43ff71483eb3ffd4db8ac83c75fae7f6, type: 2}

@@ -20,8 +20,8 @@ MonoBehaviour:
   name: Sniper III
   damage: 15
   range: 6
-  cooldownTime: 1
+  cooldownTime: 1.8
   buildingCost: 100
-  destroyRefund: 50
+  destroyRefund: 225
   upgradeCost: 100
   afterUpgradeType: {fileID: 0}

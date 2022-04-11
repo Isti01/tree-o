@@ -20,8 +20,8 @@ MonoBehaviour:
   name: Heavy Hitter I
   damage: 15
   range: 3
-  cooldownTime: 1
-  buildingCost: 100
-  destroyRefund: 50
+  cooldownTime: 1.5
+  buildingCost: 200
+  destroyRefund: 100
   upgradeCost: 100
   afterUpgradeType: {fileID: 11400000, guid: 40c47108a414cd441897516f0632a3cc, type: 2}
