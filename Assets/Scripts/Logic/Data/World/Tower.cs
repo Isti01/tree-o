@@ -11,6 +11,23 @@ public class Tower : Building {
 	//TODO we need a CanBeNull annotation or some documentation here
 	public Unit Target { get; private set; }
 
+	public Unit ClosestEnemy {
+		get {
+			Unit closest = null;
+			float closestDistance = float.PositiveInfinity;
+			Vector2 turretPosition = Position.ToVectorCentered();
+			foreach (Unit unit in World.Units) {
+				float distance = unit.Position.Distance2(turretPosition);
+				if (closestDistance > distance) {
+					closestDistance = distance;
+					closest = unit;
+				}
+			}
+
+			return closest;
+		}
+	}
+
 	public float RemainingCooldownTime { get; private set; }
 
 	public bool IsOnCooldown => RemainingCooldownTime > 0;
