@@ -2,7 +2,6 @@ using UnityEngine;
 using Color = Logic.Data.Color;
 
 namespace Presentation.World {
-[RequireComponent(typeof(SpriteRenderer))]
 public class Barrack : Structure {
 	[SerializeField]
 	private BarrackData blueBarrackData;
@@ -12,18 +11,19 @@ public class Barrack : Structure {
 
 	private Logic.Data.World.Barrack _data;
 
-	private SpriteRenderer _spriteRenderer;
+	[SerializeField]
+	private SpriteRenderer spriteConstant;
 
-	private void Start() {
-		BarrackData data = _data.OwnerColor == Color.Blue ? blueBarrackData : redBarrackData;
-
-		_spriteRenderer = GetComponent<SpriteRenderer>();
-		_spriteRenderer.sprite = data.Sprite;
-		_spriteRenderer.color = data.Color;
-	}
+	[SerializeField]
+	private SpriteRenderer spriteColored;
 
 	public void SetData(Logic.Data.World.Barrack data) {
 		_data = data;
+		BarrackData type = _data.OwnerColor == Color.Blue ? blueBarrackData : redBarrackData;
+
+		spriteConstant.sprite = type.SpriteConstant;
+		spriteColored.sprite = type.SpriteColored;
+		spriteColored.color = type.Color;
 	}
 }
 }

@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a046f9e3c8344bada9e6404adcc932c1, type: 3}
   m_Name: DmgTowerLvl2Type
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 52fa41d429fabe142b3c0f45a78e0492, type: 3}
-  blueColor: {r: 0, g: 0.3296814, b: 1, a: 1}
-  redColor: {r: 1, g: 0.12787381, b: 0, a: 1}
+  previewSprite: {fileID: 21300000, guid: 7d101f63fc97f4d4d9e0c136b2ea179c, type: 3}
+  spriteColored: {fileID: 21300000, guid: 7fac74e1e7ab3014287a02be134e0d27, type: 3}
+  spriteConstant: {fileID: 21300000, guid: 7ffaa0bc7d4a691459611cc282d136e6, type: 3}
+  spriteBackground: {fileID: 21300000, guid: e4d4401b34df3dc4b892c99ce76ea40a, type: 3}
+  blueColor: {r: 0, g: 0.6050954, b: 1, a: 1}
+  redColor: {r: 1, g: 0.27628225, b: 0, a: 1}
   shootingEffect: {fileID: 0}
   ambientEffect: {fileID: 0}
   name: Heavy Hitter II

@@ -50,14 +50,20 @@ TagManager:
   - name: TileHighlight
     uniqueID: 3544083517
     locked: 0
+  - name: StructureBackground
+    uniqueID: 2579712809
+    locked: 0
   - name: Structure
     uniqueID: 520840465
     locked: 0
   - name: Projectile
     uniqueID: 3098005577
     locked: 0
-  - name: Unit
+  - name: UnitGround
     uniqueID: 1800257023
+    locked: 0
+  - name: UnitAirborne
+    uniqueID: 109890591
     locked: 0
   - name: UnitHealthbar
     uniqueID: 3357129243

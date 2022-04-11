@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b5a290719341358eaf4ad133811357, type: 3}
   m_Name: EmptyBlueBarrack
   m_EditorClassIdentifier: 
-  color: {r: 0, g: 0.21920633, b: 1, a: 1}
-  sprite: {fileID: 21300000, guid: 75ec913d18d04ad459be698cb580bbe0, type: 3}
+  color: {r: 0, g: 0.42460012, b: 1, a: 1}
+  spriteConstant: {fileID: 21300000, guid: da61d59d08568f14c9ef148b1b4e198a, type: 3}
+  spriteColored: {fileID: 21300000, guid: 527ed3fd874551e4b8cc61c07ab30b9a, type: 3}
   ambientEffect: {fileID: 0}

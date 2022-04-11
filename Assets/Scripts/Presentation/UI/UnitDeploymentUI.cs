@@ -58,7 +58,7 @@ public class UnitDeploymentUI : MonoBehaviour {
 			UnitTypeData unit = unitType;
 			TemplateContainer card = cardComponent.Instantiate();
 			var content = card.Q<VisualElement>(CardContent);
-			content.style.backgroundImage = new StyleBackground(unitType.AliveSprite);
+			content.style.backgroundImage = new StyleBackground(unitType.PreviewSprite);
 
 			card.userData = 0;
 			UpdateCardUnitCount(card, 0);
