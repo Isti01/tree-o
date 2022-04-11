@@ -17,6 +17,7 @@ public class Tower : Building {
 			float closestDistance = float.PositiveInfinity;
 			Vector2 turretPosition = Position.ToVectorCentered();
 			foreach (Unit unit in World.Units) {
+				if (unit.Owner == Owner) continue;
 				float distance = unit.Position.Distance2(turretPosition);
 				if (closestDistance > distance) {
 					closestDistance = distance;

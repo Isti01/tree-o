@@ -23,14 +23,9 @@ public class Tower : Structure {
 	private World _world;
 
 	private void FixedUpdate() {
-		Logic.Data.World.Unit logicTarget = _data.Target ?? _data.ClosestEnemy;
-		if (logicTarget != null && logicTarget.IsAlive) {
-			Vector3 target = _world.LogicToPresentation(logicTarget).transform.position;
-			Vector3 direction = (target - rotatingTurret.position).normalized;
-			float angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x);
-			Quaternion desired = Quaternion.AngleAxis(angle - 90, Vector3.forward);
-			rotatingTurret.rotation = Quaternion.RotateTowards(rotatingTurret.rotation, desired,
-				Time.fixedDeltaTime * turretRotationSpeed);
+		if (_data.Type.Range > 0) {
+			Logic.Data.World.Unit logicTarget = _data.Target ?? _data.ClosestEnemy;
+			if (logicTarget != null) RotateTurret(logicTarget);
 		}
 	}
 
@@ -55,6 +50,15 @@ public class Tower : Structure {
 
 	public void DestroyTower() {
 		Destroy(gameObject);
+	}
+
+	private void RotateTurret(Logic.Data.World.Unit logicTarget) {
+		Vector3 target = _world.LogicToPresentation(logicTarget).transform.position;
+		Vector3 direction = (target - rotatingTurret.position).normalized;
+		float angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x);
+		Quaternion desired = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+		rotatingTurret.rotation = Quaternion.RotateTowards(rotatingTurret.rotation, desired,
+			Time.fixedDeltaTime * turretRotationSpeed);
 	}
 }
 }
