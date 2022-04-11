@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a34aa86e39548a3a95996b3e157adf7, type: 3}
   m_Name: EmptyBlueCastle
   m_EditorClassIdentifier: 
-  color: {r: 0, g: 0.8028641, b: 1, a: 1}
-  intactSprite: {fileID: 21300000, guid: 2acc62387e7123a4cbd7bf822e5b6c8b, type: 3}
+  color: {r: 0, g: 0.6256573, b: 1, a: 1}
+  intactSpriteConstant: {fileID: 21300000, guid: 50fb4b79d6813b74e81526ea22e2806a, type: 3}
+  intactSpriteColored: {fileID: 21300000, guid: 1d747fe2508c8de42903800721fa8989, type: 3}
   destroyedSprite: {fileID: 0}
   ambientEffect: {fileID: 0}
   explosionEffect: {fileID: 0}

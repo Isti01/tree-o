@@ -6,7 +6,16 @@ namespace Presentation.World {
 public class TowerTypeData : ScriptableObject, ITowerTypeData {
 	[Header("Presentation-specific values")]
 	[SerializeField]
-	private Sprite sprite; //TODO can we use the same sprite in the UI and in the "world"?
+	private Sprite previewSprite;
+
+	[SerializeField]
+	private Sprite spriteColored;
+
+	[SerializeField]
+	private Sprite spriteConstant;
+
+	[SerializeField]
+	private Sprite spriteBackground;
 
 	[SerializeField]
 	private Color blueColor;
@@ -51,7 +60,10 @@ public class TowerTypeData : ScriptableObject, ITowerTypeData {
 	[SerializeField]
 	private TowerTypeData afterUpgradeType;
 
-	public Sprite Sprite => sprite;
+	public Sprite PreviewSprite => previewSprite;
+	public Sprite SpriteColored => spriteColored;
+	public Sprite SpriteConstant => spriteConstant;
+	public Sprite SpriteBackground => spriteBackground;
 	public Color BlueColor => blueColor;
 	public Color RedColor => redColor;
 	public GameObject ShootingEffect => shootingEffect;

@@ -12,7 +12,13 @@ public class UnitTypeData : ScriptableObject, IUnitTypeData {
 	private Color redColor;
 
 	[SerializeField]
-	private Sprite aliveSprite; //TODO can we use this sprite in the UI?
+	private Sprite previewSprite;
+
+	[SerializeField]
+	private Sprite aliveSpriteConstant;
+
+	[SerializeField]
+	private Sprite aliveSpriteColored;
 
 	[SerializeField]
 	private Sprite destroyedSprite;
@@ -22,6 +28,9 @@ public class UnitTypeData : ScriptableObject, IUnitTypeData {
 
 	[SerializeField]
 	private GameObject destroyedEffect;
+
+	[SerializeField]
+	private bool airborne;
 
 	[Header("IUnitTypeData values")]
 	[SerializeField]
@@ -45,10 +54,13 @@ public class UnitTypeData : ScriptableObject, IUnitTypeData {
 
 	public Color BlueColor => blueColor;
 	public Color RedColor => redColor;
-	public Sprite AliveSprite => aliveSprite;
+	public Sprite PreviewSprite => previewSprite;
+	public Sprite AliveSpriteConstant => aliveSpriteConstant;
+	public Sprite AliveSpriteColored => aliveSpriteColored;
 	public Sprite DestroyedSprite => destroyedSprite;
 	public GameObject AttackEffect => attackEffect;
 	public GameObject DestroyedEffect => destroyedEffect;
+	public bool Airborne => airborne;
 
 	public string Name => name;
 	public float Health => health;

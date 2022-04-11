@@ -11,11 +11,15 @@ public class Unit : MonoBehaviour {
 	[SerializeField]
 	private Transform rotatingChild;
 
-	private SpriteRenderer _spriteRenderer;
+	[SerializeField]
+	private SpriteRenderer constantSprite;
+
+	[SerializeField]
+	private SpriteRenderer coloredSprite;
+
 	private HealthbarController _healthbarController;
 
 	private void Awake() {
-		_spriteRenderer = rotatingChild.GetComponent<SpriteRenderer>();
 		_healthbarController = GetComponent<HealthbarController>();
 	}
 
@@ -32,8 +36,17 @@ public class Unit : MonoBehaviour {
 	public void SetData(Logic.Data.World.Unit data) {
 		_data = data;
 		var unitData = (UnitTypeData) _data.Type;
-		_spriteRenderer.sprite = unitData.AliveSprite;
-		_spriteRenderer.color = _data.Owner.TeamColor == Color.Blue ? unitData.BlueColor : unitData.RedColor;
+		if (unitData.Airborne) {
+			constantSprite.sortingLayerName = "UnitAirborne";
+			coloredSprite.sortingLayerName = "UnitAirborne";
+		} else {
+			constantSprite.sortingLayerName = "UnitGround";
+			coloredSprite.sortingLayerName = "UnitGround";
+		}
+
+		constantSprite.sprite = unitData.AliveSpriteConstant;
+		coloredSprite.sprite = unitData.AliveSpriteColored;
+		coloredSprite.color = _data.Owner.TeamColor == Color.Blue ? unitData.BlueColor : unitData.RedColor;
 		UpdateHealth();
 	}
 

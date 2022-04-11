@@ -7,13 +7,17 @@ public class BarrackData : ScriptableObject {
 	private Color color;
 
 	[SerializeField]
-	private Sprite sprite;
+	private Sprite spriteConstant;
+
+	[SerializeField]
+	private Sprite spriteColored;
 
 	[SerializeField]
 	private GameObject ambientEffect;
 
 	public Color Color => color;
-	public Sprite Sprite => sprite;
+	public Sprite SpriteConstant => spriteConstant;
+	public Sprite SpriteColored => spriteColored;
 	public GameObject AmbientEffect => ambientEffect;
 }
 }

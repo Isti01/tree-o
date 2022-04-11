@@ -118,7 +118,7 @@ public class TowerPlacingUI : MonoBehaviour {
 			TemplateContainer card = cardComponent.Instantiate();
 
 			var content = card.Q<VisualElement>(CardContent);
-			content.style.backgroundImage = new StyleBackground(towerType.Sprite);
+			content.style.backgroundImage = new StyleBackground(towerType.PreviewSprite);
 			card.Q(TopChip).style.display = DisplayStyle.None;
 
 			var bottomLabel = card.Q<Label>(BottomChipText);

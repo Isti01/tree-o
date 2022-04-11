@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   blueColor: {r: 0, g: 0.3296814, b: 1, a: 1}
   redColor: {r: 1, g: 0.12787381, b: 0, a: 1}
-  aliveSprite: {fileID: 21300000, guid: 9f669e80f50150e4e9e07d629cb6e3d0, type: 3}
+  previewSprite: {fileID: 21300000, guid: fcbfa9527e6758646922e005ce13acb7, type: 3}
+  aliveSpriteConstant: {fileID: 21300000, guid: 7c3583380f62a8549997f3168ef924f5, type: 3}
+  aliveSpriteColored: {fileID: 21300000, guid: e1c97fc1a747a2440981c15e8f8b2af8, type: 3}
   destroyedSprite: {fileID: 0}
   attackEffect: {fileID: 0}
   destroyedEffect: {fileID: 0}
