@@ -21,10 +21,10 @@ MonoBehaviour:
   shootingEffect: {fileID: 0}
   ambientEffect: {fileID: 0}
   name: Heavy Hitter II
-  damage: 10
-  range: 10
-  cooldownTime: 1
+  damage: 20
+  range: 3
+  cooldownTime: 1.5
   buildingCost: 100
-  destroyRefund: 50
-  upgradeCost: 100
+  destroyRefund: 150
+  upgradeCost: 150
   afterUpgradeType: {fileID: 11400000, guid: ea88e84d48ebae44c96951762cd7fbca, type: 2}

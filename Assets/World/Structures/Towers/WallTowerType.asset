@@ -24,7 +24,7 @@ MonoBehaviour:
   damage: 0
   range: 0
   cooldownTime: 0
-  buildingCost: 50
+  buildingCost: 70
   destroyRefund: 40
   upgradeCost: 0
   afterUpgradeType: {fileID: 0}

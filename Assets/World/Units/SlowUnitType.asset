@@ -21,7 +21,7 @@ MonoBehaviour:
   attackEffect: {fileID: 0}
   destroyedEffect: {fileID: 0}
   name: Turtle
-  health: 50
+  health: 100
   damage: 1
   speed: 2
   cost: 100
