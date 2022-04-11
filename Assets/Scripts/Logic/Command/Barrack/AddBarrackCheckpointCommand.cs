@@ -11,17 +11,15 @@ public class AddBarrackCheckpointCommand : BaseCommand<AddBarrackCheckpointComma
 		Position = position;
 	}
 
-	public sealed class CommandResult : ICommandResult {
-		public static readonly CommandResult Success = new CommandResult();
-		public static readonly CommandResult AlreadyCheckpoint = new CommandResult();
-		public static readonly CommandResult InvalidPosition = new CommandResult();
-		public static readonly CommandResult UnreachablePosition = new CommandResult();
+	public sealed class CommandResult : AbstractCommandResult {
+		public static readonly CommandResult Success = new CommandResult("Success");
+		public static readonly CommandResult AlreadyCheckpoint = new CommandResult("AlreadyCheckpoint");
+		public static readonly CommandResult InvalidPosition = new CommandResult("InvalidPosition");
+		public static readonly CommandResult UnreachablePosition = new CommandResult("UnreachablePosition");
 
-		public bool IsSuccess => this == Success;
+		public override bool IsSuccess => this == Success;
 
-		private CommandResult() {
-			//Disallow construction
-		}
+		private CommandResult(string name) : base(name) {}
 	}
 }
 

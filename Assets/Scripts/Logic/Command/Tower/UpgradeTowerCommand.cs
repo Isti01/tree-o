@@ -7,16 +7,14 @@ public class UpgradeTowerCommand : BaseCommand<UpgradeTowerCommand.CommandResult
 		Tower = tower;
 	}
 
-	public sealed class CommandResult : ICommandResult {
-		public static readonly CommandResult Success = new CommandResult();
-		public static readonly CommandResult NotUpgradeable = new CommandResult();
-		public static readonly CommandResult NotEnoughMoney = new CommandResult();
+	public sealed class CommandResult : AbstractCommandResult {
+		public static readonly CommandResult Success = new CommandResult("Success");
+		public static readonly CommandResult NotUpgradeable = new CommandResult("NotUpgradeable");
+		public static readonly CommandResult NotEnoughMoney = new CommandResult("NotEnoughMoney");
 
-		public bool IsSuccess => this == Success;
+		public override bool IsSuccess => this == Success;
 
-		private CommandResult() {
-			//Disallow construction
-		}
+		private CommandResult(string name) : base(name) {}
 	}
 }
 

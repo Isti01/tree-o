@@ -3,6 +3,9 @@ using UnityEngine;
 namespace Presentation.World {
 [RequireComponent(typeof(LineRenderer))]
 public class Tower : Structure {
+	[SerializeField]
+	private Transform rotatingTurret;
+
 	private Logic.Data.World.Tower _data;
 
 	[SerializeField]
@@ -14,6 +17,17 @@ public class Tower : Structure {
 	[SerializeField]
 	private SpriteRenderer coloredSprite;
 
+	private World _world;
+
+	private void FixedUpdate() {
+		if (_data.Target != null) {
+			Vector3 target = _world.LogicToPresentation(_data.Target).transform.position;
+			Vector3 direction = (target - rotatingTurret.position).normalized;
+			float angle = Mathf.Rad2Deg * Mathf.Atan2(direction.y, direction.x);
+			rotatingTurret.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+		}
+	}
+
 	public void SetData(Logic.Data.World.Tower data) {
 		_data = data;
 		var type = (TowerTypeData) data.Type;
@@ -23,6 +37,8 @@ public class Tower : Structure {
 		constantSprite.sprite = type.SpriteConstant;
 		coloredSprite.sprite = type.SpriteColored;
 		coloredSprite.color = color;
+
+		_world = FindObjectOfType<World>();
 
 		var laserRenderer = GetComponent<LineRenderer>();
 		var laserGradient = new Gradient();

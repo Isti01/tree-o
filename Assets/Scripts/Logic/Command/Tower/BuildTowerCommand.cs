@@ -14,17 +14,15 @@ public class BuildTowerCommand : BaseCommand<BuildTowerCommand.CommandResult> {
 		Position = position;
 	}
 
-	public sealed class CommandResult : ICommandResult {
-		public static readonly CommandResult Success = new CommandResult();
-		public static readonly CommandResult NotEnoughMoney = new CommandResult();
-		public static readonly CommandResult TileUnavailable = new CommandResult();
-		public static readonly CommandResult MiscFailure = new CommandResult();
+	public sealed class CommandResult : AbstractCommandResult {
+		public static readonly CommandResult Success = new CommandResult("Success");
+		public static readonly CommandResult NotEnoughMoney = new CommandResult("NotEnoughMoney");
+		public static readonly CommandResult TileUnavailable = new CommandResult("TileUnavailable");
+		public static readonly CommandResult MiscFailure = new CommandResult("MiscFailure");
 
-		public bool IsSuccess => this == Success;
+		public override bool IsSuccess => this == Success;
 
-		private CommandResult() {
-			//Disallow construction
-		}
+		private CommandResult(string name) : base(name) {}
 	}
 }
 

@@ -2,6 +2,7 @@
 using Logic.Data.World;
 using Logic.Event;
 using Logic.Event.World.Tower;
+using Logic.Event.World.Unit;
 
 namespace Logic.System {
 
@@ -11,6 +12,7 @@ internal class InvalidateCachesSystem : BaseSystem {
 		dispatcher.AddListener<PhaseAdvancedEvent>(OnFightPhaseStarted);
 		dispatcher.AddListener<TowerBuiltEvent>(OnTowerBuilt);
 		dispatcher.AddListener<TowerDestroyedEvent>(OnTowerDestroyed);
+		dispatcher.AddListener<UnitDestroyedEvent>(OnUnitDestroyed);
 	}
 
 	private void OnPreparePhaseStarted(PhaseAdvancedEvent e) {
@@ -52,6 +54,12 @@ internal class InvalidateCachesSystem : BaseSystem {
 	private void RecalculateAvailableTowerPositions(IGameOverview overview) {
 		foreach (GameTeam team in overview.Teams) {
 			team.InvalidateCachedAvailableTowerPositions();
+		}
+	}
+
+	private void OnUnitDestroyed(UnitDestroyedEvent e) {
+		foreach (Tower tower in e.Unit.World.GetTileObjectsOfType<Tower>()) {
+			if (tower.Target == e.Unit) tower.UpdateTarget();
 		}
 	}
 }
