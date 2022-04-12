@@ -22,11 +22,10 @@ public class Castle : Building {
 		if (damage <= 0) throw new ArgumentException("Damage must be positive");
 		if (IsDestroyed) throw new InvalidOperationException("Castle is already destroyed");
 
-		Health -= damage;
+		Health = Math.Max(Health - damage, 0);
 		World.Overview.Events.Raise(new CastleDamagedEvent(this, attacker, damage));
 
-		if (Health <= 0) {
-			Health = 0;
+		if (IsDestroyed) {
 			//I don't think we should remove the Castle from the GameWorld:
 			// we can just replace the texture with different one.
 			World.Overview.Events.Raise(new CastleDestroyedEvent(this));
