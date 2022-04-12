@@ -48,7 +48,7 @@ public class SimulationUI : MonoBehaviour {
 		_simulationManager.OnTileSelected += OnTileSelected;
 
 		_battleUI = GetComponentInChildren<BattleUI>();
-		_battleUI.OnPauseClicked += OnPauseClicked;
+		_battleUI.OnPauseClicked += PauseGame;
 		_battleUI.OnExitClicked += OnExitClicked;
 
 		_gameOverOverlay = GetComponentInChildren<GameOverOverlay>();
@@ -57,7 +57,7 @@ public class SimulationUI : MonoBehaviour {
 
 		_pauseOverlay = GetComponentInChildren<PauseOverlay>();
 
-		_pauseOverlay.OnResumeClicked += OnResumeClicked;
+		_pauseOverlay.OnResumeClicked += ResumeGame;
 		_pauseOverlay.OnNewGameClicked += OnNewGameClicked;
 		_pauseOverlay.OnExitClicked += OnExitClicked;
 
@@ -90,7 +90,7 @@ public class SimulationUI : MonoBehaviour {
 			if (_simulationManager.IsPaused)
 				ResumeGame();
 			else
-				UpdateUiState(UIState.Paused);
+				PauseGame();
 		}
 
 		_battleUI.UpdateRemainingTime(GameOverview.TimeLeftFromPhase);
@@ -101,7 +101,7 @@ public class SimulationUI : MonoBehaviour {
 
 		_gameOverOverlay.OnOkClicked -= HideGameOverOverlay;
 
-		_battleUI.OnPauseClicked -= OnPauseClicked;
+		_battleUI.OnPauseClicked -= PauseGame;
 		_battleUI.OnExitClicked -= OnExitClicked;
 
 		_towerPlacing.OnNextClicked -= StepTowerPlacing;
@@ -109,7 +109,7 @@ public class SimulationUI : MonoBehaviour {
 		_towerPlacing.OnTowerDestroyed -= OnTowerDestroyed;
 		_towerPlacing.OnTowerUpgraded -= OnTowerUpgraded;
 
-		_pauseOverlay.OnResumeClicked -= OnResumeClicked;
+		_pauseOverlay.OnResumeClicked -= ResumeGame;
 		_pauseOverlay.OnNewGameClicked -= OnNewGameClicked;
 		_pauseOverlay.OnExitClicked -= OnExitClicked;
 
@@ -180,10 +180,6 @@ public class SimulationUI : MonoBehaviour {
 		}
 	}
 
-	private void OnResumeClicked() {
-		ResumeGame();
-	}
-
 	private void ResumeGame() {
 		UpdateUiState(_lastUiState);
 		_simulationManager.ResumeGame();
@@ -208,7 +204,7 @@ public class SimulationUI : MonoBehaviour {
 		_towerPlacing.Hide();
 	}
 
-	private void OnPauseClicked() {
+	private void PauseGame() {
 		UpdateUiState(UIState.Paused);
 		_simulationManager.PauseGame();
 	}
