@@ -1,7 +1,7 @@
 using Logic.Data;
 using UnityEngine;
 
-namespace Presentation.World {
+namespace Presentation.World.Config {
 [CreateAssetMenu(fileName = "New Economy Config", menuName = "World/Config/Economy Config", order = 1)]
 public class EconomyConfig : ScriptableObject, IGameEconomyConfig {
 	[SerializeField]

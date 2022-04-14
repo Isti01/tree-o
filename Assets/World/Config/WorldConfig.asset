@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50503fc21cc44b48bb7e0f7915b28965, type: 3}
   m_Name: WorldConfig
   m_EditorClassIdentifier: 
-  width: 15
-  height: 15
+  minWidth: 16
+  maxWidth: 18
+  minHeight: 13
+  maxHeight: 15
   barrackSpawnCooldownTime: 0.6
   castleStartingHealth: 10
   maxBuildingDistance: 3
