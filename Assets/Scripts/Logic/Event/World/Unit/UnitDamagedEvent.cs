@@ -1,6 +1,10 @@
 ﻿using Logic.Data.World;
 
 namespace Logic.Event.World.Unit {
+
+/// <summary>
+/// Raised when the value of <see cref="Data.World.Unit.CurrentHealth"/> changes.
+/// </summary>
 public class UnitDamagedEvent : BaseEvent, IUnitEvent {
 	public IUnitTypeData Type => Unit.Type;
 	public Data.World.Unit Unit { get; }
@@ -12,4 +16,5 @@ public class UnitDamagedEvent : BaseEvent, IUnitEvent {
 		Attacker = attacker;
 	}
 }
+
 }
