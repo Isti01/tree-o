@@ -1,6 +1,4 @@
-﻿using System.Data.Common;
-
-namespace Logic.Event.World.Tower {
+﻿namespace Logic.Event.World.Tower {
 public class TowerTargetChangedEvent : BaseEvent, ITowerEvent {
 	public Data.World.Tower Tower { get; }
 

@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Logic.Data;
-using Logic.Data.World;
-using Logic.Event.Team;
 using Presentation.World;
 using UnityEngine;
 using UnityEngine.UIElements;
