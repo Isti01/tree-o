@@ -4,6 +4,10 @@ using Logic.Event.World.Unit;
 
 namespace Logic.System {
 
+/// <summary>
+/// System responsible for dealing damage to a <see cref="Castle"/> when a <see cref="Unit"/> reaches it.
+/// This system is also responsible for destroying the <see cref="Unit"/> when this happens.
+/// </summary>
 internal class UnitDamagesCastleSystem : BaseSystem {
 	public override void RegisterListeners(EventDispatcher dispatcher) {
 		//Call later than usual: let listeners get notified about the damaged event

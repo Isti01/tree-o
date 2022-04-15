@@ -4,6 +4,11 @@ using Logic.Data;
 using Logic.Data.World;
 
 namespace Logic.Handler {
+
+/// <summary>
+/// Handler of <see cref="Tower"/> related commands:
+/// <see cref="BuildTowerCommand"/>, <see cref="DestroyTowerCommand"/> and <see cref="UpgradeTowerCommand"/>.
+/// </summary>
 internal class ManageTowerHandler : BaseHandler {
 	public override void RegisterConsumers(CommandDispatcher dispatcher) {
 		dispatcher.RegisterConsumer<BuildTowerCommand, BuildTowerCommand.CommandResult>(Handle);
@@ -46,4 +51,5 @@ internal class ManageTowerHandler : BaseHandler {
 		return UpgradeTowerCommand.CommandResult.Success;
 	}
 }
+
 }

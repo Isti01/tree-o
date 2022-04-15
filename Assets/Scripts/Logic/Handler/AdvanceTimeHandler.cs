@@ -5,6 +5,19 @@ using Logic.Data.World;
 
 namespace Logic.Handler {
 
+/// <summary>
+/// Handler of <see cref="AdvanceTimeCommand"/>. Executed actions include:
+/// <list type="bullet">
+/// <item>Decreasing <see cref="IGameOverview.TimeLeftFromPhase"/>,
+/// potentially advancing the phase.</item>
+/// <item>Advancing <see cref="IGameOverview.CurrentPhase"/> if it's
+/// currently <see cref="GamePhase.Fight"/> and <see cref="GameWorld.Units"/> is empty.</item>
+/// <item>Invoking <see cref="Tower"/> logic: updating cooldown, targeting, shooting.</item>
+/// <item>Moving <see cref="Unit"/> instances.</item>
+/// <item>Spawning <see cref="Unit"/> instances from <see cref="Barrack"/> instances
+/// and updating the relevant cooldown (<see cref="Barrack.RemainingCooldownTime"/>).</item>
+/// </list>
+/// </summary>
 internal class AdvanceTimeHandler : BaseHandler {
 	public override void RegisterConsumers(CommandDispatcher dispatcher) {
 		dispatcher.RegisterConsumer<AdvanceTimeCommand, BiCommandResult>(Handle);
