@@ -4,7 +4,7 @@
 /// instances, <see cref="Success"/> and <see cref="Failure"/>,
 /// corresponding to the possible values of <see cref="ICommandResult.IsSuccess"/>.
 /// </summary>
-public sealed class BiCommandResult : AbstractCommandResult {
+public sealed class BiCommandResult : DiscreteCommandResult {
 	public static readonly BiCommandResult Success = new BiCommandResult("Success");
 	public static readonly BiCommandResult Failure = new BiCommandResult("Failure");
 

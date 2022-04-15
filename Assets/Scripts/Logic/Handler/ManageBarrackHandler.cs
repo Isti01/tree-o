@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Logic.Command;
 using Logic.Command.Barrack;
+using Logic.Data;
 using Logic.Data.World;
 
 namespace Logic.Handler {
@@ -15,8 +16,9 @@ internal class ManageBarrackHandler : BaseHandler {
 		Barrack barrack = command.Barrack;
 		TilePosition position = command.Position;
 
+		if (barrack.World.Overview.CurrentPhase != GamePhase.Prepare)
+			return AddBarrackCheckpointCommand.CommandResult.MiscFailure;
 		if (barrack.CheckPoints.Contains(position)) return AddBarrackCheckpointCommand.CommandResult.AlreadyCheckpoint;
-
 		if (barrack.World[position] != null) return AddBarrackCheckpointCommand.CommandResult.InvalidPosition;
 
 		if (!barrack.World.Navigation.IsPositionReachable(barrack.Position, position))
@@ -30,6 +32,7 @@ internal class ManageBarrackHandler : BaseHandler {
 		Barrack barrack = command.Barrack;
 		TilePosition position = command.Position;
 
+		if (barrack.World.Overview.CurrentPhase != GamePhase.Prepare) return BiCommandResult.Failure;
 		if (!barrack.CheckPoints.Contains(position)) return BiCommandResult.Failure;
 
 		barrack.DeleteCheckPoint(position);

@@ -3,6 +3,9 @@ using Logic.Data.World;
 
 namespace Logic.Command.Tower {
 
+/// <summary>
+/// Command for purchasing a <see cref="Tower"/> during the <see cref="GamePhase.Prepare"/> phase.
+/// </summary>
 public class BuildTowerCommand : BaseCommand<BuildTowerCommand.CommandResult> {
 	public GameTeam Team { get; }
 	public ITowerTypeData Type { get; }
@@ -14,7 +17,7 @@ public class BuildTowerCommand : BaseCommand<BuildTowerCommand.CommandResult> {
 		Position = position;
 	}
 
-	public sealed class CommandResult : AbstractCommandResult {
+	public sealed class CommandResult : DiscreteCommandResult {
 		public static readonly CommandResult Success = new CommandResult("Success");
 		public static readonly CommandResult NotEnoughMoney = new CommandResult("NotEnoughMoney");
 		public static readonly CommandResult TileUnavailable = new CommandResult("TileUnavailable");
