@@ -1,19 +1,19 @@
 using UnityEngine;
-
+using UnityEngine.Experimental.Rendering.Universal;
 
 namespace Presentation.World {
-[RequireComponent(typeof(UnityEngine.Rendering.Universal.Light2D))]
+[RequireComponent(typeof(Light2D))]
 public class TileHighlight : MonoBehaviour {
 	[SerializeField]
 	private TileHighlightData highlightData;
 
 	private bool _dimmed;
 
-	private UnityEngine.Rendering.Universal.Light2D _light;
+	private Light2D _light;
 	private float _scale = 1;
 
 	private void Awake() {
-		_light = GetComponent<UnityEngine.Rendering.Universal.Light2D>();
+		_light = GetComponent<Light2D>();
 		if (highlightData) SetData(highlightData);
 	}
 
