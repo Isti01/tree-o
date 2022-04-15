@@ -52,9 +52,6 @@ cmake-build-*/
 # IntelliJ
 out/
 
-# Rider
-ProjectSettings/RiderScriptEditorPersistedState.asset
-
 # mpeltonen/sbt-idea plugin
 .idea_modules/
 
