@@ -8,6 +8,10 @@ namespace Logic.Handler {
 /// Handlers should be stateless if possible.
 /// </summary>
 internal abstract class BaseHandler {
+	/// <summary>
+	/// Registers the command handler callbacks in this instance.
+	/// </summary>
+	/// <param name="dispatcher">the dispatcher in which to make the registration</param>
 	public abstract void RegisterConsumers(CommandDispatcher dispatcher);
 }
 

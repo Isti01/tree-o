@@ -3,6 +3,9 @@ using Logic.Data;
 
 namespace Logic.Handler {
 
+/// <summary>
+/// Handler of <see cref="AdvancePhaseCommand"/>.
+/// </summary>
 internal class AdvancePhaseHandler : BaseHandler {
 	public override void RegisterConsumers(CommandDispatcher dispatcher) {
 		dispatcher.RegisterConsumer<AdvancePhaseCommand, BiCommandResult>(On);

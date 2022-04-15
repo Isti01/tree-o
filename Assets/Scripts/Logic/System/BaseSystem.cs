@@ -10,6 +10,10 @@ namespace Logic.System {
 /// Systems should be stateless if possible.
 /// </summary>
 internal abstract class BaseSystem {
+	/// <summary>
+	/// Registers the event listener callbacks in this instance.
+	/// </summary>
+	/// <param name="dispatcher">the dispatcher in which to make the registration</param>
 	public abstract void RegisterListeners(EventDispatcher dispatcher);
 }
 

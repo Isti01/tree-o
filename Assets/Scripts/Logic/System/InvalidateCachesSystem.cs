@@ -6,6 +6,22 @@ using Logic.Event.World.Unit;
 
 namespace Logic.System {
 
+/// <summary>
+/// System responsible for clearing/recalculating cached values. These include:
+/// <list type="bullet">
+/// <item>Positions where towers can be placed need to be updated after the <see cref="GamePhase.Fight"/>
+/// phase (because <see cref="Unit"/> instances might be occupying them)
+/// and whenever a <see cref="Tower"/> is built/destroyed.</item>
+/// <item>Updating the planned paths of <see cref="Unit"/> instances when the <see cref="GamePhase.Fight"/>
+/// phase starts, because towers might have been built/destroyed since the last path planning.</item>
+/// <item>Resetting <see cref="Tower.RemainingCooldownTime"/> and
+/// <see cref="Barrack.RemainingCooldownTime"/> when the  <see cref="GamePhase.Fight"/> phase starts.</item>
+/// <item>Unreachable entries in <see cref="Barrack.CheckPoints"/> need to be removed
+/// whenever a <see cref="Tower"/> is built.</item>
+/// <item>Upon the destruction of a <see cref="Unit"/> the values of <see cref="Tower.Target"/>
+/// need to be sanitized: destroyed <see cref="Unit"/> instances mustn't be targeted.</item>
+/// </list>
+/// </summary>
 internal class InvalidateCachesSystem : BaseSystem {
 	public override void RegisterListeners(EventDispatcher dispatcher) {
 		dispatcher.AddListener<PhaseAdvancedEvent>(OnPreparePhaseStarted);
