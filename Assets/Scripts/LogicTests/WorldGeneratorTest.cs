@@ -33,31 +33,29 @@ public class WorldGeneratorTest {
 	[Test]
 	[Repeat(LowRepeatCount)]
 	public void TestCastleCount() {
-		Assert.AreEqual(2, WorldTestUtils.GenerateWorld().TileObjects.Count(o => o is Castle));
+		GameWorld world = WorldTestUtils.GenerateWorld();
+		Assert.AreEqual(2, world.GetTileObjectsOfType<Castle>().Count());
 		foreach (Color color in Enum.GetValues(typeof(Color))) {
-			Assert.AreEqual(1, WorldTestUtils.GenerateWorld().TileObjects
-				.Where(o => o is Castle)
-				.Count(o => ((Building) o).OwnerColor == color));
+			Assert.AreEqual(1, world.GetTileObjectsOfType<Castle>()
+				.Count(o => o.OwnerColor == color));
 		}
 	}
 
 	[Test]
 	[Repeat(LowRepeatCount)]
 	public void TestBarrackCount() {
-		Assert.AreEqual(4, WorldTestUtils.GenerateWorld().TileObjects.Count(o => o is Barrack));
+		GameWorld world = WorldTestUtils.GenerateWorld();
+		Assert.AreEqual(4, world.GetTileObjectsOfType<Barrack>().Count());
 		foreach (Color color in Enum.GetValues(typeof(Color))) {
-			Assert.AreEqual(2, WorldTestUtils.GenerateWorld().TileObjects
-				.Where(o => o is Barrack)
-				.Count(o => ((Building) o).OwnerColor == color));
+			Assert.AreEqual(2, world.GetTileObjectsOfType<Barrack>()
+				.Count(o => o.OwnerColor == color));
 		}
 	}
 
 	[Test]
 	[Repeat(LowRepeatCount)]
 	public void TestObstacleCount() {
-		int count = WorldTestUtils.GenerateWorld().TileObjects
-			.Count(o => o is Obstacle);
-		Assert.Greater(count, 1);
+		Assert.Greater(WorldTestUtils.GenerateWorld().GetTileObjectsOfType<Obstacle>().Count(), 1);
 	}
 
 	[Test]
@@ -65,13 +63,11 @@ public class WorldGeneratorTest {
 	public void TestNoObstacleNearCastle() {
 		GameWorld world = WorldTestUtils.GenerateWorld();
 
-		ICollection<TilePosition> castles = world.TileObjects
-			.Where(o => o is Castle)
+		ICollection<TilePosition> castles = world.GetTileObjectsOfType<Castle>()
 			.Select(o => o.Position)
 			.ToList();
 
-		Assert.IsTrue(world.TileObjects
-			.Where(o => o is Obstacle)
+		Assert.IsTrue(world.GetTileObjectsOfType<Obstacle>()
 			.Select(o => o.Position)
 			.All(o => castles.All(p => o.FirstNormDistance(p) >= 4)));
 	}
@@ -81,13 +77,11 @@ public class WorldGeneratorTest {
 	public void TestNoObstacleNearBarrack() {
 		GameWorld world = WorldTestUtils.GenerateWorld();
 
-		ICollection<TilePosition> barracks = world.TileObjects
-			.Where(o => o is Barrack)
+		ICollection<TilePosition> barracks = world.GetTileObjectsOfType<Barrack>()
 			.Select(o => o.Position)
 			.ToList();
 
-		Assert.IsTrue(world.TileObjects
-			.Where(o => o is Obstacle)
+		Assert.IsTrue(world.GetTileObjectsOfType<Obstacle>()
 			.Select(o => o.Position)
 			.All(o => barracks.All(p => o.FirstNormDistance(p) >= 4)));
 	}
@@ -98,8 +92,7 @@ public class WorldGeneratorTest {
 		GameWorld world = WorldTestUtils.GenerateWorld();
 		int minDistance = Math.Min(world.Width, world.Height) / 4;
 
-		ICollection<TilePosition> castles = world.TileObjects
-			.Where(o => o is Castle)
+		ICollection<TilePosition> castles = world.GetTileObjectsOfType<Castle>()
 			.Select(o => o.Position)
 			.ToList();
 
@@ -118,8 +111,7 @@ public class WorldGeneratorTest {
 		GameWorld world = WorldTestUtils.GenerateWorld();
 		int minDistance = Math.Min(world.Width, world.Height) / 10;
 
-		ICollection<TilePosition> barracks = world.TileObjects
-			.Where(o => o is Barrack)
+		ICollection<TilePosition> barracks = world.GetTileObjectsOfType<Barrack>()
 			.Select(o => o.Position)
 			.ToList();
 
@@ -149,9 +141,9 @@ public class WorldGeneratorTest {
 	public void TestEnemyCastleReachable() {
 		GameWorld world = WorldTestUtils.GenerateWorld();
 
-		foreach (Barrack barrack in world.TileObjects.Where(o => o is Barrack).Cast<Barrack>()) {
-			foreach (TileObject enemy in world.TileObjects
-				.Where(o => o is Castle c && c.OwnerColor != barrack.OwnerColor)) {
+		foreach (Barrack barrack in world.GetTileObjectsOfType<Barrack>()) {
+			foreach (Castle enemy in world.GetTileObjectsOfType<Castle>()
+				.Where(c => c.OwnerColor != barrack.OwnerColor)) {
 				Assert.IsTrue(world.Navigation.IsPositionReachable(barrack.Position, enemy.Position));
 			}
 		}
