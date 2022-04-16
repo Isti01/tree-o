@@ -7,6 +7,11 @@ using Logic.Data.World;
 using NUnit.Framework;
 
 namespace LogicTests {
+
+/// <summary>
+/// Tests the procedural world generation by repeatedly generating new worlds
+/// and checking whether they adhere to specific criteria (e.g. the two castles are far enough away).
+/// </summary>
 public class WorldGeneratorTest {
 	private const int LowRepeatCount = 10;
 	private const int HighRepeatCount = 100;
@@ -134,7 +139,7 @@ public class WorldGeneratorTest {
 
 		foreach (Barrack barrack in world.GetTileObjectsOfType<Barrack>()) {
 			foreach (Castle castle in world.GetTileObjectsOfType<Castle>()) {
-				Assert.GreaterOrEqual(barrack.Position.FirstNormDistance(castle.Position),3);
+				Assert.GreaterOrEqual(barrack.Position.FirstNormDistance(castle.Position), 3);
 			}
 		}
 	}
@@ -152,4 +157,5 @@ public class WorldGeneratorTest {
 		}
 	}
 }
+
 }

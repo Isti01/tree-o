@@ -2,6 +2,9 @@
 
 namespace LogicTests {
 
+/// <summary>
+/// Utility methods regarding random number generation.
+/// </summary>
 public static class RandomUtils {
 	private static readonly Random SeedSource = new Random();
 

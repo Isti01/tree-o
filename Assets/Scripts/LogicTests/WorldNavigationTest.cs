@@ -4,6 +4,11 @@ using Logic.Data.World;
 using NUnit.Framework;
 
 namespace LogicTests {
+
+/// <summary>
+/// Tests the pathfinding (unit navigation) on both
+/// hardcoded scenarios and procedurally generated worlds.
+/// </summary>
 public class WorldNavigationTest {
 	private const int LowRepeatCount = 10;
 	private const int HighRepeatCount = 100;
@@ -86,7 +91,8 @@ public class WorldNavigationTest {
 	public void TestNoObjectInPath() {
 		GameWorld world = WorldTestUtils.GenerateWorld();
 		foreach (var to in world.GetTileObjectsOfType<Castle>()) {
-			foreach (var from in world.GetTileObjectsOfType<Barrack>().Where(obj => !obj.OwnerColor.Equals(to.OwnerColor))) {
+			foreach (var from in world.GetTileObjectsOfType<Barrack>()
+				.Where(obj => !obj.OwnerColor.Equals(to.OwnerColor))) {
 				List<Vector2> path = world.Navigation.TryGetPathDeltas(from.Position.ToVectorCentered(),
 					to.Position.ToVectorCentered(), 0);
 				float x = from.Position.X;
@@ -118,4 +124,5 @@ public class WorldNavigationTest {
 		public FillerTileObject(TilePosition position) : base(null, position) {}
 	}
 }
+
 }
