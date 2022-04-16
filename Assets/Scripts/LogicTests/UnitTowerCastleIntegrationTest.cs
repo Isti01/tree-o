@@ -1,4 +1,5 @@
-﻿using Logic.Command;
+﻿using System.Linq;
+using Logic.Command;
 using Logic.Command.Tower;
 using Logic.Command.Unit;
 using Logic.Data;
@@ -8,6 +9,11 @@ using NUnit.Framework;
 
 namespace LogicTests {
 
+/// <summary>
+/// Tests the basic interactions between <see cref="Unit"/>, <see cref="Castle"/>
+/// and <see cref="Tower"/> instances: unit damaging castle, tower damaging unit,
+/// unit destroying castle, tower destroying unit.
+/// </summary>
 public class UnitTowerCastleIntegrationTest {
 	[Test]
 	public void TestUnitDamagesCastle() {
@@ -74,7 +80,7 @@ public class UnitTowerCastleIntegrationTest {
 		GameTestUtils.TowerTypeData towerType = new GameTestUtils.TowerTypeData {
 			Damage = unitType.Health * 1.1f, Range = overview.World.Width * overview.World.Height
 		};
-		TilePosition towerPosition = WorldTestUtils.FindAnyEmptyPosition(overview.World);
+		TilePosition towerPosition = towerTeam.AvailableTowerPositions.First();
 		Assert.AreEqual(BuildTowerCommand.CommandResult.Success,
 			overview.Commands.Issue(new BuildTowerCommand(towerTeam, towerType, towerPosition)));
 

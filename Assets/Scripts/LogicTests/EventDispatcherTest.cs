@@ -4,6 +4,9 @@ using NUnit.Framework;
 
 namespace LogicTests {
 
+/// <summary>
+/// Tests the full functionality of the <see cref="EventDispatcher"/> class.
+/// </summary>
 public class EventDispatcherTest {
 	[Test]
 	public void TestAddingListener() {

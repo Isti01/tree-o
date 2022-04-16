@@ -6,7 +6,17 @@ using Moq;
 using NUnit.Framework;
 
 namespace LogicTests {
+
+/// <summary>
+/// Utility methods for <see cref="GameWorld"/> related operations.
+/// </summary>
 public static class WorldTestUtils {
+	/// <summary>
+	/// Creates a (procedurally) generated world. Its size (dimensions) are also random.
+	/// Mocking is used to fulfill the dependencies of the <see cref="GameWorld"/> class.
+	/// The generated world is logged to the console for debugging reasons.
+	/// </summary>
+	/// <returns>a new, randomly generated world</returns>
 	public static GameWorld GenerateWorld() {
 		Random random = RandomUtils.CreateRandomlySeededRandom();
 		int width = random.Next(10, 15);
@@ -24,16 +34,6 @@ public static class WorldTestUtils {
 		TestContext.Out.WriteLine("Generated world:");
 		TestContext.Out.WriteLine(WorldAsMultilineString(world));
 		return world;
-	}
-
-	public static TilePosition FindAnyEmptyPosition(GameWorld world) {
-		for (var x = 0; x < world.Width; x++) {
-			for (var y = 0; y < world.Height; y++) {
-				if (world[x, y] == null) return new TilePosition(x, y);
-			}
-		}
-
-		throw new InvalidOperationException("There aren't any empty positions");
 	}
 
 	private static string WorldAsMultilineString(GameWorld world) {
@@ -64,4 +64,5 @@ public static class WorldTestUtils {
 		return result.ToString();
 	}
 }
+
 }

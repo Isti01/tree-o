@@ -4,6 +4,9 @@ using NUnit.Framework;
 
 namespace LogicTests {
 
+/// <summary>
+/// Tests the full functionality of the <see cref="CommandDispatcher"/> class.
+/// </summary>
 public class CommandDispatcherTest {
 	[Test]
 	public void TestHandlingCommand() {

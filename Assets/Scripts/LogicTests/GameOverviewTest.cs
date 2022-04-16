@@ -4,6 +4,12 @@ using NUnit.Framework;
 
 namespace LogicTests {
 
+/// <summary>
+/// Tests the functionality of the <see cref="GameOverview"/> class.
+/// This class encapsulates almost all other classes in the logic component,
+/// so it's important to note that only the functionalities provided by this specific class
+/// are tested in this test class.
+/// </summary>
 public class GameOverviewTest {
 	[Test]
 	public void TestNoOpRound() {
