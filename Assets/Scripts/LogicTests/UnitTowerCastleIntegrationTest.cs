@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Logic.Command;
 using Logic.Command.Tower;
 using Logic.Command.Unit;
 using Logic.Data;
 using Logic.Data.World;
+using Logic.Event.World.Tower;
 using Logic.Event.World.Unit;
 using NUnit.Framework;
 
@@ -86,9 +89,10 @@ public class UnitTowerCastleIntegrationTest {
 
 		//Set up event listener
 		var unitDestroyedEvent = false;
-		overview.Events.AddListener<UnitDestroyedEvent>(e => unitDestroyedEvent = true);
+		overview.Events.AddListener<UnitDestroyedEvent>(_ => unitDestroyedEvent = true);
 
 		//Enter fighting phase and let the tower kill the unit
+		int oldMoney = towerTeam.Money;
 		overview.AdvancePhase();
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
 		for (var i = 0; i < 10; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, 0.1f)));
@@ -98,6 +102,158 @@ public class UnitTowerCastleIntegrationTest {
 		foreach (GameTeam team in overview.Teams)
 			Assert.AreEqual(overview.World.Config.CastleStartingHealth, team.Castle.Health, 0.01);
 		Assert.IsTrue(unitDestroyedEvent);
+		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
+		Assert.AreEqual(oldMoney + overview.EconomyConfig.NewUnitsKilledPay
+			+ overview.EconomyConfig.RoundBasePay, towerTeam.Money);
+	}
+
+	[Test]
+	public void TestTowerCooldown() {
+		GameOverview overview = GameTestUtils.CreateOverview(((overviewConfig, economyConfig, worldConfig) => {
+			overviewConfig.FightingPhaseDuration = float.PositiveInfinity;
+		}));
+
+		GameTeam unitTeam = overview.GetTeam(Color.Blue);
+		GameTeam towerTeam = overview.GetEnemyTeam(unitTeam);
+
+		//Purchase a unit with zero speed
+		GameTestUtils.UnitTypeData unitType = new GameTestUtils.UnitTypeData { Speed = 0 };
+		Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(unitTeam, unitType)));
+
+		//Build a tower with zero damage and high range
+		GameTestUtils.TowerTypeData towerType = new GameTestUtils.TowerTypeData {
+			Damage = 0, Range = overview.World.Width * overview.World.Height
+		};
+		TilePosition towerPosition = towerTeam.AvailableTowerPositions.First();
+		Assert.AreEqual(BuildTowerCommand.CommandResult.Success,
+			overview.Commands.Issue(new BuildTowerCommand(towerTeam, towerType, towerPosition)));
+		Tower tower = towerTeam.Towers.First();
+
+		//Enter fighting phase and let the tower shoot at the unit
+		overview.AdvancePhase();
+		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
+		var shot = false;
+		overview.Events.AddListener<TowerShotEvent>(_ => shot = true);
+		while (!shot) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon)));
+
+		//Assert that the cooldown lasts
+		shot = false;
+		Assert.IsTrue(tower.IsOnCooldown);
+		float deltaTime = towerType.CooldownTime / 10;
+		for (var i = 0; i < 9; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
+		Assert.IsFalse(shot);
+		Assert.IsTrue(tower.IsOnCooldown);
+
+		//Assert that the tower shoots again
+		for (var i = 0; i < 2; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
+		Assert.IsTrue(shot);
+		Assert.IsTrue(tower.IsOnCooldown);
+	}
+
+	[Test]
+	public void TestTowerTargetReachedCastle() {
+		GameOverview overview = CreateTowerTargetTestingGame(10, 10,
+			(towerTeam, _) => new[] { towerTeam.AvailableTowerPositions.First() }, 1, 0, float.PositiveInfinity, 1);
+
+		//Update the tower's target
+		Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon)));
+		Tower tower = overview.World.GetTileObjectsOfType<Tower>().First();
+		Assert.AreEqual(tower.Target, overview.World.Units.First());
+
+		//Let the unit reach the castle
+		while (overview.World.Units.Any())
+			Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, 0.5f)));
+
+		//Validate results
+		Assert.IsNull(tower.Target);
+	}
+
+	[Test]
+	public void TestTowerTargetGotDestroyed() {
+		GameOverview overview = CreateTowerTargetTestingGame(10, 10,
+			(towerTeam, _) => towerTeam.AvailableTowerPositions.Take(2), 5, 2, float.PositiveInfinity, 0);
+
+		//Update the towers' targets (and let them shoot once)
+		Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon)));
+		foreach (Tower tower in overview.World.GetTileObjectsOfType<Tower>())
+			Assert.AreEqual(tower.Target, overview.World.Units.First());
+
+		//Let the towers kill the unit
+		Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon)));
+
+		//Validate results
+		foreach (Tower tower in overview.World.GetTileObjectsOfType<Tower>()) Assert.IsNull(tower.Target);
+	}
+
+	[Test]
+	public void TestTowerTargetMovedOutOfRange() {
+		IEnumerable<TilePosition> TowerPositionChooser(GameTeam towerTeam, GameWorld world) {
+			int[] dx = { -1, 0, 0, 1 };
+			int[] dy = { 0, 1, -1, 0 };
+			foreach (Barrack barrack in world.Overview.GetEnemyTeam(towerTeam).Barracks) {
+				var any = false;
+				for (var i = 0; i < 4 && !any; i++) {
+					TilePosition position = barrack.Position.Added(dx[i], dy[i]);
+					if (!towerTeam.AvailableTowerPositions.Contains(position)) continue;
+					any = true;
+					yield return position;
+				}
+
+				if (!any) Assert.Fail("Unable to place towers next to the barracks");
+			}
+		}
+
+		GameOverview overview = CreateTowerTargetTestingGame(30, 30, TowerPositionChooser, 1, 0, 2.5f, 1);
+
+		//Update the tower's target
+		Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon)));
+		Tower tower = overview.World.GetTileObjectsOfType<Tower>().First(t => t.Target != null);
+		Assert.NotNull(tower);
+		Unit unit = overview.World.Units.First();
+
+		//Let the unit move outside the tower's range
+		while (unit.IsAlive && unit.Position.Distance(tower.Position.ToVectorCentered()) <= tower.Type.Range)
+			Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, 0.5f)));
+		Assert.IsTrue(unit.IsAlive);
+
+		//Let the tower update its target, validate results
+		Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon)));
+		Assert.IsNull(tower.Target);
+	}
+
+	private GameOverview CreateTowerTargetTestingGame(int worldWidth, int worldHeight,
+		Func<GameTeam, GameWorld, IEnumerable<TilePosition>> towerPositionChooser,
+		float unitHealth, float towerDamage, float towerRange, float towerCooldown) {
+		GameOverview overview = GameTestUtils.CreateOverview(((overviewConfig, _, worldConfig) => {
+			overviewConfig.FightingPhaseDuration = float.PositiveInfinity;
+			worldConfig.Width = worldWidth;
+			worldConfig.Height = worldHeight;
+			worldConfig.MaxBuildingDistance = worldConfig.Height * worldConfig.Width;
+		}));
+
+		GameTeam unitTeam = overview.Teams.First();
+		GameTeam towerTeam = overview.GetEnemyTeam(unitTeam);
+
+		//Purchase a unit
+		GameTestUtils.UnitTypeData unitType = new GameTestUtils.UnitTypeData { Health = unitHealth };
+		Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(unitTeam, unitType)));
+
+		//Build a tower
+		GameTestUtils.TowerTypeData towerType = new GameTestUtils.TowerTypeData {
+			Damage = towerDamage, Range = towerRange, CooldownTime = towerCooldown
+		};
+		foreach (TilePosition towerPosition in towerPositionChooser(towerTeam, overview.World)) {
+			Assert.AreEqual(BuildTowerCommand.CommandResult.Success,
+				overview.Commands.Issue(new BuildTowerCommand(towerTeam, towerType, towerPosition)));
+		}
+
+		//Enter fighting phase, spawn the units
+		overview.AdvancePhase();
+		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
+		Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon)));
+		Assert.AreEqual(1, overview.World.Units.Count);
+
+		return overview;
 	}
 }
 
