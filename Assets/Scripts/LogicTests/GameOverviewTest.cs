@@ -1,4 +1,7 @@
-﻿using Logic.Command;
+﻿using System;
+using System.Linq;
+using Logic.Command;
+using Logic.Command.Unit;
 using Logic.Data;
 using NUnit.Framework;
 
@@ -14,21 +17,67 @@ public class GameOverviewTest {
 	[Test]
 	public void TestNoOpRound() {
 		GameOverview overview = GameTestUtils.CreateOverview();
+		IGameEconomyConfig economyConfig = overview.EconomyConfig;
+
+		foreach (GameTeam team in overview.Teams) {
+			Assert.AreEqual(economyConfig.StartingBalance, team.Money);
+		}
+
 		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
 		overview.AdvancePhase();
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
 		overview.AdvancePhase();
+		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
+
+		foreach (GameTeam team in overview.Teams) {
+			Assert.AreEqual(economyConfig.StartingBalance + economyConfig.RoundBasePay, team.Money);
+		}
+	}
+
+	[Test]
+	public void TestFightingPhaseEndsWhenNoUnitsLeft() {
+		GameOverview overview = GameTestUtils.CreateOverview();
+		overview.AdvancePhase();
+		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
+		overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon));
 		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
 	}
 
 	[Test]
 	public void TestFightingPhaseHasLimitedTime() {
 		GameOverview overview = GameTestUtils.CreateOverview();
+
+		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
+		GameTestUtils.UnitTypeData unitType = new GameTestUtils.UnitTypeData { Speed = float.Epsilon };
+		overview.Commands.Issue(new PurchaseUnitCommand(overview.Teams.First(), unitType));
+
 		overview.AdvancePhase();
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
-		float deltaTime = overview.TimeLeftFromPhase * 1.1f;
+
+		float deltaTime = overview.TimeLeftFromPhase * 0.3f;
+		for (var i = 0; i < 3; i++) {
+			overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime));
+			Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
+			Assert.AreEqual(1, overview.World.Units.Count);
+		}
+
 		overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime));
 		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
+	}
+
+	[Test]
+	public void TestFinishedPhaseHasNoNextPhase() {
+		GameOverview overview = GameTestUtils.CreateOverview(((overviewConfig, economyConfig, worldConfig) => {
+			worldConfig.CastleStartingHealth = 0; //Dirty hack, hopefully won't break
+		}));
+
+		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
+		overview.AdvancePhase();
+		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
+		overview.AdvancePhase();
+		Assert.AreEqual(GamePhase.Finished, overview.CurrentPhase);
+		Assert.Throws<Exception>(overview.AdvancePhase);
+		Assert.AreEqual(GamePhase.Finished, overview.CurrentPhase);
 	}
 }
 
