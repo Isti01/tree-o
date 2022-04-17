@@ -57,10 +57,10 @@ public static class GameTestUtils {
 	/// instance to the logic component: modifying values while the game is running might break stuff.
 	/// </summary>
 	public class GameEconomyConfig : IGameEconomyConfig {
-		public int StartingBalance { get; set; } = 10;
-		public int RoundBasePay { get; set; } = 10;
-		public int NewUnitsKilledPay { get; set; } = 10;
-		public int TotalUnitsPurchasedPay { get; set; } = 10;
+		public int StartingBalance { get; set; } = 11;
+		public int RoundBasePay { get; set; } = 13;
+		public int NewUnitsKilledPay { get; set; } = 17;
+		public int TotalUnitsPurchasedPay { get; set; } = 19;
 	}
 
 	/// <summary>

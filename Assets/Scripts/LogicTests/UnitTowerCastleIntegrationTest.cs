@@ -14,8 +14,8 @@ namespace LogicTests {
 
 /// <summary>
 /// Tests the basic interactions between <see cref="Unit"/>, <see cref="Castle"/>
-/// and <see cref="Tower"/> instances: unit damaging castle, tower damaging unit,
-/// unit destroying castle, tower destroying unit.
+/// and <see cref="Tower"/> instances: unit damaging castle, unit destroying castle,
+/// tower targeting unit, tower damaging unit,tower destroying unit.
 /// </summary>
 public class UnitTowerCastleIntegrationTest {
 	[Test]
