@@ -39,7 +39,7 @@ public class GameOverviewTest {
 		GameOverview overview = GameTestUtils.CreateOverview();
 		overview.AdvancePhase();
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
-		overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon));
+		Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon)));
 		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
 	}
 
@@ -49,19 +49,19 @@ public class GameOverviewTest {
 
 		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
 		GameTestUtils.UnitTypeData unitType = new GameTestUtils.UnitTypeData { Speed = float.Epsilon };
-		overview.Commands.Issue(new PurchaseUnitCommand(overview.Teams.First(), unitType));
+		Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(overview.Teams.First(), unitType)));
 
 		overview.AdvancePhase();
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
 
 		float deltaTime = overview.TimeLeftFromPhase * 0.3f;
 		for (var i = 0; i < 3; i++) {
-			overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime));
+			Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
 			Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
 			Assert.AreEqual(1, overview.World.Units.Count);
 		}
 
-		overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime));
+		Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
 		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
 	}
 
