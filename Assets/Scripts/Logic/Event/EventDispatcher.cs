@@ -49,12 +49,12 @@ public class EventDispatcher {
 	/// <param name="listener">the consumer of the event</param>
 	/// <typeparam name="T">the event to listen to</typeparam>
 	public void AddListener<T>(Ordering ordering, Listener<T> listener) where T : BaseEvent {
-		if (!_listeners.TryGetValue(typeof(T), out IList<RegisteredListener> set)) {
-			set = new List<RegisteredListener>();
-			_listeners[typeof(T)] = set;
+		if (!_listeners.TryGetValue(typeof(T), out IList<RegisteredListener> list)) {
+			list = new List<RegisteredListener>();
+			_listeners[typeof(T)] = list;
 		}
 
-		set.Add(new RegisteredListener(ordering, listener));
+		list.Add(new RegisteredListener(ordering, listener));
 	}
 
 	/// <summary>
@@ -70,7 +70,7 @@ public class EventDispatcher {
 	/// among the listeners of the specified event</exception>
 	public void RemoveListener<T>(Ordering ordering, Listener<T> listener) where T : BaseEvent {
 		RegisteredListener registered = new RegisteredListener(ordering, listener);
-		if (!_listeners.TryGetValue(typeof(T), out IList<RegisteredListener> set) || !set.Remove(registered)) {
+		if (!_listeners.TryGetValue(typeof(T), out IList<RegisteredListener> list) || !list.Remove(registered)) {
 			throw new IllegalListenerStateException($"{registered} isn't a registered listener of {typeof(T)}");
 		}
 	}
