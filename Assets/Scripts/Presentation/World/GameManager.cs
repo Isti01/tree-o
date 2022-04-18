@@ -3,8 +3,8 @@ using UnityEngine.SceneManagement;
 
 namespace Presentation.World {
 public class GameManager : MonoBehaviour {
-	public const string MainMenuScene = "Scenes/MainMenu";
-	public const string SimulationScene = "Scenes/Simulation";
+	private const string MainMenuScene = "Scenes/MainMenu";
+	private const string SimulationScene = "Scenes/Simulation";
 
 	public void LoadMenu() {
 		SceneManager.LoadScene(MainMenuScene);
