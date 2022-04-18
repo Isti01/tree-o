@@ -88,6 +88,7 @@ public class EventDispatcher {
 			//Call listeners which listen to the exact event type or one of its superclasses
 			Type type = eventData.GetType();
 			do {
+				//Suppress false warning: type can't be null
 				// ReSharper disable once AssignNullToNotNullAttribute
 				if (!_listeners.TryGetValue(type, out IList<RegisteredListener> listeners)) break;
 

@@ -90,7 +90,7 @@ public class Unit {
 		ISet<TilePosition> reachableCheckpoints = World.Navigation.GetReachablePositionSubset(TilePosition,
 			new HashSet<TilePosition>(_checkPoints));
 
-		for (var i = 0; i < _checkPoints.Count - 1; i++) {
+		for (int i = 0; i < _checkPoints.Count - 1; i++) {
 			if (reachableCheckpoints.Contains(_checkPoints[i])) continue;
 			_checkPoints.RemoveAt(i);
 			i--;

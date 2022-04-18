@@ -4,6 +4,9 @@ using NUnit.Framework;
 
 namespace LogicTests {
 
+//Suppress suggestion: using local functions would require us to cast them to Function instance each time
+// ReSharper disable ConvertToLocalFunction
+
 /// <summary>
 /// Tests the full functionality of the <see cref="CommandDispatcher"/> class.
 /// </summary>
@@ -42,7 +45,7 @@ public class CommandDispatcherTest {
 	}
 
 	[Test]
-	public void TestReaddingConsumer() {
+	public void TestReAddingConsumer() {
 		CommandDispatcher dispatcher = new CommandDispatcher();
 		CommandDispatcher.Consumer<Sample, BiCommandResult> consumer = _ => BiCommandResult.Success;
 		dispatcher.RegisterConsumer(consumer);

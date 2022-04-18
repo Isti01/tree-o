@@ -1,3 +1,4 @@
+// ReSharper disable All
 using UnityEditor;
 using System.Linq;
 using System;

@@ -42,10 +42,10 @@ public static class WorldTestUtils {
 		result.Append(boundary, world.Width + 2);
 		result.Append(Environment.NewLine);
 
-		for (var y = 0; y < world.Height; y++) {
+		for (int y = 0; y < world.Height; y++) {
 			result.Append(boundary);
 
-			for (var x = 0; x < world.Width; x++) {
+			for (int x = 0; x < world.Width; x++) {
 				result.Append(world.GetTile(x, y) switch {
 					null => ' ',
 					Castle c => c.OwnerColor == Color.Red ? 'R' : 'B',

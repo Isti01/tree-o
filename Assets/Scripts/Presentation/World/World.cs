@@ -46,7 +46,7 @@ public class World : MonoBehaviour {
 	private Dictionary<TilePosition, GameObject> _tileHighlights;
 	private Dictionary<Logic.Data.World.Unit, Unit> _units;
 
-	private GameOverview GameOverview => _simulationManager.GameOverview;
+	private IGameOverview GameOverview => _simulationManager.GameOverview;
 
 	private void Start() {
 		_simulationManager = FindObjectOfType<SimulationManager>();
@@ -78,8 +78,8 @@ public class World : MonoBehaviour {
 		transform.position = new Vector3(-world.Width / 2.0f, -world.Width / 2.0f, 0);
 		_map = new GameObject[world.Width, world.Height];
 
-		for (var x = 0; x < world.Width; x++) {
-			for (var y = 0; y < world.Height; y++) InstantiateTile(x, y, world);
+		for (int x = 0; x < world.Width; x++) {
+			for (int y = 0; y < world.Height; y++) InstantiateTile(x, y, world);
 		}
 	}
 
@@ -125,7 +125,7 @@ public class World : MonoBehaviour {
 		HighlightTile(_selectedBarrack.Position);
 
 		float checkpointCount = _selectedBarrack.CheckPoints.Count;
-		var current = 1;
+		int current = 1;
 		foreach (TilePosition position in _selectedBarrack.CheckPoints) {
 			var highlight = HighlightTile(position);
 			highlight.ScaleIntensity(current / checkpointCount);
@@ -264,7 +264,7 @@ public class World : MonoBehaviour {
 		laserRenderer.enabled = true;
 
 		IEnumerator LaserUpdater() {
-			var remainingTime = 0.15f;
+			float remainingTime = 0.15f;
 			while (remainingTime > 0) {
 				yield return new WaitForFixedUpdate();
 				remainingTime -= Time.fixedDeltaTime;
@@ -326,7 +326,7 @@ public class World : MonoBehaviour {
 				GameObject structure = InstantiateTower(parent, tower);
 				return structure;
 			}
-			case Logic.Data.World.Obstacle obstacle: {
+			case Logic.Data.World.Obstacle _: {
 				GameObject structure = Instantiate(obstaclePrefab, parent.transform);
 				return structure;
 			}

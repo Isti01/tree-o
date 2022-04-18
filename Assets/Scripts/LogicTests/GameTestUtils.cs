@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Logic.Data;
 using Logic.Data.World;
 
@@ -14,7 +15,43 @@ public static class GameTestUtils {
 	/// </summary>
 	/// <returns>a newly created overview instance</returns>
 	public static GameOverview CreateOverview() {
-		return CreateOverview(((config, economy, world) => {}));
+		//Suggestion needs to be disabled manually: C# language level doesn't support discard parameters
+		// ReSharper disable UnusedParameter.Local
+		return CreateOverview((overview, economy, world) => {});
+		// ReSharper restore UnusedParameter.Local
+	}
+
+	/// <summary>
+	/// Shorthand for the method with the same name.
+	/// This overload "ignores" two of the <see cref="Action"/> parameters.
+	/// </summary>
+	/// <returns>a newly created overview instance</returns>
+	public static GameOverview CreateOverview(Action<GameOverviewConfig> configInitializer) {
+		// ReSharper disable UnusedParameter.Local
+		return CreateOverview((overview, economy, world) => configInitializer(overview));
+		// ReSharper restore UnusedParameter.Local
+	}
+
+	/// <summary>
+	/// Shorthand for the method with the same name.
+	/// This overload "ignores" two of the <see cref="Action"/> parameters.
+	/// </summary>
+	/// <returns>a newly created overview instance</returns>
+	public static GameOverview CreateOverview(Action<GameEconomyConfig> configInitializer) {
+		// ReSharper disable UnusedParameter.Local
+		return CreateOverview((overview, economy, world) => configInitializer(economy));
+		// ReSharper restore UnusedParameter.Local
+	}
+
+	/// <summary>
+	/// Shorthand for the method with the same name.
+	/// This overload "ignores" two of the <see cref="Action"/> parameters.
+	/// </summary>
+	/// <returns>a newly created overview instance</returns>
+	public static GameOverview CreateOverview(Action<GameWorldConfig> configInitializer) {
+		// ReSharper disable UnusedParameter.Local
+		return CreateOverview((overview, economy, world) => configInitializer(world));
+		// ReSharper restore UnusedParameter.Local
 	}
 
 	/// <summary>
@@ -36,8 +73,8 @@ public static class GameTestUtils {
 
 		configInitializer(overviewConfig, economyConfig, worldConfig);
 
-		Action<Exception> errorHandler = e => throw e;
-		return new GameOverview(errorHandler, rngSeed, overviewConfig, economyConfig, worldConfig);
+		void ErrorHandler(Exception e) => throw e;
+		return new GameOverview(ErrorHandler, rngSeed, overviewConfig, economyConfig, worldConfig);
 	}
 
 	/// <summary>
@@ -46,6 +83,7 @@ public static class GameTestUtils {
 	/// While the values have public setters, they should only be used prior to passing the
 	/// instance to the logic component: modifying values while the game is running might break stuff.
 	/// </summary>
+	[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 	public class GameOverviewConfig : IGameOverviewConfig {
 		public float FightingPhaseDuration { get; set; } = 10;
 	}
@@ -56,6 +94,7 @@ public static class GameTestUtils {
 	/// While the values have public setters, they should only be used prior to passing the
 	/// instance to the logic component: modifying values while the game is running might break stuff.
 	/// </summary>
+	[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 	public class GameEconomyConfig : IGameEconomyConfig {
 		public int StartingBalance { get; set; } = 11;
 		public int RoundBasePay { get; set; } = 13;
@@ -69,6 +108,7 @@ public static class GameTestUtils {
 	/// While the values have public setters, they should only be used prior to passing the
 	/// instance to the logic component: modifying values while the game is running might break stuff.
 	/// </summary>
+	[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 	public class GameWorldConfig : IGameWorldConfig {
 		public int Width { get; set; } = 10;
 		public int Height { get; set; } = 10;
@@ -83,6 +123,7 @@ public static class GameTestUtils {
 	/// While the values have public setters, they should only be used prior to passing the
 	/// instance to the logic component: modifying values while the game is running might break stuff.
 	/// </summary>
+	[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 	public class UnitTypeData : IUnitTypeData {
 		public string Name { get; set; } = "Test Unit";
 		public float Health { get; set; } = 10;
@@ -97,6 +138,7 @@ public static class GameTestUtils {
 	/// While the values have public setters, they should only be used prior to passing the
 	/// instance to the logic component: modifying values while the game is running might break stuff.
 	/// </summary>
+	[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 	public class TowerTypeData : ITowerTypeData {
 		public string Name { get; set; } = "Test Tower";
 		public float Damage { get; set; } = 1;

@@ -55,7 +55,7 @@ public class GameOverviewTest {
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
 
 		float deltaTime = overview.TimeLeftFromPhase * 0.3f;
-		for (var i = 0; i < 3; i++) {
+		for (int i = 0; i < 3; i++) {
 			Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
 			Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
 			Assert.AreEqual(1, overview.World.Units.Count);
@@ -67,9 +67,9 @@ public class GameOverviewTest {
 
 	[Test]
 	public void TestFinishedPhaseHasNoNextPhase() {
-		GameOverview overview = GameTestUtils.CreateOverview(((overviewConfig, economyConfig, worldConfig) => {
+		GameOverview overview = GameTestUtils.CreateOverview(worldConfig => {
 			worldConfig.CastleStartingHealth = 0; //Dirty hack, hopefully won't break
-		}));
+		});
 
 		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
 		overview.AdvancePhase();

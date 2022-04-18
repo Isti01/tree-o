@@ -22,7 +22,7 @@ public class WorldGeneratorTest {
 
 		Stopwatch stopwatch = new Stopwatch();
 		stopwatch.Start();
-		for (var i = 0; i < HighRepeatCount; i++) {
+		for (int i = 0; i < HighRepeatCount; i++) {
 			WorldTestUtils.GenerateWorld();
 		}
 

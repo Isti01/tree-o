@@ -20,11 +20,10 @@ public class CommandDispatcher {
 	/// <exception cref="IllegalHandlerStateException">if a handler is already set</exception>
 	public void RegisterConsumer<TC, TR>(Consumer<TC, TR> consumer)
 		where TC : BaseCommand<TR> where TR : ICommandResult {
-		if (_consumers.TryGetValue(typeof(TC), out Delegate old)) {
+		if (_consumers.TryGetValue(typeof(TC), out Delegate old))
 			throw new IllegalHandlerStateException($"{typeof(TC)} already has a handler: {old}");
-		} else {
-			_consumers[typeof(TC)] = consumer;
-		}
+
+		_consumers[typeof(TC)] = consumer;
 	}
 
 	/// <summary>
