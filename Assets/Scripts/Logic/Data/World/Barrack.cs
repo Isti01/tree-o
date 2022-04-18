@@ -75,7 +75,7 @@ public class Barrack : Building {
 		World.DeployUnit(this, type);
 	}
 
-	public void DeleteUnreachableCheckpoints() {
+	internal void DeleteUnreachableCheckpoints() {
 		ISet<TilePosition> oldCheckpoints = new HashSet<TilePosition>(_checkPoints);
 		ISet<TilePosition> reachableCheckpoints = World.Navigation.GetReachablePositionSubset(Position,
 			oldCheckpoints);
