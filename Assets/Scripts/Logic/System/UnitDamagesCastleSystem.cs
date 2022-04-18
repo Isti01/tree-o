@@ -24,7 +24,7 @@ internal class UnitDamagesCastleSystem : BaseSystem {
 				enemyCastle.Damage(unit, unit.Type.Damage);
 			}
 
-			unit.Kill();
+			unit.DestroyWithoutDamage();
 			unit.World.DestroyUnit(unit);
 		}
 	}

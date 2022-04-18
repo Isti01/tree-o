@@ -7,7 +7,7 @@ namespace Logic.System {
 
 /// <summary>
 /// System responsible for dealing with the destruction of <see cref="Unit"/> instances:
-/// when <see cref="UnitDamagedEvent"/> is invoked and the <see cref="Unit"/> ends up getting killed,
+/// when <see cref="UnitDamagedEvent"/> is invoked and the <see cref="Unit"/> ends up getting destroyed,
 /// this system is (indirectly) responsible for raising <see cref="UnitDestroyedEvent"/>
 /// and executing relevant actions.
 /// </summary>
@@ -25,7 +25,7 @@ internal class DestroyUnitSystem : BaseSystem {
 
 	private void On(UnitDestroyedEvent e) {
 		IGameOverview overview = e.Unit.World.Overview;
-		overview.GetEnemyTeam(e.Unit.Owner).GiveMoney(overview.EconomyConfig.NewUnitsKilledPay);
+		overview.GetEnemyTeam(e.Unit.Owner).GiveMoney(overview.EconomyConfig.NewUnitsDestroyedPay);
 	}
 }
 

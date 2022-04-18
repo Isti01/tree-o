@@ -102,7 +102,7 @@ public class Unit {
 		World.Overview.Events.Raise(new UnitDamagedEvent(this, attacker));
 	}
 
-	internal void Kill() {
+	internal void DestroyWithoutDamage() {
 		CurrentHealth = 0;
 	}
 

@@ -59,7 +59,7 @@ public static class GameTestUtils {
 	public class GameEconomyConfig : IGameEconomyConfig {
 		public int StartingBalance { get; set; } = 11;
 		public int RoundBasePay { get; set; } = 13;
-		public int NewUnitsKilledPay { get; set; } = 17;
+		public int NewUnitsDestroyedPay { get; set; } = 17;
 		public int TotalUnitsPurchasedPay { get; set; } = 19;
 	}
 

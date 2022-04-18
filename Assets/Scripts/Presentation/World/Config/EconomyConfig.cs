@@ -14,7 +14,7 @@ public class EconomyConfig : ScriptableObject, IGameEconomyConfig {
 
 	[SerializeField]
 	[Min(0)]
-	private int newUnitsKilledPay;
+	private int newUnitsDestroyedPay;
 
 	[SerializeField]
 	[Min(0)]
@@ -22,7 +22,7 @@ public class EconomyConfig : ScriptableObject, IGameEconomyConfig {
 
 	public int StartingBalance => startingBalance;
 	public int RoundBasePay => roundBasePay;
-	public int NewUnitsKilledPay => newUnitsKilledPay;
+	public int NewUnitsDestroyedPay => newUnitsDestroyedPay;
 	public int TotalUnitsPurchasedPay => totalUnitsPurchasedPay;
 }
 }

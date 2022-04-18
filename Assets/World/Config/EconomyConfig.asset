@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startingBalance: 1000
   roundBasePay: 200
-  newUnitsKilledPay: 10
+  newUnitsDestroyedPay: 10
   totalUnitsPurchasedPay: 10

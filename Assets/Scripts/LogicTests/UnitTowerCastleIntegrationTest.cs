@@ -103,7 +103,7 @@ public class UnitTowerCastleIntegrationTest {
 			Assert.AreEqual(overview.World.Config.CastleStartingHealth, team.Castle.Health, 0.01);
 		Assert.IsTrue(unitDestroyedEvent);
 		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
-		Assert.AreEqual(oldMoney + overview.EconomyConfig.NewUnitsKilledPay
+		Assert.AreEqual(oldMoney + overview.EconomyConfig.NewUnitsDestroyedPay
 			+ overview.EconomyConfig.RoundBasePay, towerTeam.Money);
 	}
 
