@@ -26,26 +26,25 @@ internal class WorldGenerator {
 	}
 
 	private void GenerateWorld() {
-		List<TileObject> occupieds = new List<TileObject>();
-		List<TileObject> otherside = new List<TileObject>();
+		List<TileObject> occupiedList = new List<TileObject>();
 		TilePosition tp;
 		int x = _random.Next() % _width;
 		int y = _random.Next() % (_height / 5);
-		occupieds.Add(_constructors.CreateCastle(new TilePosition(x, y), Color.Red));
+		occupiedList.Add(_constructors.CreateCastle(new TilePosition(x, y), Color.Red));
 		do {
 			x = _random.Next() % _width;
 			y = _random.Next() % (_height / 5);
 			tp = new TilePosition(x, y);
-		} while (occupieds.Any(occupied => occupied.Position.FirstNormDistance(tp) < 3));
+		} while (occupiedList.Any(occupied => occupied.Position.FirstNormDistance(tp) < 3));
 
-		occupieds.Add(_constructors.CreateBarrack(new TilePosition(x, y), Color.Red));
+		occupiedList.Add(_constructors.CreateBarrack(new TilePosition(x, y), Color.Red));
 		do {
 			x = _random.Next() % _width;
 			y = _random.Next() % (_height / 5);
 			tp = new TilePosition(x, y);
-		} while (occupieds.Any(occupied => occupied.Position.FirstNormDistance(tp) < 3));
+		} while (occupiedList.Any(occupied => occupied.Position.FirstNormDistance(tp) < 3));
 
-		occupieds.Add(_constructors.CreateBarrack(new TilePosition(x, y), Color.Red));
+		occupiedList.Add(_constructors.CreateBarrack(new TilePosition(x, y), Color.Red));
 
 		int obstacleCount = (_random.Next() % ((_width * _height) / 60)) + 2;
 		int i = 0, rep = 0;
@@ -58,16 +57,16 @@ internal class WorldGenerator {
 			for (int j = 0; j < obstacleSize && allGood; j++) {
 				for (int k = 0; k < obstacleSize && allGood; k++) {
 					tp = new TilePosition(x + j, y + k);
-					allGood = !occupieds.Where(building => !(building is Obstacle))
+					allGood = !occupiedList.Where(building => !(building is Obstacle))
 							.Any(occupied => occupied.Position.FirstNormDistance(tp) < 4)
-						&& !occupieds.Any(obj => obj.Position.Equals(tp));
+						&& !occupiedList.Any(obj => obj.Position.Equals(tp));
 				}
 			}
 
 			if (allGood) {
 				for (int j = 0; j < obstacleSize; j++) {
 					for (int k = 0; k < obstacleSize; k++) {
-						occupieds.Add(_constructors.CreateObstacle(new TilePosition(x + j, y + k)));
+						occupiedList.Add(_constructors.CreateObstacle(new TilePosition(x + j, y + k)));
 					}
 				}
 
@@ -75,26 +74,26 @@ internal class WorldGenerator {
 			}
 		}
 
-		foreach (var castle in occupieds.Where(castle => castle is Castle)) {
-			otherside.Add(_constructors.CreateCastle(
-				new TilePosition(_width - castle.Position.X - 1, _height - castle.Position.Y - 1), Color.Blue));
+		List<TileObject> otherSide = new List<TileObject>();
+		foreach (TileObject tileObject in occupiedList) {
+			TilePosition newPos = new TilePosition(_width, _height)
+				.Subtracted(tileObject.Position).Subtracted(1, 1);
+			if (tileObject is Castle) {
+				otherSide.Add(_constructors.CreateCastle(newPos, Color.Blue));
+			} else if (tileObject is Barrack) {
+				otherSide.Add(_constructors.CreateBarrack(newPos, Color.Blue));
+			} else if (tileObject is Obstacle) {
+				otherSide.Add(_constructors.CreateObstacle(newPos));
+			} else {
+				throw new Exception($"Unexpected tile object: {tileObject}");
+			}
 		}
 
-		foreach (var barrack in occupieds.Where(barrack => barrack is Barrack)) {
-			otherside.Add(_constructors.CreateBarrack(
-				new TilePosition(_width - barrack.Position.X - 1, _height - barrack.Position.Y - 1), Color.Blue));
-		}
-
-		foreach (var obstacle in occupieds.Where(obstacle => obstacle is Obstacle)) {
-			otherside.Add(_constructors.CreateObstacle(new TilePosition(_width - obstacle.Position.X - 1,
-				_height - obstacle.Position.Y - 1)));
-		}
-
-		foreach (var obj in occupieds) {
+		foreach (TileObject obj in occupiedList) {
 			_grid[obj.Position.X, obj.Position.Y] = obj;
 		}
 
-		foreach (var obj in otherside) {
+		foreach (TileObject obj in otherSide) {
 			_grid[obj.Position.X, obj.Position.Y] = obj;
 		}
 	}

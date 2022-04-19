@@ -38,7 +38,7 @@ public class SimulationUI : MonoBehaviour {
 	private UIState _uiState = UIState.UnitDeployment;
 	private UnitDeploymentUI _unitDeployment;
 
-	private GameOverview GameOverview => _simulationManager.GameOverview;
+	private IGameOverview GameOverview => _simulationManager.GameOverview;
 
 	private void Start() {
 		_lastUiState = _uiState;
@@ -264,14 +264,10 @@ public class SimulationUI : MonoBehaviour {
 	}
 
 	private void OnTileSelected(TilePosition position, SimulationManager.MouseButton button) {
-		switch (_uiState) {
-			case UIState.TowerPlacing:
-				if (button == SimulationManager.MouseButton.Left) HandleTowerPlacingTileSelection(position);
-
-				break;
-			case UIState.UnitDeployment:
-				HandleUnitDeploymentTileSelection(position, button);
-				break;
+		if (_uiState == UIState.TowerPlacing) {
+			if (button == SimulationManager.MouseButton.Left) HandleTowerPlacingTileSelection(position);
+		} else if (_uiState == UIState.UnitDeployment) {
+			HandleUnitDeploymentTileSelection(position, button);
 		}
 	}
 
@@ -309,9 +305,9 @@ public class SimulationUI : MonoBehaviour {
 			StartUnitDeployment(Logic.Data.Color.Red);
 		} else {
 			UpdateUiState(UIState.Battle);
-			if (GameOverview.CurrentPhase == GamePhase.Prepare)
-				if (!GameOverview.Commands.Issue(new AdvancePhaseCommand(GameOverview)))
-					Debug.LogError("[GamePhase] Failed to advance the GamePhase");
+			if (GameOverview.CurrentPhase == GamePhase.Prepare
+				&& !GameOverview.Commands.Issue(new AdvancePhaseCommand(GameOverview)))
+				Debug.LogError("[GamePhase] Failed to advance the GamePhase");
 		}
 	}
 

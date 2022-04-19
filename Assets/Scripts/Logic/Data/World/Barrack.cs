@@ -65,7 +65,7 @@ public class Barrack : Building {
 	}
 
 	internal void Spawn() {
-		if (!QueuedUnits.Any()) throw new InvalidOperationException($"No queued units exist; nothing to spawn");
+		if (!QueuedUnits.Any()) throw new InvalidOperationException("No queued units exist; nothing to spawn");
 
 		if (IsOnCooldown) throw new InvalidOperationException($"Spawning is on cooldown: {RemainingCooldownTime}");
 
@@ -80,7 +80,7 @@ public class Barrack : Building {
 		ISet<TilePosition> reachableCheckpoints = World.Navigation.GetReachablePositionSubset(Position,
 			oldCheckpoints);
 
-		for (var i = 0; i < _checkPoints.Count - 1; i++) {
+		for (int i = 0; i < _checkPoints.Count - 1; i++) {
 			if (reachableCheckpoints.Contains(_checkPoints[i])) continue;
 			_checkPoints.RemoveAt(i);
 			i--;

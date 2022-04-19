@@ -19,7 +19,7 @@ public class BarrackUnitIntegrationTest {
 		IUnitTypeData unitType = new GameTestUtils.UnitTypeData();
 		Assert.AreNotEqual(0, team.Barracks.Count);
 
-		var purchasedUnits = 0;
+		int purchasedUnits = 0;
 		while (team.Barracks.Any(b => b.QueuedUnits.Count == 0)) {
 			Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(team, unitType)));
 			purchasedUnits++;
@@ -35,7 +35,7 @@ public class BarrackUnitIntegrationTest {
 		IUnitTypeData unitType = new GameTestUtils.UnitTypeData { Speed = 0 };
 
 		//Purchase 3 units -> one of the barracks must have at least 2
-		for (var i = 0; i < 3; i++) Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(team, unitType)));
+		for (int i = 0; i < 3; i++) Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(team, unitType)));
 		Barrack barrack = team.Barracks.OrderByDescending(b => b.QueuedUnits.Count).First();
 
 		//Enter fighting phase
@@ -52,20 +52,20 @@ public class BarrackUnitIntegrationTest {
 
 		//Assert that cooldown lasts
 		float deltaTime = overview.World.Config.BarrackSpawnCooldownTime / 10;
-		for (var i = 0; i < 9; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
+		for (int i = 0; i < 9; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
 		Assert.IsTrue(barrack.QueuedUnits.Count > 0);
 		Assert.IsTrue(barrack.IsOnCooldown);
 
 		//Assert that the barrack spawn another unit
 		int oldQueued = barrack.QueuedUnits.Count;
-		for (var i = 0; i < 2; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
+		for (int i = 0; i < 2; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
 		Assert.AreEqual(3, overview.World.Units.Count + team.Barracks.Sum(b => b.QueuedUnits.Count));
 		Assert.AreEqual(oldQueued - 1, barrack.QueuedUnits.Count);
 		Assert.IsTrue(barrack.IsOnCooldown);
 
 		//Assert that the barrack won't be on cooldown after spawning all units
 		deltaTime = overview.World.Config.BarrackSpawnCooldownTime * 1.1f;
-		for (var i = 0; i < 3; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
+		for (int i = 0; i < 3; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
 		Assert.AreEqual(3, overview.World.Units.Count);
 		Assert.AreEqual(0, team.Barracks.Sum(b => b.QueuedUnits.Count));
 		Assert.IsFalse(barrack.IsOnCooldown);

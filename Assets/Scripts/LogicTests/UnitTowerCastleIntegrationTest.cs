@@ -33,7 +33,7 @@ public class UnitTowerCastleIntegrationTest {
 		//Enter fighting phase and move the unit
 		overview.AdvancePhase();
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
-		for (var i = 0; i < 10; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, 1)));
+		for (int i = 0; i < 10; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, 1)));
 
 		//Validate the results
 		Assert.AreEqual(0, overview.World.Units.Count);
@@ -58,7 +58,7 @@ public class UnitTowerCastleIntegrationTest {
 		//Enter fighting phase and move the units
 		overview.AdvancePhase();
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
-		for (var i = 0; i < 10; i++) overview.Commands.Issue(new AdvanceTimeCommand(overview, 1));
+		for (int i = 0; i < 10; i++) overview.Commands.Issue(new AdvanceTimeCommand(overview, 1));
 
 		//Validate the results
 		Assert.AreEqual(0, overview.World.Units.Count);
@@ -68,9 +68,9 @@ public class UnitTowerCastleIntegrationTest {
 
 	[Test]
 	public void TestTowerDestroysUnit() {
-		GameOverview overview = GameTestUtils.CreateOverview(((overviewConfig, economyConfig, worldConfig) => {
+		GameOverview overview = GameTestUtils.CreateOverview(worldConfig => {
 			worldConfig.MaxBuildingDistance = worldConfig.Width * worldConfig.Height;
-		}));
+		});
 
 		GameTeam unitTeam = overview.GetTeam(Color.Blue);
 		GameTeam towerTeam = overview.GetEnemyTeam(unitTeam);
@@ -88,14 +88,14 @@ public class UnitTowerCastleIntegrationTest {
 			overview.Commands.Issue(new BuildTowerCommand(towerTeam, towerType, towerPosition)));
 
 		//Set up event listener
-		var unitDestroyedEvent = false;
+		bool unitDestroyedEvent = false;
 		overview.Events.AddListener<UnitDestroyedEvent>(_ => unitDestroyedEvent = true);
 
 		//Enter fighting phase and let the tower kill the unit
 		int oldMoney = towerTeam.Money;
 		overview.AdvancePhase();
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
-		for (var i = 0; i < 10; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, 0.1f)));
+		for (int i = 0; i < 10; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, 0.1f)));
 
 		//Validate the results
 		Assert.AreEqual(0, overview.World.Units.Count);
@@ -109,9 +109,9 @@ public class UnitTowerCastleIntegrationTest {
 
 	[Test]
 	public void TestTowerCooldown() {
-		GameOverview overview = GameTestUtils.CreateOverview(((overviewConfig, economyConfig, worldConfig) => {
+		GameOverview overview = GameTestUtils.CreateOverview(overviewConfig => {
 			overviewConfig.FightingPhaseDuration = float.PositiveInfinity;
-		}));
+		});
 
 		GameTeam unitTeam = overview.GetTeam(Color.Blue);
 		GameTeam towerTeam = overview.GetEnemyTeam(unitTeam);
@@ -132,7 +132,7 @@ public class UnitTowerCastleIntegrationTest {
 		//Enter fighting phase and let the tower shoot at the unit
 		overview.AdvancePhase();
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
-		var shot = false;
+		bool shot = false;
 		overview.Events.AddListener<TowerShotEvent>(_ => shot = true);
 		while (!shot) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon)));
 
@@ -140,12 +140,12 @@ public class UnitTowerCastleIntegrationTest {
 		shot = false;
 		Assert.IsTrue(tower.IsOnCooldown);
 		float deltaTime = towerType.CooldownTime / 10;
-		for (var i = 0; i < 9; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
+		for (int i = 0; i < 9; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
 		Assert.IsFalse(shot);
 		Assert.IsTrue(tower.IsOnCooldown);
 
 		//Assert that the tower shoots again
-		for (var i = 0; i < 2; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
+		for (int i = 0; i < 2; i++) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, deltaTime)));
 		Assert.IsTrue(shot);
 		Assert.IsTrue(tower.IsOnCooldown);
 	}
@@ -191,8 +191,8 @@ public class UnitTowerCastleIntegrationTest {
 			int[] dx = { -1, 0, 0, 1 };
 			int[] dy = { 0, 1, -1, 0 };
 			foreach (Barrack barrack in world.Overview.GetEnemyTeam(towerTeam).Barracks) {
-				var any = false;
-				for (var i = 0; i < 4 && !any; i++) {
+				bool any = false;
+				for (int i = 0; i < 4 && !any; i++) {
 					TilePosition position = barrack.Position.Added(dx[i], dy[i]);
 					if (!towerTeam.AvailableTowerPositions.Contains(position)) continue;
 					any = true;
@@ -221,15 +221,15 @@ public class UnitTowerCastleIntegrationTest {
 		Assert.IsNull(tower.Target);
 	}
 
-	private GameOverview CreateTowerTargetTestingGame(int worldWidth, int worldHeight,
+	private static GameOverview CreateTowerTargetTestingGame(int worldWidth, int worldHeight,
 		Func<GameTeam, GameWorld, IEnumerable<TilePosition>> towerPositionChooser,
 		float unitHealth, float towerDamage, float towerRange, float towerCooldown) {
-		GameOverview overview = GameTestUtils.CreateOverview(((overviewConfig, _, worldConfig) => {
+		GameOverview overview = GameTestUtils.CreateOverview((overviewConfig, _, worldConfig) => {
 			overviewConfig.FightingPhaseDuration = float.PositiveInfinity;
 			worldConfig.Width = worldWidth;
 			worldConfig.Height = worldHeight;
 			worldConfig.MaxBuildingDistance = worldConfig.Height * worldConfig.Width;
-		}));
+		});
 
 		GameTeam unitTeam = overview.Teams.First();
 		GameTeam towerTeam = overview.GetEnemyTeam(unitTeam);

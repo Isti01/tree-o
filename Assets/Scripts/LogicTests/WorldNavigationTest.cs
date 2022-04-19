@@ -16,13 +16,13 @@ public class WorldNavigationTest {
 	[Test]
 	public void CanReachOwnEmptyTile() {
 		WorldNavigation navigation = CreateNavigation(CreateGrid(3, 3));
-		var tile = new TilePosition(1, 1);
+		TilePosition tile = new TilePosition(1, 1);
 		Assert.IsTrue(navigation.IsPositionReachable(tile, tile));
 	}
 
 	[Test]
 	public void CanReachOwnFilledTile() {
-		var tile = new TilePosition(1, 1);
+		TilePosition tile = new TilePosition(1, 1);
 		WorldNavigation navigation = CreateNavigation(CreateGrid(3, 3, tile));
 		Assert.IsTrue(navigation.IsPositionReachable(tile, tile));
 	}
@@ -30,32 +30,32 @@ public class WorldNavigationTest {
 	[Test]
 	public void CanReachEmptyTile() {
 		WorldNavigation navigation = CreateNavigation(CreateGrid(5, 3));
-		var from = new TilePosition(1, 1);
-		var to = new TilePosition(4, 1);
+		TilePosition from = new TilePosition(1, 1);
+		TilePosition to = new TilePosition(4, 1);
 		Assert.IsTrue(navigation.IsPositionReachable(from, to));
 	}
 
 	[Test]
 	public void CanReachFilledTile() {
-		var to = new TilePosition(4, 1);
+		TilePosition to = new TilePosition(4, 1);
 		WorldNavigation navigation = CreateNavigation(CreateGrid(5, 3, to));
-		var from = new TilePosition(1, 1);
+		TilePosition from = new TilePosition(1, 1);
 		Assert.IsTrue(navigation.IsPositionReachable(from, to));
 	}
 
 	[Test]
 	public void CanNotReachEmptyButUnreachableTile() {
 		WorldNavigation navigation = CreateNavigation(CreateGrid(3, 1, new TilePosition(1, 0)));
-		var from = new TilePosition(0, 0);
-		var to = new TilePosition(2, 0);
+		TilePosition from = new TilePosition(0, 0);
+		TilePosition to = new TilePosition(2, 0);
 		Assert.IsFalse(navigation.IsPositionReachable(from, to));
 	}
 
 	[Test]
 	public void CanReachLineOfSightBlockedButReachableEmptyTile() {
 		WorldNavigation navigation = CreateNavigation(CreateGrid(7, 3, new TilePosition(3, 1)));
-		var from = new TilePosition(1, 1);
-		var to = new TilePosition(5, 1);
+		TilePosition from = new TilePosition(1, 1);
+		TilePosition to = new TilePosition(5, 1);
 		Assert.IsTrue(navigation.IsPositionReachable(from, to));
 	}
 
@@ -77,7 +77,7 @@ public class WorldNavigationTest {
 		List<Vector2> path = world.Navigation.TryGetPathDeltas(from, to, 0);
 		float x = from.X;
 		float y = from.Y;
-		foreach (var delta in path) {
+		foreach (Vector2 delta in path) {
 			x += delta.X;
 			y += delta.Y;
 		}
@@ -90,15 +90,15 @@ public class WorldNavigationTest {
 	[Repeat(HighRepeatCount)]
 	public void TestNoObjectInPath() {
 		GameWorld world = WorldTestUtils.GenerateWorld();
-		foreach (var to in world.GetTileObjectsOfType<Castle>()) {
-			foreach (var from in world.GetTileObjectsOfType<Barrack>()
+		foreach (Castle to in world.GetTileObjectsOfType<Castle>()) {
+			foreach (Barrack from in world.GetTileObjectsOfType<Barrack>()
 				.Where(obj => !obj.OwnerColor.Equals(to.OwnerColor))) {
 				List<Vector2> path = world.Navigation.TryGetPathDeltas(from.Position.ToVectorCentered(),
 					to.Position.ToVectorCentered(), 0);
 				float x = from.Position.X;
 				float y = from.Position.Y;
 				path.RemoveAt(path.Count - 1);
-				foreach (var delta in path) {
+				foreach (Vector2 delta in path) {
 					x += delta.X;
 					y += delta.Y;
 					Assert.IsNull(world[(int) x, (int) y]);

@@ -28,8 +28,8 @@ public class GameWorld {
 
 	public IEnumerable<TileObject> TileObjects {
 		get {
-			for (var x = 0; x < Width; x++)
-				for (var y = 0; y < Height; y++)
+			for (int x = 0; x < Width; x++)
+				for (int y = 0; y < Height; y++)
 					if (_grid[x, y] != null)
 						yield return _grid[x, y];
 		}

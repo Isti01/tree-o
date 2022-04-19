@@ -2,9 +2,9 @@
     "name": "Presentation",
     "rootNamespace": "",
     "references": [
-        "Logic",
-        "UnityEngine.UIElementsModule",
-        "Unity.RenderPipelines.Universal.Runtime"
+        "guid:20f989420405e3c418017ad141280e79",
+        "guid:023ac9b81facd43ebbb2a6f1c6252835",
+        "guid:15fc0a57446b3144c949da3e2b9737a9"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

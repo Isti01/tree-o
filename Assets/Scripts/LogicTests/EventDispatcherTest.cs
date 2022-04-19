@@ -4,6 +4,9 @@ using NUnit.Framework;
 
 namespace LogicTests {
 
+//Suppress suggestion: using local functions would require us to cast them to Function instance each time
+// ReSharper disable ConvertToLocalFunction
+
 /// <summary>
 /// Tests the full functionality of the <see cref="EventDispatcher"/> class.
 /// </summary>
@@ -46,7 +49,7 @@ public class EventDispatcherTest {
 	[Test]
 	public void TestInvocationExactListener() {
 		EventDispatcher dispatcher = NewErrorRethrowingDispatcher();
-		var called = false;
+		bool called = false;
 		dispatcher.AddListener<BicycleEvent>(_ => called = true);
 		dispatcher.Raise(new BicycleEvent());
 		Assert.IsTrue(called);
@@ -55,7 +58,7 @@ public class EventDispatcherTest {
 	[Test]
 	public void TestInvocationMultipleSameListeners() {
 		EventDispatcher dispatcher = NewErrorRethrowingDispatcher();
-		var counter = 0;
+		int counter = 0;
 		EventDispatcher.Listener<BicycleEvent> listener = _ => counter++;
 		dispatcher.AddListener(listener);
 		dispatcher.AddListener(listener);
@@ -66,7 +69,7 @@ public class EventDispatcherTest {
 	[Test]
 	public void TestInvocationPolymorphListeners() {
 		EventDispatcher dispatcher = NewErrorRethrowingDispatcher();
-		var counter = 0;
+		int counter = 0;
 		// ReSharper disable once AccessToModifiedClosure
 		dispatcher.AddListener<BaseEvent>(_ => counter++);
 		dispatcher.AddListener<BicycleEvent>(_ => counter++);
@@ -99,7 +102,7 @@ public class EventDispatcherTest {
 
 	[Test]
 	public void TestErrorHandlerSingleError() {
-		var called = false;
+		bool called = false;
 		EventDispatcher dispatcher = new EventDispatcher(errors => {
 			Assert.AreEqual(1, errors.Count);
 			called = true;
@@ -111,7 +114,7 @@ public class EventDispatcherTest {
 
 	[Test]
 	public void TestErrorHandlerMultipleErrors() {
-		var called = false;
+		bool called = false;
 		EventDispatcher dispatcher = new EventDispatcher(errors => {
 			Assert.AreEqual(3, errors.Count);
 			called = true;
@@ -126,7 +129,7 @@ public class EventDispatcherTest {
 	[Test]
 	public void TestInvocationOrder() {
 		EventDispatcher dispatcher = NewErrorRethrowingDispatcher();
-		var concat = "-";
+		string concat = "-";
 		// ReSharper disable once AccessToModifiedClosure
 		dispatcher.AddListener<BicycleEvent>(_ => concat += "3");
 		dispatcher.AddListener<BaseEvent>(EventDispatcher.Ordering.Normal, _ => concat += "3");

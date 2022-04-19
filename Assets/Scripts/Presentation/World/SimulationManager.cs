@@ -30,7 +30,7 @@ public class SimulationManager : MonoBehaviour {
 
 	public bool IsPaused { get; private set; }
 
-	public GameOverview GameOverview { get; private set; }
+	public IGameOverview GameOverview { get; private set; }
 
 	private void Awake() {
 		void ExceptionHandler(Exception e) {
@@ -39,10 +39,6 @@ public class SimulationManager : MonoBehaviour {
 
 		GameOverview = new GameOverview(ExceptionHandler, UnityEngine.Random.Range(0, 9999),
 			overviewConfig, economyConfig, worldConfig);
-		// GameOverview.Events.AddListener<Logic.Event.BaseEvent>(Logic.Event.EventDispatcher.Ordering.First,
-		// 	e => Debug.Log($"Event raised ('First' priority): {e}"));
-		// GameOverview.Events.AddListener<Logic.Event.BaseEvent>(Logic.Event.EventDispatcher.Ordering.Last,
-		// 	e => Debug.Log($"Event raised ('Last' priority): {e}"));
 	}
 
 	private void Start() {

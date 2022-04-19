@@ -82,7 +82,7 @@ public class GameTeam {
 	}
 
 	internal void IncrementPurchasedUnitCount(IUnitTypeData unitTypeData) {
-		var newCount = 1;
+		int newCount = 1;
 		if (_deployedUnitTypeCounts.TryGetValue(unitTypeData, out int count)) {
 			newCount += count;
 		}

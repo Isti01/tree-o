@@ -1,8 +1,8 @@
 ﻿namespace Logic.Data.World {
 internal class Dijkstra {
 	public int D { get; set; }
-	public int Ox { get; set; }
-	public int Oy { get; set; }
+	public int Ox { get; }
+	public int Oy { get; }
 	public int Px { get; set; }
 	public int Py { get; set; }
 	public bool Queued { get; set; }

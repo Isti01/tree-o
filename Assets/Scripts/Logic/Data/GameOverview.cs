@@ -81,13 +81,9 @@ public class GameOverview : IGameOverview {
 	}
 
 	public GameTeam GetEnemyTeam(GameTeam team) {
-		if (team == _redTeam) {
-			return _blueTeam;
-		} else if (team == _blueTeam) {
-			return _redTeam;
-		} else {
-			throw new Exception($"Unexpected team: {team}");
-		}
+		if (team == _redTeam) return _blueTeam;
+		if (team == _blueTeam) return _redTeam;
+		throw new Exception($"Unexpected team: {team}");
 	}
 
 	internal void AdvancePhase() {
@@ -107,10 +103,10 @@ public class GameOverview : IGameOverview {
 				CurrentPhase = GamePhase.Prepare;
 				TimeLeftFromPhase = float.PositiveInfinity;
 				foreach (GameTeam team in Teams) {
-					int oldmoney = team.Money;
+					int oldMoney = team.Money;
 					team.GiveMoney(EconomyConfig.RoundBasePay
 						+ team.PurchasedUnitCount * EconomyConfig.TotalUnitsPurchasedPay);
-					Events.Raise(new TeamMoneyUpdatedEvent(team,oldmoney));
+					Events.Raise(new TeamMoneyUpdatedEvent(team, oldMoney));
 				}
 			}
 		} else {
