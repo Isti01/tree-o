@@ -5,6 +5,7 @@ using Logic.Event.World.Barrack;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
+
 public class Barrack : Building {
 	#region Fields
 
@@ -76,11 +77,14 @@ public class Barrack : Building {
 	}
 
 	internal void DeleteUnreachableCheckpoints() {
-		ISet<TilePosition> oldCheckpoints = new HashSet<TilePosition>(_checkPoints);
+		HashSet<TilePosition> oldCheckpoints = new HashSet<TilePosition>(_checkPoints);
+		oldCheckpoints.RemoveWhere(pos => World[pos] != null);
 		ISet<TilePosition> reachableCheckpoints = World.Navigation.GetReachablePositionSubset(Position,
 			oldCheckpoints);
+		TilePosition enemyCastle = World.Overview.GetEnemyTeam(Owner).Castle.Position;
+		reachableCheckpoints = World.Navigation.GetReachablePositionSubset(enemyCastle, reachableCheckpoints);
 
-		for (int i = 0; i < _checkPoints.Count - 1; i++) {
+		for (int i = 0; i < _checkPoints.Count; i++) {
 			if (reachableCheckpoints.Contains(_checkPoints[i])) continue;
 			_checkPoints.RemoveAt(i);
 			i--;
@@ -94,4 +98,5 @@ public class Barrack : Building {
 
 	#endregion
 }
+
 }

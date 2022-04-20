@@ -4,6 +4,7 @@ using System.Linq;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
+
 public class Unit {
 	#region Fields
 
@@ -87,9 +88,12 @@ public class Unit {
 	internal void UpdatePlannedPath() {
 		_cachedCheckpointPath = null;
 
+		HashSet<TilePosition> checkpointsToCheck = new HashSet<TilePosition>(_checkPoints);
+		checkpointsToCheck.RemoveWhere(pos => World[pos] != null);
 		ISet<TilePosition> reachableCheckpoints = World.Navigation.GetReachablePositionSubset(TilePosition,
-			new HashSet<TilePosition>(_checkPoints));
+			checkpointsToCheck);
 
+		//No need to check the last checkpoint: it is the enemy castle
 		for (int i = 0; i < _checkPoints.Count - 1; i++) {
 			if (reachableCheckpoints.Contains(_checkPoints[i])) continue;
 			_checkPoints.RemoveAt(i);
@@ -118,4 +122,5 @@ public class Unit {
 		}
 	}
 }
+
 }
