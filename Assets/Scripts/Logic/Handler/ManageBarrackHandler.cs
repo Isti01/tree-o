@@ -18,14 +18,20 @@ internal class ManageBarrackHandler : BaseHandler {
 
 	private AddBarrackCheckpointCommand.CommandResult Handle(AddBarrackCheckpointCommand command) {
 		Barrack barrack = command.Barrack;
+		GameWorld world = barrack.World;
+		IGameOverview overview = world.Overview;
 		TilePosition position = command.Position;
 
-		if (barrack.World.Overview.CurrentPhase != GamePhase.Prepare)
-			return AddBarrackCheckpointCommand.CommandResult.MiscFailure;
+		if (overview.CurrentPhase != GamePhase.Prepare) return AddBarrackCheckpointCommand.CommandResult.MiscFailure;
 		if (barrack.CheckPoints.Contains(position)) return AddBarrackCheckpointCommand.CommandResult.AlreadyCheckpoint;
-		if (barrack.World[position] != null) return AddBarrackCheckpointCommand.CommandResult.InvalidPosition;
+		if (world[position] != null) return AddBarrackCheckpointCommand.CommandResult.InvalidPosition;
 
-		if (!barrack.World.Navigation.IsPositionReachable(barrack.Position, position))
+		if (!world.Navigation.IsPositionReachable(barrack.Position, position))
+			return AddBarrackCheckpointCommand.CommandResult.UnreachablePosition;
+
+		//Position can be reached from the barrack, but the enemy castle might not be reachable from that position
+		TilePosition enemyCastle = overview.GetEnemyTeam(barrack.Owner).Castle.Position;
+		if (!world.Navigation.IsPositionReachable(enemyCastle, position))
 			return AddBarrackCheckpointCommand.CommandResult.UnreachablePosition;
 
 		barrack.PushCheckPoint(position);
