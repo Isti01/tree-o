@@ -48,7 +48,8 @@ public class GameWorld {
 	internal GameWorld(IGameOverview overview, IGameWorldConfig config) {
 		Overview = overview;
 		Config = config;
-		_grid = WorldGenerator.GenerateGrid(overview.Random.Next(), Width, Height, new TileObjectConstructors(this));
+		_grid = WorldGenerator.GenerateGrid(overview.Random.Next(), Width, Height,
+			config.GenerateObstacles, new TileObjectConstructors(this));
 		Navigation = new WorldNavigation(_grid);
 	}
 

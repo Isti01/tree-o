@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using Logic.Data;
 using Logic.Data.World;
+using NUnit.Framework;
 
 namespace LogicTests {
 
@@ -74,7 +75,11 @@ public static class GameTestUtils {
 		configInitializer(overviewConfig, economyConfig, worldConfig);
 
 		void ErrorHandler(Exception e) => throw e;
-		return new GameOverview(ErrorHandler, rngSeed, overviewConfig, economyConfig, worldConfig);
+		GameOverview overview = new GameOverview(ErrorHandler, rngSeed, overviewConfig, economyConfig, worldConfig);
+
+		TestContext.Out.WriteLine("Generated world:");
+		TestContext.Out.WriteLine(WorldTestUtils.WorldAsMultilineString(overview.World));
+		return overview;
 	}
 
 	/// <summary>
@@ -115,6 +120,7 @@ public static class GameTestUtils {
 		public float BarrackSpawnCooldownTime { get; set; } = 1;
 		public float CastleStartingHealth { get; set; } = 10;
 		public int MaxBuildingDistance { get; set; } = 5;
+		public bool GenerateObstacles { get; set; } = true;
 	}
 
 	/// <summary>

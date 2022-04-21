@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Logic.Data.World {
+
 internal class WorldGenerator {
-	public static TileObject[,] GenerateGrid(int seed, int width, int height, ITileObjectConstructors constructors) {
-		WorldGenerator generator = new WorldGenerator(seed, width, height, constructors);
+	public static TileObject[,] GenerateGrid(int seed, int width, int height,
+		bool generateObstacles, ITileObjectConstructors constructors) {
+		WorldGenerator generator = new WorldGenerator(seed, width, height, generateObstacles, constructors);
 		generator.GenerateWorld();
 		return generator._grid;
 	}
@@ -13,14 +15,17 @@ internal class WorldGenerator {
 	private readonly Random _random;
 	private readonly int _width;
 	private readonly int _height;
+	private readonly bool _generateObstacles;
 	private readonly ITileObjectConstructors _constructors;
 	private readonly TileObject[,] _grid;
 
-	private WorldGenerator(int seed, int width, int height, ITileObjectConstructors constructors) {
+	private WorldGenerator(int seed, int width, int height,
+		bool generateObstacles, ITileObjectConstructors constructors) {
 		if (width < 8 || height < 8) throw new ArgumentException("World must be at 8x8");
 		_random = new Random(seed);
 		_width = width;
 		_height = height;
+		_generateObstacles = generateObstacles;
 		_constructors = constructors;
 		_grid = new TileObject[width, height];
 	}
@@ -46,7 +51,7 @@ internal class WorldGenerator {
 
 		occupiedList.Add(_constructors.CreateBarrack(new TilePosition(x, y), Color.Red));
 
-		int obstacleCount = (_random.Next() % ((_width * _height) / 60)) + 2;
+		int obstacleCount = _generateObstacles ? (_random.Next() % ((_width * _height) / 60)) + 2 : 0;
 		int i = 0, rep = 0;
 		while (i < obstacleCount && rep < 1000) {
 			++rep;
@@ -104,4 +109,5 @@ internal class WorldGenerator {
 		public Obstacle CreateObstacle(TilePosition position);
 	}
 }
+
 }
