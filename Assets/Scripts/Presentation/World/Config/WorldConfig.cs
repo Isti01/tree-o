@@ -61,5 +61,6 @@ public class WorldConfig : ScriptableObject, IGameWorldConfig {
 	public float BarrackSpawnCooldownTime => barrackSpawnCooldownTime;
 	public float CastleStartingHealth => castleStartingHealth;
 	public int MaxBuildingDistance => maxBuildingDistance;
+	public bool GenerateObstacles => true;
 }
 }

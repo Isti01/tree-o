@@ -29,6 +29,7 @@ public static class WorldTestUtils {
 		config.Setup(c => c.BarrackSpawnCooldownTime).Returns(1);
 		config.Setup(c => c.Width).Returns(width);
 		config.Setup(c => c.Height).Returns(height);
+		config.Setup(c => c.GenerateObstacles).Returns(true);
 		GameWorld world = new GameWorld(overview.Object, config.Object);
 
 		TestContext.Out.WriteLine("Generated world:");
@@ -36,7 +37,12 @@ public static class WorldTestUtils {
 		return world;
 	}
 
-	private static string WorldAsMultilineString(GameWorld world) {
+	/// <summary>
+	/// Gets a multiline text that describes how the word looks. Useful for debugging.
+	/// </summary>
+	/// <param name="world">the world to visualize</param>
+	/// <returns>a text that visualizes the world</returns>
+	public static string WorldAsMultilineString(GameWorld world) {
 		const char boundary = '#';
 		StringBuilder result = new StringBuilder();
 		result.Append(boundary, world.Width + 2);
@@ -51,6 +57,7 @@ public static class WorldTestUtils {
 					Castle c => c.OwnerColor == Color.Red ? 'R' : 'B',
 					Barrack b => b.OwnerColor == Color.Red ? 'r' : 'b',
 					Obstacle _ => 'X',
+					Tower _ => 'T',
 					var v => throw new Exception($"Unexpected object: {v}")
 				});
 			}
