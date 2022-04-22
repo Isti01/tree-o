@@ -69,17 +69,11 @@ internal class WorldNavigation {
 		int[] diffX = { 0, 0, -1, 1 };
 		int[] diffY = { 1, -1, 0, 0 };
 
-		while (queue.Count > 0) {
-			int minValue = queue[0].D;
-			int minIndex = 0;
-			for (int i = 1; i < queue.Count; i++) {
-				if (minValue <= queue[i].D) continue;
-				minValue = queue[i].D;
-				minIndex = i;
-			}
-
-			Dijkstra u = queue[minIndex];
-			queue.RemoveAt(minIndex);
+		//Instead of removing from the queue, advance an index: this is faster.
+		//The first element always has the least weight due to all edges having the same cost (1).
+		int queueIndex = 0;
+		while (queue.Count > queueIndex) {
+			Dijkstra u = queue[queueIndex++];
 
 			if (u.D == int.MaxValue) break;
 
