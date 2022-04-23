@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: DmgTowerLvl3Type
   m_EditorClassIdentifier: 
   previewSprite: {fileID: 21300000, guid: 7d101f63fc97f4d4d9e0c136b2ea179c, type: 3}
-  spriteColored: {fileID: 21300000, guid: 7fac74e1e7ab3014287a02be134e0d27, type: 3}
-  spriteConstant: {fileID: 21300000, guid: 7ffaa0bc7d4a691459611cc282d136e6, type: 3}
+  spriteColored: {fileID: 21300000, guid: 7fe05da00de44fd40bc9acc64daca1b9, type: 3}
+  spriteConstant: {fileID: 21300000, guid: ee2a5d4fb13f7c94d831ad154c97db32, type: 3}
   spriteBackground: {fileID: 21300000, guid: e4d4401b34df3dc4b892c99ce76ea40a, type: 3}
   blueColor: {r: 0, g: 0.6050954, b: 1, a: 1}
   redColor: {r: 1, g: 0.27628225, b: 0, a: 1}
