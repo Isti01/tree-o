@@ -101,10 +101,10 @@ public static class GameTestUtils {
 	/// </summary>
 	[SuppressMessage("ReSharper", "AutoPropertyCanBeMadeGetOnly.Global")]
 	public class GameEconomyConfig : IGameEconomyConfig {
-		public int StartingBalance { get; set; } = 11;
-		public int RoundBasePay { get; set; } = 13;
-		public int NewUnitsDestroyedPay { get; set; } = 17;
-		public int TotalUnitsPurchasedPay { get; set; } = 19;
+		public int StartingBalance { get; set; } = 19;
+		public int RoundBasePay { get; set; } = 17;
+		public int NewUnitsDestroyedPay { get; set; } = 13;
+		public int TotalUnitsPurchasedPay { get; set; } = 11;
 	}
 
 	/// <summary>
@@ -150,9 +150,9 @@ public static class GameTestUtils {
 		public float Damage { get; set; } = 1;
 		public float Range { get; set; } = 3;
 		public float CooldownTime { get; set; } = 1;
-		public int BuildingCost { get; set; } = 1;
+		public int BuildingCost { get; set; } = 3;
 		public int DestroyRefund { get; set; } = 1;
-		public int UpgradeCost { get; set; } = 1;
+		public int UpgradeCost { get; set; } = 2;
 		public ITowerTypeData AfterUpgradeType { get; set; } = null;
 	}
 }
