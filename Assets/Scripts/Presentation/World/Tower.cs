@@ -29,6 +29,9 @@ public class Tower : Structure {
 		}
 	}
 
+	/// <summary>
+	/// Sets the displayed tower type
+	/// </summary>
 	public void SetData(Logic.Data.World.Tower data) {
 		_data = data;
 		var type = (TowerTypeData) data.Type;
@@ -48,6 +51,9 @@ public class Tower : Structure {
 		laserRenderer.colorGradient = laserGradient;
 	}
 
+	/// <summary>
+	/// Removes the tower from the scene
+	/// </summary>
 	public void DestroyTower() {
 		Destroy(gameObject);
 	}

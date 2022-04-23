@@ -17,6 +17,10 @@ public class Barrack : Structure {
 	[SerializeField]
 	private SpriteRenderer spriteColored;
 
+
+	/// <summary>
+	/// Updates the displayed barrack type
+	/// </summary>
 	public void SetData(Logic.Data.World.Barrack data) {
 		_data = data;
 		BarrackData type = _data.OwnerColor == Color.Blue ? blueBarrackData : redBarrackData;

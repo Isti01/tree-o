@@ -157,10 +157,12 @@ public class World : MonoBehaviour {
 		}
 	}
 
+	/// <returns>Returns the <see cref="Structure"/> on the given coordinates</returns>
 	public T LogicToPresentation<T>(TileObject tileObject) where T : Structure {
 		return _map[tileObject.Position.X, tileObject.Position.Y].GetComponentInChildren<T>();
 	}
 
+	/// <returns>Returns the <see cref="Unit"/> on the given coordinates</returns>
 	public Unit LogicToPresentation(Logic.Data.World.Unit unit) {
 		return _units[unit];
 	}
@@ -186,32 +188,13 @@ public class World : MonoBehaviour {
 		Debug.Log($"Removed Tower: {e.Tower}");
 	}
 
-	public TileHighlight HighlightTile(TilePosition pos) {
+	private TileHighlight HighlightTile(TilePosition pos) {
 		GameObject highlight = Instantiate(tileHighlightPrefab, _map[pos.X, pos.Y].transform);
 		_tileHighlights.Add(pos, highlight);
 		return highlight.GetComponent<TileHighlight>();
 	}
 
-	public TileHighlight HighlightTile(GameObject tile) {
-		TilePosition pos = tile.GetComponent<Tile>().Position;
-		return HighlightTile(pos);
-	}
-
-	public void RemoveHighlight(TilePosition pos) {
-		if (_tileHighlights.TryGetValue(pos, out GameObject obj)) {
-			_tileHighlights.Remove(pos);
-			Destroy(obj);
-		} else {
-			Debug.Log($"Failed to retrieve tile on position {pos}");
-		}
-	}
-
-	public void RemoveHighlight(GameObject tile) {
-		TilePosition pos = tile.GetComponent<Tile>().Position;
-		RemoveHighlight(pos);
-	}
-
-	public void RemoveHighlights() {
+	private void RemoveHighlights() {
 		foreach (GameObject obj in _tileHighlights.Values) Destroy(obj);
 
 		_tileHighlights.Clear();

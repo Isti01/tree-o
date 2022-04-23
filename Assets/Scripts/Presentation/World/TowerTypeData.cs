@@ -2,6 +2,9 @@ using Logic.Data.World;
 using UnityEngine;
 
 namespace Presentation.World {
+/// <summary>
+/// Enables the tower visualization settings to be configured in the Unity Editor
+/// </summary>
 [CreateAssetMenu(fileName = "New Tower Type", menuName = "World/Structures/Tower Type", order = 1)]
 public class TowerTypeData : ScriptableObject, ITowerTypeData {
 	[Header("Presentation-specific values")]

@@ -17,21 +17,33 @@ public class TileHighlight : MonoBehaviour {
 		if (highlightData) SetData(highlightData);
 	}
 
+	/// <summary>
+	/// Sets the highlight intensity to dimmed
+	/// </summary>
 	public void SetDimmed(bool dimmed = true) {
 		_dimmed = dimmed;
 		UpdateTile();
 	}
 
+	/// <summary>
+	/// Sets the highlight radius
+	/// </summary>
 	public void SetRadius(float outerRadius, float innerRadius = 0.0f) {
 		_light.pointLightOuterRadius = outerRadius;
 		_light.pointLightInnerRadius = innerRadius;
 	}
 
+	/// <summary>
+	/// Scales the highlight intensity
+	/// </summary>
 	public void ScaleIntensity(float scale) {
 		_scale = scale;
 		UpdateTile();
 	}
 
+	/// <summary>
+	/// Updates the displayed highlight type
+	/// </summary>
 	public void SetData(TileHighlightData data) {
 		highlightData = data;
 		_dimmed = false;
