@@ -21,9 +21,9 @@ MonoBehaviour:
   shootingEffect: {fileID: 0}
   ambientEffect: {fileID: 0}
   name: Sniper II
-  damage: 12
+  damage: 20
   range: 5
-  cooldownTime: 1.8
+  cooldownTime: 1.6
   buildingCost: 100
   destroyRefund: 150
   upgradeCost: 150

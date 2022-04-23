@@ -20,7 +20,8 @@ MonoBehaviour:
   destroyedSprite: {fileID: 0}
   attackEffect: {fileID: 0}
   destroyedEffect: {fileID: 0}
-  name: Turtle
+  airborne: 0
+  name: Tank
   health: 100
   damage: 1
   speed: 2

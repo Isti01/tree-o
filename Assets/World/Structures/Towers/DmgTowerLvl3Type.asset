@@ -21,9 +21,9 @@ MonoBehaviour:
   shootingEffect: {fileID: 0}
   ambientEffect: {fileID: 0}
   name: Heavy Hitter III
-  damage: 30
+  damage: 35
   range: 3
-  cooldownTime: 1.5
+  cooldownTime: 1
   buildingCost: 100
   destroyRefund: 225
   upgradeCost: 100
