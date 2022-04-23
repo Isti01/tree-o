@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: RngTowerLvl1Type
   m_EditorClassIdentifier: 
   previewSprite: {fileID: 21300000, guid: 7d69bc6151ffe184bb5822ba7a7dd059, type: 3}
-  spriteColored: {fileID: 21300000, guid: 339ad5cceb0a76441b82b792a6599b25, type: 3}
-  spriteConstant: {fileID: 21300000, guid: 77096e765182be941bac94ce695aae7b, type: 3}
+  spriteColored: {fileID: 21300000, guid: e295a136eb1ee434098bf6dd590c2ede, type: 3}
+  spriteConstant: {fileID: 21300000, guid: c02ce26f5a894de4f840f0139c5d6649, type: 3}
   spriteBackground: {fileID: 21300000, guid: 4f0cea2553d7ca2449e18f26414ec287, type: 3}
   blueColor: {r: 0, g: 0.6050954, b: 1, a: 1}
   redColor: {r: 1, g: 0.27628225, b: 0, a: 1}
