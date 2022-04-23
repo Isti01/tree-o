@@ -15,6 +15,7 @@ MonoBehaviour:
   color: {r: 0, g: 0.6256573, b: 1, a: 1}
   intactSpriteConstant: {fileID: 21300000, guid: 50fb4b79d6813b74e81526ea22e2806a, type: 3}
   intactSpriteColored: {fileID: 21300000, guid: 1d747fe2508c8de42903800721fa8989, type: 3}
-  destroyedSprite: {fileID: 0}
+  destroyedSpriteConstant: {fileID: 21300000, guid: bc5167d12fa72994687426c3402b45fa, type: 3}
+  destroyedSpriteColored: {fileID: 0}
   ambientEffect: {fileID: 0}
   explosionEffect: {fileID: 0}
