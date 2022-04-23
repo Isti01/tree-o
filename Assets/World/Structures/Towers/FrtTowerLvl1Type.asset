@@ -16,7 +16,7 @@ MonoBehaviour:
   spriteColored: {fileID: 21300000, guid: 2eb8a16626f9dfe45a9ec30247c2464c, type: 3}
   spriteConstant: {fileID: 21300000, guid: 9eca5b795dbdec3479b23fa285c00aea, type: 3}
   spriteBackground: {fileID: 21300000, guid: aa04bdbbf137ccc4cbeda59d33a40be8, type: 3}
-  blueColor: {r: 0, g: 0.6039216, b: 1, a: 1}
+  blueColor: {r: 0, g: 0.6050954, b: 1, a: 1}
   redColor: {r: 1, g: 0.27628225, b: 0, a: 1}
   shootingEffect: {fileID: 0}
   ambientEffect: {fileID: 0}
