@@ -6,6 +6,6 @@ public interface IGameWorldConfig {
 	public float CastleStartingHealth { get; }
 	public int MaxBuildingDistance { get; }
 	public bool GenerateObstacles { get; }
-	public float BarrackSpawnOffset { get; }
+	public float BarrackSpawnTimeOffset { get; }
 }
 }
