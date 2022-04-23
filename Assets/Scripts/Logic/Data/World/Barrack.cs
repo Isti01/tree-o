@@ -5,7 +5,6 @@ using Logic.Event.World.Barrack;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
-
 public class Barrack : Building {
 	#region Fields
 
@@ -66,7 +65,7 @@ public class Barrack : Building {
 	}
 
 	internal void ResetCooldown() {
-		RemainingCooldownTime = Index*World.Config.BarrackSpawnOffset;
+		RemainingCooldownTime = Index * World.Config.BarrackSpawnOffset;
 	}
 
 	internal void Spawn() {
@@ -102,5 +101,4 @@ public class Barrack : Building {
 
 	#endregion
 }
-
 }

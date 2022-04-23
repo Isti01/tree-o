@@ -5,7 +5,6 @@ using Logic.Event.World.Tower;
 using Logic.Event.World.Unit;
 
 namespace Logic.System {
-
 /// <summary>
 /// System responsible for clearing/recalculating cached values. These include:
 /// <list type="bullet">
@@ -79,5 +78,4 @@ internal class InvalidateCachesSystem : BaseSystem {
 		}
 	}
 }
-
 }
