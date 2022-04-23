@@ -17,16 +17,20 @@ public class Castle : Structure {
 	[SerializeField]
 	private SpriteRenderer spriteColored;
 
-	private void Start() {
-		CastleData data = _data.OwnerColor == Color.Blue ? blueCastleData : redCastleData;
-
-		spriteConstant.sprite = data.IntactSpriteConstant;
-		spriteColored.sprite = data.IntactSpriteColored;
-		spriteColored.color = data.Color;
-	}
+	private bool _destroyed = false;
 
 	public void SetData(Logic.Data.World.Castle data) {
 		_data = data;
+		CastleData type = _data.OwnerColor == Color.Blue ? blueCastleData : redCastleData;
+
+		spriteConstant.sprite = _destroyed ? type.DestroyedSpriteConstant : type.IntactSpriteConstant;
+		spriteColored.sprite = _destroyed ? type.DestroyedSpriteColored : type.IntactSpriteColored;
+		spriteColored.color = type.Color;
+	}
+
+	public void SetDestroyed(bool destroyed = true) {
+		_destroyed = destroyed;
+		SetData(_data);
 	}
 }
 }

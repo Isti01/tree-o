@@ -5,6 +5,7 @@ using Logic.Data;
 using Logic.Data.World;
 using Logic.Event;
 using Logic.Event.World.Barrack;
+using Logic.Event.World.Castle;
 using Logic.Event.World.Tower;
 using Logic.Event.World.Unit;
 using Presentation.UI;
@@ -37,7 +38,7 @@ public class World : MonoBehaviour {
 	private GameObject towerRadiusHighlightPrefab;
 
 	private GameObject[,] _map;
-	private GameTeam buildingPossibleTeam;
+	private GameTeam _buildingPossibleTeam;
 	private Logic.Data.World.Barrack _selectedBarrack;
 	private Logic.Data.World.Tower _selectedTower;
 	private GameObject _selectedTowerRadiusHighlight;
@@ -69,6 +70,8 @@ public class World : MonoBehaviour {
 		events.AddListener<BarrackCheckpointCreatedEvent>(OnBarrackCheckpointCreated);
 		events.AddListener<BarrackCheckpointRemovedEvent>(OnBarrackCheckpointRemoved);
 
+		events.AddListener<CastleDestroyedEvent>(OnCastleDestroyed);
+
 		var simulationUI = FindObjectOfType<SimulationUI>();
 		simulationUI.OnBuildingPossibleChanges += OnBuildingPossibleChanges;
 		simulationUI.OnBarrackSelected += OnBarrackSelected;
@@ -81,6 +84,11 @@ public class World : MonoBehaviour {
 		for (int x = 0; x < world.Width; x++) {
 			for (int y = 0; y < world.Height; y++) InstantiateTile(x, y, world);
 		}
+	}
+
+	private void OnCastleDestroyed(CastleDestroyedEvent e) {
+		var castle = LogicToPresentation<Castle>(e.Castle);
+		castle.SetDestroyed();
 	}
 
 	private void OnTowerSelected(Logic.Data.World.Tower tower) {
@@ -134,16 +142,16 @@ public class World : MonoBehaviour {
 	}
 
 	private void OnBuildingPossibleChanges(GameTeam team) {
-		if (buildingPossibleTeam == team) return;
-		buildingPossibleTeam = team;
+		if (_buildingPossibleTeam == team) return;
+		_buildingPossibleTeam = team;
 		VisualizeValidTowerPositions();
 	}
 
 	private void VisualizeValidTowerPositions() {
 		RemoveHighlights();
-		if (buildingPossibleTeam == null) return;
+		if (_buildingPossibleTeam == null) return;
 
-		foreach (TilePosition position in buildingPossibleTeam.AvailableTowerPositions) {
+		foreach (TilePosition position in _buildingPossibleTeam.AvailableTowerPositions) {
 			var tile = HighlightTile(position);
 			tile.SetDimmed();
 		}
