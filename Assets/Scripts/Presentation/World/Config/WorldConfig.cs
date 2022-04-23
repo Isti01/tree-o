@@ -41,6 +41,10 @@ public class WorldConfig : ScriptableObject, IGameWorldConfig {
 	[Min(0)]
 	private int maxBuildingDistance;
 
+	[SerializeField]
+	[Min(0.01f)]
+	private float barrackSpawnOffset;
+
 	[NonSerialized]
 	private int _height;
 
@@ -65,5 +69,6 @@ public class WorldConfig : ScriptableObject, IGameWorldConfig {
 	public float CastleStartingHealth => castleStartingHealth;
 	public int MaxBuildingDistance => maxBuildingDistance;
 	public bool GenerateObstacles => true;
+	public float BarrackSpawnOffset => barrackSpawnOffset;
 }
 }

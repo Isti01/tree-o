@@ -25,12 +25,16 @@ public class Barrack : Building {
 
 	public IReadOnlyCollection<IUnitTypeData> QueuedUnits => new List<IUnitTypeData>(_queuedUnits);
 
+	public int Index { get; }
+
 	#endregion
 
 	#region Methods
 
-	internal Barrack(GameWorld world, TilePosition position, Color owner)
-		: base(world, position, owner) {}
+	internal Barrack(GameWorld world, TilePosition position, Color owner, int index)
+		: base(world, position, owner) {
+		Index = index;
+	}
 
 	internal void QueueUnit(IUnitTypeData type) {
 		_queuedUnits.Add(type);
@@ -62,7 +66,7 @@ public class Barrack : Building {
 	}
 
 	internal void ResetCooldown() {
-		RemainingCooldownTime = 0;
+		RemainingCooldownTime = Index*World.Config.BarrackSpawnOffset;
 	}
 
 	internal void Spawn() {

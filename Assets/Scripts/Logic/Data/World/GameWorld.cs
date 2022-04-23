@@ -95,6 +95,7 @@ public class GameWorld {
 	#endregion
 
 	private class TileObjectConstructors : WorldGenerator.ITileObjectConstructors {
+		private readonly IDictionary<Color, int> _barrackCounter = new Dictionary<Color, int>();
 		private readonly GameWorld _world;
 
 		public TileObjectConstructors(GameWorld world) {
@@ -106,7 +107,10 @@ public class GameWorld {
 		}
 
 		public Barrack CreateBarrack(TilePosition position, Color team) {
-			return new Barrack(_world, position, team);
+			_barrackCounter.TryGetValue(team, out int index);
+			Barrack barrack = new Barrack(_world, position, team, index);
+			_barrackCounter[team] = index + 1;
+			return barrack;
 		}
 
 		public Obstacle CreateObstacle(TilePosition position) {
