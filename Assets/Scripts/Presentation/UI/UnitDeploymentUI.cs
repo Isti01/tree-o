@@ -41,6 +41,9 @@ public class UnitDeploymentUI : MonoBehaviour {
 		RootElement.Q<Button>(NextButton).clicked += () => OnNextClicked?.Invoke();
 	}
 
+	/// <summary>
+	/// Sets the colors that should be displayed on each team's turn
+	/// </summary>
 	public void SetTeamColors(UnityEngine.Color teamRedColor, UnityEngine.Color teamBlueColor) {
 		_teamRedColor = teamRedColor;
 		_teamBlueColor = teamBlueColor;
@@ -72,7 +75,10 @@ public class UnitDeploymentUI : MonoBehaviour {
 		}
 	}
 
-	public void OnUnitBought(UnitTypeData unit) {
+	/// <summary>
+	/// Increments the bought unit count of a given type
+	/// </summary>
+	public void UpdateBoughtUnitCount(UnitTypeData unit) {
 		if (_unitCards.TryGetValue(unit, out VisualElement card))
 			UpdateCardUnitCount(card, 1);
 		else
@@ -87,10 +93,13 @@ public class UnitDeploymentUI : MonoBehaviour {
 		topLabel.text = $"Amount: {newUnits}";
 	}
 
+	/// <summary>
+	/// Sets the UI color and team name, resets the bought unit counters
+	/// </summary>
 	public void SetActivePlayer(Color activePlayer) {
 		_activePlayer = activePlayer;
 
-		SetupCards(); // TODO maybe do this better (store references to the cards, and query the deployed units by ref)
+		SetupCards();
 		bool isBlue = _activePlayer == Color.Blue;
 		UnityEngine.Color color = isBlue ? _teamBlueColor : _teamRedColor;
 
@@ -101,21 +110,31 @@ public class UnitDeploymentUI : MonoBehaviour {
 		RootElement.Q<Label>(PlayerNameTurn).text = $"Player {playerName}'s turn";
 	}
 
+	/// <summary>
+	/// Sets the displayed money amount of the given team
+	/// </summary>
 	public void SetPlayerMoney(Color teamColor, int playerMoney) {
 		if (teamColor == _activePlayer) RootElement.Q<Label>(BudgetText).text = $"Budget: {playerMoney}";
 	}
 
+	/// <summary>
+	/// Shows the unit deployment UI
+	/// </summary>
 	public void Show() {
 		RootElement.style.display = DisplayStyle.Flex;
 	}
 
+	/// <summary>
+	/// Hides the unit deployment UI
+	/// </summary>
 	public void Hide() {
 		RootElement.style.display = DisplayStyle.None;
 	}
 
-	public event Action<UnitTypeData> OnUnitPurchased;
-
-	public void UpdateUnitStatistics(GameTeam team) {
+	/// <summary>
+	/// Updates overall unit deployment statistics of the given team
+	/// </summary>
+	public void UpdateDeployedUnitStatistics(GameTeam team) {
 		if (team.TeamColor != _activePlayer) return;
 
 		var container = RootElement.Q(DeployedUnitsContainer);
@@ -125,6 +144,14 @@ public class UnitDeploymentUI : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Invoked when a unit purchase card is clicked
+	/// </summary>
+	public event Action<UnitTypeData> OnUnitPurchased;
+
+	/// <summary>
+	/// Invoked when the next button is clicked
+	/// </summary>
 	public event Action OnNextClicked;
 }
 }
