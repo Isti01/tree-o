@@ -232,23 +232,26 @@ public class SimulationUI : MonoBehaviour {
 			Debug.Log("Failed to deploy unit"); // TODO maybe show this on the UI
 	}
 
-	private void StartTowerPlacing(Logic.Data.Color player) {
+	private void StartTowerPlacing(Logic.Data.Color player, bool resetUI) {
 		_activePlayer = player;
 		GameTeam playerData = GameOverview.GetTeam(_activePlayer);
 
 		_selectedTowerType = null;
 
-		_towerPlacing.ResetUI();
+		if (resetUI) {
+			_towerPlacing.ResetUI();
+			_towerPlacing.SetActivePlayer(_activePlayer);
+			_towerPlacing.SetPlayerMoney(playerData.TeamColor, playerData.Money);
+		}
+
 		_towerPlacing.Show();
-		_towerPlacing.SetActivePlayer(_activePlayer);
-		_towerPlacing.SetPlayerMoney(playerData.TeamColor, playerData.Money);
 	}
 
 	private void StepTowerPlacing() {
 		if (_activePlayer == Logic.Data.Color.Blue) {
 			OnTowerSelected?.Invoke(null);
 			OnBuildingPossibleChanges?.Invoke(null);
-			StartTowerPlacing(Logic.Data.Color.Red);
+			StartTowerPlacing(Logic.Data.Color.Red, true);
 		} else {
 			OnTowerSelected?.Invoke(null);
 			OnBuildingPossibleChanges?.Invoke(null);
@@ -302,7 +305,7 @@ public class SimulationUI : MonoBehaviour {
 		OnBarrackSelected?.Invoke(null);
 		_selectedBarrack = null;
 		if (_activePlayer == Logic.Data.Color.Blue) {
-			StartUnitDeployment(Logic.Data.Color.Red);
+			StartUnitDeployment(Logic.Data.Color.Red, true);
 		} else {
 			UpdateUiState(UIState.Battle);
 			if (GameOverview.CurrentPhase == GamePhase.Prepare
@@ -311,14 +314,17 @@ public class SimulationUI : MonoBehaviour {
 		}
 	}
 
-	private void StartUnitDeployment(Logic.Data.Color player) {
+	private void StartUnitDeployment(Logic.Data.Color player, bool resetUI) {
 		_activePlayer = player;
 		GameTeam playerData = GameOverview.GetTeam(_activePlayer);
 
+		if (resetUI) {
+			_unitDeployment.SetActivePlayer(_activePlayer);
+			_unitDeployment.SetPlayerMoney(player, playerData.Money);
+			_unitDeployment.UpdateUnitStatistics(GameOverview.GetTeam(_activePlayer));
+		}
+
 		_unitDeployment.Show();
-		_unitDeployment.SetActivePlayer(_activePlayer);
-		_unitDeployment.SetPlayerMoney(player, playerData.Money);
-		_unitDeployment.UpdateUnitStatistics(GameOverview.GetTeam(_activePlayer));
 	}
 
 	private void StartBattle() {
@@ -341,18 +347,18 @@ public class SimulationUI : MonoBehaviour {
 	}
 
 	private void UpdateUiState(UIState uiState) {
-		Debug.Log($"Updated UI state to: {uiState}");
+		bool returnedFromPause = _uiState == UIState.Paused;
 		if (_uiState != uiState) _lastUiState = _uiState;
 
 		_uiState = uiState;
 		switch (_uiState) {
 			case UIState.TowerPlacing:
 				HideUIs();
-				StartTowerPlacing(Logic.Data.Color.Blue);
+				StartTowerPlacing(Logic.Data.Color.Blue, !returnedFromPause);
 				break;
 			case UIState.UnitDeployment:
 				HideUIs();
-				StartUnitDeployment(Logic.Data.Color.Blue);
+				StartUnitDeployment(Logic.Data.Color.Blue, !returnedFromPause);
 				break;
 			case UIState.Battle:
 				HideUIs();
