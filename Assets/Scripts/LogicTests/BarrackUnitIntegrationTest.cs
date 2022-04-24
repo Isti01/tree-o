@@ -39,7 +39,7 @@ public class BarrackUnitIntegrationTest {
 		Barrack barrack = team.Barracks.OrderByDescending(b => b.QueuedUnits.Count).First();
 
 		//Enter fighting phase
-		overview.AdvancePhase();
+		Assert.IsTrue(overview.Commands.Issue(new AdvancePhaseCommand(overview)));
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
 		Assert.AreEqual(0, overview.World.Units.Count);
 		Assert.AreEqual(3, team.Barracks.Sum(b => b.QueuedUnits.Count));
@@ -85,8 +85,8 @@ public class BarrackUnitIntegrationTest {
 		expectedMoney -= unitType.Cost;
 		Assert.AreEqual(expectedMoney, team.Money);
 
-		overview.AdvancePhase();
-		overview.AdvancePhase();
+		Assert.IsTrue(overview.Commands.Issue(new AdvancePhaseCommand(overview)));
+		Assert.IsTrue(overview.Commands.Issue(new AdvancePhaseCommand(overview)));
 		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
 
 		expectedMoney += config.RoundBasePay + config.TotalUnitsPurchasedPay;

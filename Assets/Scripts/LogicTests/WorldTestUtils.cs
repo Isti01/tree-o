@@ -70,6 +70,22 @@ public static class WorldTestUtils {
 		result.Append(Environment.NewLine);
 		return result.ToString();
 	}
+
+	/// <summary>
+	/// Finds an empty position on the specified world,
+	/// throwing an exception if no empty position exists.
+	/// </summary>
+	/// <param name="world">the world in which to search</param>
+	/// <returns>an empty tile's position</returns>
+	public static TilePosition GetEmptyPosition(GameWorld world) {
+		for (int x = 0; x < world.Width; x++) {
+			for (int y = 0; y < world.Height; y++) {
+				if (world[x, y] == null) return new TilePosition(x, y);
+			}
+		}
+
+		throw new Exception("World has no empty positions");
+	}
 }
 
 }
