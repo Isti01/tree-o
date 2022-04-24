@@ -70,21 +70,34 @@ public class TowerPlacingUI : MonoBehaviour {
 		foreach (VisualElement tab in _tabs) tab.style.display = DisplayStyle.None;
 	}
 
+	/// <summary>
+	/// Shows the tower placing instructions
+	/// </summary>
 	public void ShowInstructions() {
 		HideTabs();
 		RootElement.Q(InstructionsText).style.display = DisplayStyle.Flex;
 	}
 
+	/// <summary>
+	/// Resets the tower placing UI
+	/// The method hides the visible tabs and shows the tower placing instructions
+	/// </summary>
 	public void ResetUI() {
 		HideTabs();
 		ShowInstructions();
 	}
 
+	/// <summary>
+	/// Sets the colors that should be displayed on each team's turn
+	/// </summary>
 	public void SetTeamColors(UnityEngine.Color teamRedColor, UnityEngine.Color teamBlueColor) {
 		_teamRedColor = teamRedColor;
 		_teamBlueColor = teamBlueColor;
 	}
 
+	/// <summary>
+	/// Sets the UI color and team name
+	/// </summary>
 	public void SetActivePlayer(Color activePlayer) {
 		_activePlayer = activePlayer;
 
@@ -98,14 +111,23 @@ public class TowerPlacingUI : MonoBehaviour {
 		RootElement.Q<Label>(PlayerNameTurn).text = $"Player {playerName}'s turn";
 	}
 
+	/// <summary>
+	/// Sets the displayed money amount of the given team
+	/// </summary>
 	public void SetPlayerMoney(Color teamColor, int playerMoney) {
 		if (teamColor == _activePlayer) RootElement.Q<Label>(BudgetText).text = $"Budget: {playerMoney}";
 	}
 
+	/// <summary>
+	/// Shows the tower placing UI
+	/// </summary>
 	public void Show() {
 		RootElement.style.display = DisplayStyle.Flex;
 	}
 
+	/// <summary>
+	/// Hides the tower placing UI
+	/// </summary>
 	public void Hide() {
 		RootElement.style.display = DisplayStyle.None;
 	}
@@ -132,6 +154,9 @@ public class TowerPlacingUI : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Displays the stats of a tower type
+	/// </summary>
 	public void ShowTowerTypeStats(TowerTypeData towerType) {
 		HideTabs();
 		VisualElement tab = RootElement.Q(TowerTypeStats);
@@ -184,6 +209,9 @@ public class TowerPlacingUI : MonoBehaviour {
 		};
 	}
 
+	/// <summary>
+	/// Displays the stats of a built tower on the map
+	/// </summary>
 	public void ShowTowerStats(Tower tower) {
 		HideTabs();
 		_selectedDeployedTower = tower;
@@ -216,9 +244,24 @@ public class TowerPlacingUI : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Invoked when the destroy tower button is clicked
+	/// </summary>
 	public event Action<Tower> OnTowerDestroyed;
+
+	/// <summary>
+	/// Invoked when the update tower button is clicked
+	/// </summary>
 	public event Action<Tower> OnTowerUpgraded;
+
+	/// <summary>
+	/// Invoked when the next button is clicke
+	/// </summary>
 	public event Action OnNextClicked;
+
+	/// <summary>
+	/// Invoked when a tower type is selected
+	/// </summary>
 	public event Action<TowerTypeData> OnTowerTypeSelected;
 }
 }

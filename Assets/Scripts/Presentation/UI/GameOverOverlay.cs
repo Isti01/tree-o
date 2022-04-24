@@ -19,6 +19,9 @@ public class GameOverOverlay : MonoBehaviour {
 		RootElement.Q<Button>(OkButton).clicked += () => OnOkClicked?.Invoke();
 	}
 
+	/// <summary>
+	/// Displays the winner team's name on the screen
+	/// </summary>
 	public void UpdateMessage(GameTeam winner) {
 		var text = "It's a tie!";
 		if (winner != null) {
@@ -29,14 +32,23 @@ public class GameOverOverlay : MonoBehaviour {
 		RootElement.Q<Label>(Message).text = text;
 	}
 
+	/// <summary>
+	/// Shows the game over overlay
+	/// </summary>
 	public void Show() {
 		RootElement.style.display = DisplayStyle.Flex;
 	}
 
+	/// <summary>
+	/// Hides the game over overlay
+	/// </summary>
 	public void Hide() {
 		RootElement.style.display = DisplayStyle.None;
 	}
 
+	/// <summary>
+	/// Invoked when the ok button is clicked
+	/// </summary>
 	public event Action OnOkClicked;
 }
 }

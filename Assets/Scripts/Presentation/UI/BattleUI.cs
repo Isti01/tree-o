@@ -57,27 +57,43 @@ public class BattleUI : MonoBehaviour {
 		return player == Color.Red ? _playerRedRoundStats : _playerBlueRoundStats;
 	}
 
+	/// <summary>
+	/// Sets the visibility of the pause button on the battle screen.
+	/// The method hides the "Exit" button and shows the "Pause" button
+	/// </summary>
 	public void ShowPauseButton() {
-		Debug.Log("Shown pause");
 		_pauseButton.style.display = DisplayStyle.Flex;
 		_exitButton.style.display = DisplayStyle.None;
 	}
 
+	/// <summary>
+	/// Sets the visibility of the exit button on the battle screen.
+	/// The method hides the "Pause" button and shows the "Exit" button
+	/// </summary>
 	public void ShowExitButton() {
 		_pauseButton.style.display = DisplayStyle.None;
 		_exitButton.style.display = DisplayStyle.Flex;
 	}
 
+	/// <summary>
+	/// Shows the battle screen
+	/// </summary>
 	public void Show() {
 		_active = true;
 		RootElement.style.display = DisplayStyle.Flex;
 	}
 
+	/// <summary>
+	/// Hides the battle screen
+	/// </summary>
 	public void Hide() {
 		_active = false;
 		RootElement.style.display = DisplayStyle.None;
 	}
 
+	/// <summary>
+	/// Sets the displayed money amount of the given team
+	/// </summary>
 	public void SetPlayerMoney(Color color, int money) {
 		if (!_active) return;
 
@@ -85,6 +101,9 @@ public class BattleUI : MonoBehaviour {
 		stats.Q<Label>(PlayerMoneyText).text = $"Money: {money}";
 	}
 
+	/// <summary>
+	/// Sets both overall and round statistics of the given team
+	/// </summary>
 	public void SetTeamStatistics(GameTeam team) {
 		if (!_active) return;
 
@@ -92,19 +111,23 @@ public class BattleUI : MonoBehaviour {
 		SetRoundStats(team);
 	}
 
+	/// <summary>
+	/// Sets round statistics of the given team
+	/// </summary>
 	private void SetRoundStats(GameTeam team) {
 		var stats = GetRoundStats(team.TeamColor).Q(PlayerStatContainer);
 		stats.Clear();
 
-		var texts = new[] {
-			$"Active towers: {team.PresentTowerCount}", $"Alive Units: {team.AliveUnits}"
-		};
+		string[] texts = { $"Active towers: {team.PresentTowerCount}", $"Alive Units: {team.AliveUnits}" };
 
 		foreach (string text in texts) {
 			stats.Add(new Label { text = text });
 		}
 	}
 
+	/// <summary>
+	/// Sets overall statistics of the given team
+	/// </summary>
 	private void SetOverallStats(GameTeam team) {
 		var stats = GetOverallStats(team.TeamColor);
 		stats.Q<Label>(PlayerRemainingUnitsText).text = $"Units purchased: {team.PurchasedUnitCount}";
@@ -113,6 +136,9 @@ public class BattleUI : MonoBehaviour {
 		SetPlayerMoney(team.TeamColor, team.Money);
 	}
 
+	/// <summary>
+	/// Sets the remaining time
+	/// </summary>
 	public void UpdateRemainingTime(float timeLeft) {
 		if (!_active) return;
 
@@ -121,8 +147,14 @@ public class BattleUI : MonoBehaviour {
 		RootElement.Q<Label>(TimeLeftText).text = $"Time remaining: {text}s";
 	}
 
+	/// <summary>
+	/// Invoked when the exit button is clicked
+	/// </summary>
 	public event Action OnExitClicked;
 
+	/// <summary>
+	/// Invoked when the pause button is clicked
+	/// </summary>
 	public event Action OnPauseClicked;
 }
 }

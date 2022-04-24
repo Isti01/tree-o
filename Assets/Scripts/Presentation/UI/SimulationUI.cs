@@ -21,8 +21,12 @@ namespace Presentation.UI {
 public class SimulationUI : MonoBehaviour {
 	private const string GameView = "GameView";
 
-	public Color teamRedColor;
-	public Color teamBlueColor;
+	[SerializeField]
+	private Color teamRedColor;
+
+	[SerializeField]
+	private Color teamBlueColor;
+
 	private Logic.Data.Color _activePlayer = Logic.Data.Color.Blue;
 
 	private BattleUI _battleUI;
@@ -124,7 +128,7 @@ public class SimulationUI : MonoBehaviour {
 
 	private void OnTeamStatisticsUpdated(TeamStatisticsUpdatedEvent e) {
 		_battleUI.SetTeamStatistics(e.Team);
-		_unitDeployment.UpdateUnitStatistics(e.Team);
+		_unitDeployment.UpdateDeployedUnitStatistics(e.Team);
 	}
 
 	private void OnTeamMoneyUpdated(TeamMoneyUpdatedEvent e) {
@@ -226,10 +230,7 @@ public class SimulationUI : MonoBehaviour {
 
 	private void OnUnitPurchased(UnitTypeData unitType) {
 		var command = new PurchaseUnitCommand(GameOverview.GetTeam(_activePlayer), unitType);
-		if (GameOverview.Commands.Issue(command))
-			_unitDeployment.OnUnitBought(unitType);
-		else
-			Debug.Log("Failed to deploy unit"); // TODO maybe show this on the UI
+		if (GameOverview.Commands.Issue(command)) _unitDeployment.UpdateBoughtUnitCount(unitType);
 	}
 
 	private void StartTowerPlacing(Logic.Data.Color player) {
@@ -245,13 +246,12 @@ public class SimulationUI : MonoBehaviour {
 	}
 
 	private void StepTowerPlacing() {
+		OnBuildingPossibleChanges?.Invoke(null);
+		OnTowerSelected?.Invoke(null);
+
 		if (_activePlayer == Logic.Data.Color.Blue) {
-			OnTowerSelected?.Invoke(null);
-			OnBuildingPossibleChanges?.Invoke(null);
 			StartTowerPlacing(Logic.Data.Color.Red);
 		} else {
-			OnTowerSelected?.Invoke(null);
-			OnBuildingPossibleChanges?.Invoke(null);
 			UpdateUiState(UIState.UnitDeployment);
 		}
 	}
@@ -305,8 +305,8 @@ public class SimulationUI : MonoBehaviour {
 			StartUnitDeployment(Logic.Data.Color.Red);
 		} else {
 			UpdateUiState(UIState.Battle);
-			if (GameOverview.CurrentPhase == GamePhase.Prepare
-				&& !GameOverview.Commands.Issue(new AdvancePhaseCommand(GameOverview)))
+			var command = new AdvancePhaseCommand(GameOverview);
+			if (GameOverview.CurrentPhase == GamePhase.Prepare && !GameOverview.Commands.Issue(command))
 				Debug.LogError("[GamePhase] Failed to advance the GamePhase");
 		}
 	}
@@ -318,7 +318,7 @@ public class SimulationUI : MonoBehaviour {
 		_unitDeployment.Show();
 		_unitDeployment.SetActivePlayer(_activePlayer);
 		_unitDeployment.SetPlayerMoney(player, playerData.Money);
-		_unitDeployment.UpdateUnitStatistics(GameOverview.GetTeam(_activePlayer));
+		_unitDeployment.UpdateDeployedUnitStatistics(GameOverview.GetTeam(_activePlayer));
 	}
 
 	private void StartBattle() {
@@ -370,13 +370,44 @@ public class SimulationUI : MonoBehaviour {
 		}
 	}
 
+	/// <summary>
+	/// Invoked when a tower is selected, the event argument is null when a tower is deselected
+	/// </summary>
 	public event Action<Tower> OnTowerSelected;
+
+	/// <summary>
+	/// Invoked when the building possible area visualization should be updated
+	/// </summary>
 	public event Action<GameTeam> OnBuildingPossibleChanges;
+
+	/// <summary>
+	/// Invoked when a barrack is selected, the event argument is null when a barrack is deselected
+	/// </summary>
 	public event Action<Barrack> OnBarrackSelected;
+
+	/// <summary>
+	/// Invoked when the mouse enters the game area
+	/// </summary>
 	public event Action<MouseEnterEvent> OnGameViewMouseEnter;
+
+	/// <summary>
+	/// Invoked when the mouse leaves the game area
+	/// </summary>
 	public event Action<MouseLeaveEvent> OnGameViewMouseLeave;
+
+	/// <summary>
+	/// Invoked when a mouse button is pressed down on the game area
+	/// </summary>
 	public event Action<MouseDownEvent> OnGameViewMouseDown;
+
+	/// <summary>
+	/// Invoked when a mouse button is released on the game area
+	/// </summary>
 	public event Action<MouseUpEvent> OnGameViewMouseUp;
+
+	/// <summary>
+	/// Invoked when the mouse cursor moved on the game area
+	/// </summary>
 	public event Action<MouseMoveEvent> OnGameViewMouseMove;
 }
 }
