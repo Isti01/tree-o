@@ -60,17 +60,7 @@ public class TowerManagementTest {
 
 		GameTeam team = overview.Teams.First();
 		ITowerTypeData towerType = new GameTestUtils.TowerTypeData();
-
-		TilePosition position = new TilePosition(0, 0);
-		bool positionFound = false;
-		for (int x = 0; x < overview.World.Width && !positionFound; x++) {
-			for (int y = 0; y < overview.World.Height && !positionFound; y++) {
-				position = new TilePosition(x, y);
-				if (overview.World[position] == null) positionFound = true;
-			}
-		}
-
-		Assert.IsTrue(positionFound);
+		TilePosition position = WorldTestUtils.GetEmptyPosition(overview.World);
 
 		int oldMoney = team.Money;
 		Assert.AreEqual(BuildTowerCommand.CommandResult.TileUnavailable,
