@@ -81,16 +81,25 @@ public class SimulationManager : MonoBehaviour {
 		OnTileSelected?.Invoke(tile.Position, button);
 	}
 
+	/// <summary>
+	/// Resumes the simulation by setting the timeScale to 1
+	/// </summary>
 	public void ResumeGame() {
 		Time.timeScale = 1;
 		IsPaused = false;
 	}
 
+	/// <summary>
+	/// Stops the simulation by setting the timeScale to 0
+	/// </summary>
 	public void PauseGame() {
 		Time.timeScale = 0;
 		IsPaused = true;
 	}
 
+	/// <summary>
+	/// Invoked when a tile is selected in the game world
+	/// </summary>
 	public event Action<TilePosition, MouseButton> OnTileSelected;
 }
 }

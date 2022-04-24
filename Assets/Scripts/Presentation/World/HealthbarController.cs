@@ -19,17 +19,23 @@ public class HealthbarController : MonoBehaviour {
 	[SerializeField]
 	private SpriteRenderer healthSprite;
 
-	private float lastActionTime = Mathf.NegativeInfinity;
+	private float _lastActionTime = Mathf.NegativeInfinity;
 
 	private void Update() {
 		SetTransparency();
 	}
 
+	/// <summary>
+	/// Sets the health bar sprite transparency to opaque
+	/// </summary>
 	public void MakeVisible() {
-		lastActionTime = Time.time;
+		_lastActionTime = Time.time;
 		SetTransparency();
 	}
 
+	/// <summary>
+	/// Sets the displayed health amount
+	/// </summary>
 	public void SetHealth(float ratio) {
 		if (Math.Abs(healthContainer.localScale.x - ratio) < 0.001) return;
 		healthContainer.localScale = new Vector3(ratio, 1, 1);
@@ -39,7 +45,7 @@ public class HealthbarController : MonoBehaviour {
 	private void SetTransparency() {
 		float newAlpha;
 
-		float delta = Time.time - lastActionTime;
+		float delta = Time.time - _lastActionTime;
 		if (delta < fullyVisibleDuration) {
 			newAlpha = 1;
 		} else if (delta - fullyVisibleDuration < fadingDuration) {

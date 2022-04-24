@@ -19,6 +19,9 @@ public class Castle : Structure {
 
 	private bool _destroyed = false;
 
+	/// <summary>
+	/// Updates the displayed castle type
+	/// </summary>
 	public void SetData(Logic.Data.World.Castle data) {
 		_data = data;
 		CastleData type = _data.OwnerColor == Color.Blue ? blueCastleData : redCastleData;
@@ -28,8 +31,11 @@ public class Castle : Structure {
 		spriteColored.color = type.Color;
 	}
 
-	public void SetDestroyed(bool destroyed = true) {
-		_destroyed = destroyed;
+	/// <summary>
+	/// Updates the displayed castle type to it's destroyed variant
+	/// </summary>
+	public void SetDestroyed() {
+		_destroyed = true;
 		SetData(_data);
 	}
 }

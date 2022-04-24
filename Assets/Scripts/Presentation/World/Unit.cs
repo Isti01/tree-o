@@ -33,6 +33,9 @@ public class Unit : MonoBehaviour {
 		transform.localPosition = newPosition;
 	}
 
+	/// <summary>
+	/// Sets the displayed unit type
+	/// </summary>
 	public void SetData(Logic.Data.World.Unit data) {
 		_data = data;
 		var unitData = (UnitTypeData) _data.Type;
@@ -50,10 +53,16 @@ public class Unit : MonoBehaviour {
 		UpdateHealth();
 	}
 
+	/// <summary>
+	/// Updates the displayed health
+	/// </summary>
 	public void UpdateHealth() {
 		_healthbarController.SetHealth(_data.CurrentHealth / _data.Type.Health);
 	}
 
+	/// <summary>
+	/// Removes the unit from the scene
+	/// </summary>
 	public void DestroyUnit() {
 		Destroy(gameObject);
 	}

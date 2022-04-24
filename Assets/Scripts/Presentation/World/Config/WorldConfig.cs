@@ -4,10 +4,13 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Presentation.World.Config {
+/// <summary>
+/// Enables the World related settings to be configured in the Unity Editor
+/// </summary>
 [CreateAssetMenu(fileName = "New World Config", menuName = "World/Config/World Config", order = 1)]
 public class WorldConfig : ScriptableObject, IGameWorldConfig {
 	[NonSerialized]
-	private int width;
+	private int _width;
 
 	[SerializeField]
 	[Min(8)]
@@ -20,7 +23,7 @@ public class WorldConfig : ScriptableObject, IGameWorldConfig {
 	private int maxWidth;
 
 	[NonSerialized]
-	private int height;
+	private int _height;
 
 	[SerializeField]
 	[Min(8)]
@@ -46,15 +49,15 @@ public class WorldConfig : ScriptableObject, IGameWorldConfig {
 
 	public int Width {
 		get {
-			if (width == 0) width = Random.Range(minWidth, maxWidth + 1);
-			return width;
+			if (_width == 0) _width = Random.Range(minWidth, maxWidth + 1);
+			return _width;
 		}
 	}
 
 	public int Height {
 		get {
-			if (height == 0) return height = Random.Range(minHeight, maxHeight + 1);
-			return height;
+			if (_height == 0) return _height = Random.Range(minHeight, maxHeight + 1);
+			return _height;
 		}
 	}
 
