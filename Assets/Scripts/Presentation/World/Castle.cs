@@ -2,6 +2,7 @@ using UnityEngine;
 using Color = Logic.Data.Color;
 
 namespace Presentation.World {
+[RequireComponent(typeof(HealthbarController))]
 public class Castle : Structure {
 	[SerializeField]
 	private CastleData blueCastleData;
@@ -19,6 +20,12 @@ public class Castle : Structure {
 
 	private bool _destroyed = false;
 
+	private HealthbarController _healthbarController;
+
+	private void Start() {
+		_healthbarController = GetComponent<HealthbarController>();
+	}
+
 	/// <summary>
 	/// Updates the displayed castle type
 	/// </summary>
@@ -29,6 +36,13 @@ public class Castle : Structure {
 		spriteConstant.sprite = _destroyed ? type.DestroyedSpriteConstant : type.IntactSpriteConstant;
 		spriteColored.sprite = _destroyed ? type.DestroyedSpriteColored : type.IntactSpriteColored;
 		spriteColored.color = type.Color;
+	}
+
+	/// <summary>
+	/// Updates the displayed health
+	/// </summary>
+	public void UpdateHealth() {
+		_healthbarController.SetHealth(_data.Health / _data.World.Config.CastleStartingHealth);
 	}
 
 	/// <summary>
