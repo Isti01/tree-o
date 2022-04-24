@@ -70,6 +70,7 @@ public class World : MonoBehaviour {
 		events.AddListener<BarrackCheckpointCreatedEvent>(OnBarrackCheckpointCreated);
 		events.AddListener<BarrackCheckpointRemovedEvent>(OnBarrackCheckpointRemoved);
 
+		events.AddListener<CastleDamagedEvent>(OnCastleDamaged);
 		events.AddListener<CastleDestroyedEvent>(OnCastleDestroyed);
 
 		var simulationUI = FindObjectOfType<SimulationUI>();
@@ -84,6 +85,11 @@ public class World : MonoBehaviour {
 		for (int x = 0; x < world.Width; x++) {
 			for (int y = 0; y < world.Height; y++) InstantiateTile(x, y, world);
 		}
+	}
+
+	private void OnCastleDamaged(CastleDamagedEvent e) {
+		var castle = LogicToPresentation<Castle>(e.Castle);
+		castle.UpdateHealth();
 	}
 
 	private void OnCastleDestroyed(CastleDestroyedEvent e) {

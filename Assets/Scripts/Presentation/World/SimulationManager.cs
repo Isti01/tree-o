@@ -60,7 +60,7 @@ public class SimulationManager : MonoBehaviour {
 
 	private void HandleHover() {
 		Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-		int layerMask = 1 << LayerMask.NameToLayer("Unit");
+		int layerMask = 1 << LayerMask.NameToLayer("Unit") | 1 << LayerMask.NameToLayer("Castle");
 		RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
 		if (!hit) return;
 
