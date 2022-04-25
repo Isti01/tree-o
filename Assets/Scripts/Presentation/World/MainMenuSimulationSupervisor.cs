@@ -61,6 +61,7 @@ public class MainMenuSimulationSupervisor : MonoBehaviour {
 	private IEnumerator _simulationCoroutine;
 
 	private void Start() {
+		_simulationCoroutine = null;
 		// we don't want to destroy castles
 		foreach (UnitTypeData unitType in unitTypes) {
 			var modifiedUnitType = Instantiate(unitType);
@@ -175,6 +176,13 @@ public class MainMenuSimulationSupervisor : MonoBehaviour {
 		if (_simulationCoroutine != null) Debug.LogError("The simulation is already running");
 		_simulationCoroutine = StartSimulation(scene);
 		StartCoroutine(_simulationCoroutine);
+	}
+
+	private void OnDestroy() {
+		SceneManager.sceneLoaded -= OnSceneLoaded;
+		if (_simulationCoroutine != null) {
+			StopCoroutine(_simulationCoroutine);
+		}
 	}
 }
 }
