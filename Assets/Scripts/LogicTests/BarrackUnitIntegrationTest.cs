@@ -20,11 +20,13 @@ public class BarrackUnitIntegrationTest {
 		Assert.AreNotEqual(0, team.Barracks.Count);
 
 		int purchasedUnits = 0;
-		while (team.Barracks.Any(b => b.QueuedUnits.Count == 0)) {
+		int whileLimit = 100000;
+		while (whileLimit-- > 0 && team.Barracks.Any(b => b.QueuedUnits.Count == 0)) {
 			Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(team, unitType)));
 			purchasedUnits++;
 		}
 
+		Assert.Greater(whileLimit, 0);
 		Assert.AreEqual(purchasedUnits, team.Barracks.Select(b => b.QueuedUnits.Count).Sum());
 	}
 

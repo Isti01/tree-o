@@ -134,7 +134,11 @@ public class UnitTowerCastleIntegrationTest {
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
 		bool shot = false;
 		overview.Events.AddListener<TowerShotEvent>(_ => shot = true);
-		while (!shot) Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon)));
+
+		int whileLimit = 10;
+		while (whileLimit-- > 0 && !shot)
+			Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon)));
+		Assert.Greater(whileLimit, 0);
 
 		//Assert that the cooldown lasts
 		shot = false;
@@ -161,8 +165,10 @@ public class UnitTowerCastleIntegrationTest {
 		Assert.AreEqual(tower.Target, overview.World.Units.First());
 
 		//Let the unit reach the castle
-		while (overview.World.Units.Any())
+		int whileLimit = 1000 * overview.World.Width * overview.World.Height;
+		while (whileLimit-- > 0 && overview.World.Units.Any())
 			Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, 0.5f)));
+		Assert.Greater(whileLimit, 0);
 
 		//Validate results
 		Assert.IsNull(tower.Target);
@@ -212,8 +218,11 @@ public class UnitTowerCastleIntegrationTest {
 		Unit unit = overview.World.Units.First();
 
 		//Let the unit move outside the tower's range
-		while (unit.IsAlive && unit.Position.Distance(tower.Position.ToVectorCentered()) <= tower.Type.Range)
+		int whileLimit = 1000 * (int) Math.Ceiling(tower.Type.Range * tower.Type.Range);
+		while (whileLimit-- > 0 && unit.IsAlive
+			&& unit.Position.Distance(tower.Position.ToVectorCentered()) <= tower.Type.Range)
 			Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, 0.5f)));
+		Assert.Greater(whileLimit, 0);
 		Assert.IsTrue(unit.IsAlive);
 
 		//Let the tower update its target, validate results
