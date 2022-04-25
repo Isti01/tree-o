@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Logic.Command;
 using Logic.Command.Tower;
 using Logic.Command.Unit;
@@ -64,9 +65,9 @@ public class MainMenuSimulationSupervisor : MonoBehaviour {
 		_simulationCoroutine = null;
 		// we don't want to destroy castles
 		foreach (UnitTypeData unitType in unitTypes) {
-			var modifiedUnitType = Instantiate(unitType);
-			var prop = modifiedUnitType.GetType().GetField("damage",
-				System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+			UnitTypeData modifiedUnitType = Instantiate(unitType);
+			FieldInfo prop = modifiedUnitType.GetType().GetField("damage",
+				BindingFlags.NonPublic | BindingFlags.Instance);
 			Debug.Assert(prop != null);
 			if (prop == null) continue;
 			prop.SetValue(modifiedUnitType, 0.0f);
@@ -75,6 +76,11 @@ public class MainMenuSimulationSupervisor : MonoBehaviour {
 
 		SceneManager.sceneLoaded += OnSceneLoaded;
 		SceneManager.LoadScene(SimulationScenePath, LoadSceneMode.Additive);
+	}
+
+	private void OnDestroy() {
+		SceneManager.sceneLoaded -= OnSceneLoaded;
+		if (_simulationCoroutine != null) StopCoroutine(_simulationCoroutine);
 	}
 
 	private static T FindObjectInRootObjects<T>(Scene scene) where T : MonoBehaviour {
@@ -99,19 +105,17 @@ public class MainMenuSimulationSupervisor : MonoBehaviour {
 		RemoveSimulationUI(scene);
 		MoveWorld(scene);
 
-		SimulationManager manager = FindObjectInRootObjects<SimulationManager>(scene);
+		var manager = FindObjectInRootObjects<SimulationManager>(scene);
 		yield return new WaitUntil(() => manager.GameOverview != null);
 
 		IGameOverview overview = manager.GameOverview;
-		if (overview.CurrentPhase == GamePhase.Prepare) {
-			yield return PreparePhase(overview);
-		}
+		if (overview.CurrentPhase == GamePhase.Prepare) yield return PreparePhase(overview);
 
 		overview.Events.AddListener<PhaseAdvancedEvent>(OnPhaseAdvanced);
 	}
 
 	private void OnPhaseAdvanced(PhaseAdvancedEvent e) {
-		var overview = e.Overview;
+		IGameOverview overview = e.Overview;
 		switch (overview.CurrentPhase) {
 			case GamePhase.Prepare:
 				StartCoroutine(PreparePhase(overview));
@@ -127,48 +131,59 @@ public class MainMenuSimulationSupervisor : MonoBehaviour {
 	}
 
 	private IEnumerator PreparePhase(IGameOverview overview) {
-		CommandDispatcher commands = overview.Commands;
-		var world = overview.World;
-		int width = world.Width;
-		int height = world.Height;
-
 		foreach (GameTeam team in overview.Teams) {
-			int towerDestroyAttempts = Random.Range(minTowerDestroyAttempts, maxTowerDestroyAttempts);
-			for (int i = 0; i < towerDestroyAttempts; i++) {
-				var tower = team.Towers.OrderBy(e => Random.value - .5f)
-					.FirstOrDefault(_ => Random.value > towerDestroyProbability);
-				if (tower == null) continue;
-				commands.Issue(new DestroyTowerCommand(tower));
-				yield return new WaitForSeconds(towerPlacingDelay);
-			}
-
-			int towerPlacingAttempts = Random.Range(minTowerPlacingAttempts, maxTowerPlacingAttempts);
-			for (int i = 0; i < towerPlacingAttempts; i++) {
-				int x = Random.Range(0, width);
-				int y = Random.Range(0, height);
-				int index = Random.Range(0, towerTypes.Count);
-				if (commands.Issue(new BuildTowerCommand(team, towerTypes[index], new TilePosition(x, y)))) {
-					yield return new WaitForSeconds(towerPlacingDelay);
-				}
-			}
-
-			int towerUpgradeAttempts = Random.Range(minTowerUpgradeAttempts, maxTowerUpgradeAttempts);
-			for (int i = 0; i < towerUpgradeAttempts; i++) {
-				var tower = team.Towers.OrderBy(e => Random.value - .5f)
-					.FirstOrDefault(_ => Random.value > towerUpgradeProbability);
-				if (tower == null) continue;
-				commands.Issue(new UpgradeTowerCommand(tower));
-				yield return new WaitForSeconds(towerPlacingDelay);
-			}
-
-			int unitDeploymentAttempts = Random.Range(minUnitDeploymentAttempts, maxUnitDeploymentAttempts);
-			for (int i = 0; i < unitDeploymentAttempts; i++) {
-				int index = Random.Range(0, _modifiedUnitTypes.Count);
-				commands.Issue(new PurchaseUnitCommand(team, _modifiedUnitTypes[index]));
-			}
+			yield return DestroyTowers(team);
+			yield return PlaceTowers(team);
+			yield return UpgradeTowers(team);
+			TrainUnits(team);
 		}
 
-		commands.Issue(new AdvancePhaseCommand(overview));
+		overview.Commands.Issue(new AdvancePhaseCommand(overview));
+	}
+
+	private void TrainUnits(GameTeam team) {
+		int unitDeploymentAttempts = Random.Range(minUnitDeploymentAttempts, maxUnitDeploymentAttempts);
+		for (int i = 0; i < unitDeploymentAttempts; i++) {
+			int index = Random.Range(0, _modifiedUnitTypes.Count);
+			team.Overview.Commands.Issue(new PurchaseUnitCommand(team, _modifiedUnitTypes[index]));
+		}
+	}
+
+	private IEnumerator UpgradeTowers(GameTeam team) {
+		int towerUpgradeAttempts = Random.Range(minTowerUpgradeAttempts, maxTowerUpgradeAttempts);
+		for (int i = 0; i < towerUpgradeAttempts; i++) {
+			Logic.Data.World.Tower tower = team.Towers.OrderBy(e => Random.value - .5f)
+				.FirstOrDefault(_ => Random.value > towerUpgradeProbability);
+			if (tower == null) continue;
+			if (team.Overview.Commands.Issue(new UpgradeTowerCommand(tower)))
+				yield return new WaitForSeconds(towerPlacingDelay);
+		}
+	}
+
+	private IEnumerator PlaceTowers(GameTeam team) {
+		int width = team.Overview.World.Width;
+		int height = team.Overview.World.Height;
+
+		int towerPlacingAttempts = Random.Range(minTowerPlacingAttempts, maxTowerPlacingAttempts);
+		for (int i = 0; i < towerPlacingAttempts; i++) {
+			int x = Random.Range(0, width);
+			int y = Random.Range(0, height);
+			int index = Random.Range(0, towerTypes.Count);
+			var position = new TilePosition(x, y);
+			if (team.Overview.Commands.Issue(new BuildTowerCommand(team, towerTypes[index], position)))
+				yield return new WaitForSeconds(towerPlacingDelay);
+		}
+	}
+
+	private IEnumerator DestroyTowers(GameTeam team) {
+		int towerDestroyAttempts = Random.Range(minTowerDestroyAttempts, maxTowerDestroyAttempts);
+		for (int i = 0; i < towerDestroyAttempts; i++) {
+			Logic.Data.World.Tower tower = team.Towers.OrderBy(e => Random.value - .5f)
+				.FirstOrDefault(_ => Random.value > towerDestroyProbability);
+			if (tower == null) continue;
+			team.Overview.Commands.Issue(new DestroyTowerCommand(tower));
+			yield return new WaitForSeconds(towerPlacingDelay);
+		}
 	}
 
 	private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
@@ -176,13 +191,6 @@ public class MainMenuSimulationSupervisor : MonoBehaviour {
 		if (_simulationCoroutine != null) Debug.LogError("The simulation is already running");
 		_simulationCoroutine = StartSimulation(scene);
 		StartCoroutine(_simulationCoroutine);
-	}
-
-	private void OnDestroy() {
-		SceneManager.sceneLoaded -= OnSceneLoaded;
-		if (_simulationCoroutine != null) {
-			StopCoroutine(_simulationCoroutine);
-		}
 	}
 }
 }
