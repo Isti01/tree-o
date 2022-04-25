@@ -194,8 +194,9 @@ GameObject:
   m_Component:
   - component: {fileID: 115605303}
   - component: {fileID: 115605302}
+  - component: {fileID: 115605304}
   m_Layer: 0
-  m_Name: Global Light
+  m_Name: World Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -213,13 +214,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 073797afb82c5a1438f328866b10b3f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_LightType: 4
+  m_LightType: 1
   m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0.5
+  m_FalloffIntensity: 0.6
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.8
+  m_Intensity: 0.6
   m_LightVolumeOpacity: 0
-  m_ApplyToSortingLayers: 25f3810c000000001d2c89f43d6c3ed311650b1f49d0a7b8ffbd4d6b857aff912f3a3480f1cc4664294bc399
+  m_ApplyToSortingLayers: 25f3810c000000001d2c89f43d6c3ed311650b1f49d0a7b8ffbd4d6b857aff912f3a3480f1cc4664294bc3991bba19c81fcc8c06ad50f4cc
   m_LightCookieSprite: {fileID: 0}
   m_UseNormalMap: 0
   m_LightOrder: 0
@@ -232,10 +233,10 @@ MonoBehaviour:
   m_PointLightOuterRadius: 1
   m_PointLightDistance: 3
   m_PointLightQuality: 1
-  m_ShapeLightParametricSides: 5
+  m_ShapeLightParametricSides: 4
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
-  m_ShapeLightFalloffSize: 0.5
+  m_ShapeLightFalloffSize: 10
   m_ShapeLightFalloffOffset: {x: 0, y: 0}
   m_ShapePath:
   - {x: -0.5, y: -0.5, z: 0}
@@ -249,13 +250,26 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 115605301}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_Father: {fileID: 1772625070}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &115605304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 115605301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43da71e1cff6405d81016c17e173d9be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shapeLight: {fileID: 115605302}
 --- !u!1 &240370939
 GameObject:
   m_ObjectHideFlags: 0
@@ -502,7 +516,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -561,8 +575,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ef8de9081bc4007a0af3118a9387817, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minZoomLevel: 5
-  maxZoomLevel: 35
+  minZoomLevel: 4
+  maxZoomLevel: 25
   zoomSensitivity: 1
   zoomSpeed: 30
   panSensitivity: {x: 0.02, y: 0.02}
@@ -659,7 +673,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 115605303}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -683,6 +698,7 @@ MonoBehaviour:
   unitPrefab: {fileID: 8268301215112136559, guid: 89351f8508198b049a8fa60e02fb638d, type: 3}
   tileHighlightPrefab: {fileID: 1691539168291297187, guid: 7784762b60ea8a84580dfd13cebd6afb, type: 3}
   towerRadiusHighlightPrefab: {fileID: 7967503270793754117, guid: f9c1e45b237058c49ae2d4c09f8715dd, type: 3}
+  environmentPrefab: {fileID: 5874974756031650793, guid: 71e9029c69294b34988f957accd09dbf, type: 3}
 --- !u!1 &1799972800
 GameObject:
   m_ObjectHideFlags: 0

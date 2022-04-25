@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77a9789635f84fcca2ecabdcf6a5591d, type: 3}
   m_Name: Tile Highlight
   m_EditorClassIdentifier: 
-  lightColor: {r: 1, g: 1, b: 1, a: 0.5019608}
-  intensity: 1
+  lightColor: {r: 1, g: 1, b: 1, a: 1}
+  intensity: 0.4
+  dimmedIntensity: 0.2

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using Color = Logic.Data.Color;
 
 namespace Presentation.World {
@@ -16,6 +17,9 @@ public class Unit : MonoBehaviour {
 
 	[SerializeField]
 	private SpriteRenderer coloredSprite;
+
+	[SerializeField]
+	private Light2D pointLight;
 
 	private HealthbarController _healthbarController;
 
@@ -47,9 +51,12 @@ public class Unit : MonoBehaviour {
 			coloredSprite.sortingLayerName = "UnitGround";
 		}
 
+		var color = _data.Owner.TeamColor == Color.Blue ? unitData.BlueColor : unitData.RedColor;
+
 		constantSprite.sprite = unitData.AliveSpriteConstant;
 		coloredSprite.sprite = unitData.AliveSpriteColored;
-		coloredSprite.color = _data.Owner.TeamColor == Color.Blue ? unitData.BlueColor : unitData.RedColor;
+		coloredSprite.color = color;
+		pointLight.color = color;
 		UpdateHealth();
 	}
 

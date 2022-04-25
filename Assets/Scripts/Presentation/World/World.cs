@@ -37,6 +37,9 @@ public class World : MonoBehaviour {
 	[SerializeField]
 	private GameObject towerRadiusHighlightPrefab;
 
+	[SerializeField]
+	private GameObject environmentPrefab;
+
 	private GameObject[,] _map;
 	private GameTeam _buildingPossibleTeam;
 	private Logic.Data.World.Barrack _selectedBarrack;
@@ -82,8 +85,28 @@ public class World : MonoBehaviour {
 		transform.position = new Vector3(-world.Width / 2.0f, -world.Width / 2.0f, 0);
 		_map = new GameObject[world.Width, world.Height];
 
+		var worldLight = FindObjectOfType<WorldLight>();
+		worldLight.SetDimensions(world.Width, world.Height);
+
+		CreateWorld();
+		CreateWorldPadding();
+	}
+
+	private void CreateWorld() {
+		GameWorld world = GameOverview.World;
 		for (int x = 0; x < world.Width; x++) {
 			for (int y = 0; y < world.Height; y++) InstantiateTile(x, y, world);
+		}
+	}
+
+	private void CreateWorldPadding() {
+		const int padding = 7;
+		GameWorld world = GameOverview.World;
+		for (int x = -padding; x < world.Width + padding; x++) {
+			for (int y = -padding; y < world.Height + padding; y++) {
+				if (y >= 0 && y < world.Height && x >= 0 && x < world.Width) continue;
+				InstantiateEnvironment(x, y);
+			}
 		}
 	}
 
@@ -285,14 +308,18 @@ public class World : MonoBehaviour {
 		tower.GetComponent<LineRenderer>().enabled = false;
 	}
 
-	private GameObject InstantiateTower(GameObject parent, Logic.Data.World.Tower tower) {
+	private void InstantiateTower(GameObject parent, Logic.Data.World.Tower tower) {
 		GameObject structure = Instantiate(towerPrefab, parent.transform);
 		var towerComponent = structure.GetComponent<Tower>();
 		towerComponent.SetData(tower);
-		return structure;
 	}
 
-	private GameObject InstantiateTile(int x, int y, GameWorld world) {
+	private void InstantiateEnvironment(int x, int y) {
+		GameObject environment = Instantiate(environmentPrefab, transform);
+		environment.transform.localPosition = new Vector3(x, y);
+	}
+
+	private void InstantiateTile(int x, int y, GameWorld world) {
 		GameObject tile = Instantiate(tilePrefab, transform);
 		tile.transform.localPosition = new Vector3(x, y);
 		var tileComponent = tile.GetComponent<Tile>();
@@ -301,31 +328,29 @@ public class World : MonoBehaviour {
 
 		TileObject data = world[x, y];
 		if (data != null) InstantiateStructure(tile, data);
-
-		return tile;
 	}
 
-	private GameObject InstantiateStructure(GameObject parent, TileObject tileData) {
+	private void InstantiateStructure(GameObject parent, TileObject tileData) {
 		switch (tileData) {
 			case Logic.Data.World.Barrack barrack: {
 				GameObject structure = Instantiate(barrackPrefab, parent.transform);
 				var barrackComponent = structure.GetComponent<Barrack>();
 				barrackComponent.SetData(barrack);
-				return structure;
+				break;
 			}
 			case Logic.Data.World.Castle castle: {
 				GameObject structure = Instantiate(castlePrefab, parent.transform);
 				var barrackComponent = structure.GetComponent<Castle>();
 				barrackComponent.SetData(castle);
-				return structure;
+				break;
 			}
 			case Logic.Data.World.Tower tower: {
-				GameObject structure = InstantiateTower(parent, tower);
-				return structure;
+				InstantiateTower(parent, tower);
+				break;
 			}
 			case Logic.Data.World.Obstacle _: {
-				GameObject structure = Instantiate(obstaclePrefab, parent.transform);
-				return structure;
+				Instantiate(obstaclePrefab, parent.transform);
+				break;
 			}
 			default:
 				throw new Exception("Unhandled TileObject Type");
