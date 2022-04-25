@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using Color = Logic.Data.Color;
 
 namespace Presentation.World {
+[RequireComponent(typeof(Light2D))]
 public class Barrack : Structure {
 	[SerializeField]
 	private BarrackData blueBarrackData;
@@ -17,6 +19,8 @@ public class Barrack : Structure {
 	[SerializeField]
 	private SpriteRenderer spriteColored;
 
+	[SerializeField]
+	private Light2D pointLight;
 
 	/// <summary>
 	/// Updates the displayed barrack type
@@ -28,6 +32,7 @@ public class Barrack : Structure {
 		spriteConstant.sprite = type.SpriteConstant;
 		spriteColored.sprite = type.SpriteColored;
 		spriteColored.color = type.Color;
+		pointLight.color = type.Color;
 	}
 }
 }

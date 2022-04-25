@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 using Color = Logic.Data.Color;
 
 namespace Presentation.World {
@@ -18,6 +19,9 @@ public class Castle : Structure {
 	[SerializeField]
 	private SpriteRenderer spriteColored;
 
+	[SerializeField]
+	private Light2D pointLight;
+
 	private bool _destroyed = false;
 
 	private HealthbarController _healthbarController;
@@ -36,6 +40,8 @@ public class Castle : Structure {
 		spriteConstant.sprite = _destroyed ? type.DestroyedSpriteConstant : type.IntactSpriteConstant;
 		spriteColored.sprite = _destroyed ? type.DestroyedSpriteColored : type.IntactSpriteColored;
 		spriteColored.color = type.Color;
+		pointLight.color = type.Color;
+		pointLight.enabled = !_destroyed;
 	}
 
 	/// <summary>

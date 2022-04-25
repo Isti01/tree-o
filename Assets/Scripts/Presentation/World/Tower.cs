@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 namespace Presentation.World {
 [RequireComponent(typeof(LineRenderer))]
@@ -20,7 +22,17 @@ public class Tower : Structure {
 	[SerializeField]
 	private float turretRotationSpeed;
 
+	[SerializeField]
+	private Light2D pointLight;
+
+	[SerializeField]
+	private LineRenderer laserRenderer;
+
 	private World _world;
+
+	private void Awake() {
+		_world = FindObjectOfType<World>();
+	}
 
 	private void FixedUpdate() {
 		if (_data.Type.Range > 0) {
@@ -41,10 +53,8 @@ public class Tower : Structure {
 		constantSprite.sprite = type.SpriteConstant;
 		coloredSprite.sprite = type.SpriteColored;
 		coloredSprite.color = color;
+		pointLight.color = color;
 
-		_world = FindObjectOfType<World>();
-
-		var laserRenderer = GetComponent<LineRenderer>();
 		var laserGradient = new Gradient();
 		laserGradient.SetKeys(new[] { new GradientColorKey(color, 0), new GradientColorKey(color, 1) },
 			new[] { new GradientAlphaKey(1, 0), new GradientAlphaKey(1, 1) });
