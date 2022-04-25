@@ -26,8 +26,6 @@ public class SimulationManager : MonoBehaviour {
 	[SerializeField]
 	private Camera mainCamera;
 
-	private SimulationUI _simulationUI;
-
 	public bool IsPaused { get; private set; }
 
 	public IGameOverview GameOverview { get; private set; }
@@ -42,8 +40,10 @@ public class SimulationManager : MonoBehaviour {
 	}
 
 	private void Start() {
-		_simulationUI = FindObjectOfType<SimulationUI>();
-		_simulationUI.OnGameViewMouseUp += SelectTile;
+		var simulationUI = FindObjectOfType<SimulationUI>();
+		if (simulationUI != null) {
+			simulationUI.OnGameViewMouseUp += SelectTile;
+		}
 	}
 
 	private void Update() {
@@ -52,10 +52,6 @@ public class SimulationManager : MonoBehaviour {
 
 	private void FixedUpdate() {
 		GameOverview?.Commands?.Issue(new AdvanceTimeCommand(GameOverview, Time.fixedDeltaTime));
-	}
-
-	private void OnDestroy() {
-		_simulationUI.OnGameViewMouseUp -= SelectTile;
 	}
 
 	private void HandleHover() {
