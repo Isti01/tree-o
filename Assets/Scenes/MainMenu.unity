@@ -317,6 +317,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d083e3f3ad0bdc42b212e5bed740707, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minTowerPlacingAttempts: 5
+  maxTowerPlacingAttempts: 10
+  minTowerDestroyAttempts: 0
+  maxTowerDestroyAttempts: 3
+  towerDestroyProbability: 0.4
+  minTowerUpgradeAttempts: 0
+  maxTowerUpgradeAttempts: 3
+  towerUpgradeProbability: 0.4
+  minUnitDeploymentAttempts: 3
+  maxUnitDeploymentAttempts: 10
+  towerPlacingDelay: 0.25
+  towerTypes:
+  - {fileID: 11400000, guid: a2978ddc11d13fd43bdf581244985ea0, type: 2}
+  - {fileID: 11400000, guid: f299e01e73a41d5498e4b3ebc22c4afe, type: 2}
+  - {fileID: 11400000, guid: bc8ca3c42ec58f44bb985de36537d877, type: 2}
+  unitTypes:
+  - {fileID: 11400000, guid: 990eddc6120b95548a91484d5cad18ff, type: 2}
+  - {fileID: 11400000, guid: 7cde7bea9bf73ac44bd6563d6b5d7aeb, type: 2}
 --- !u!4 &1584077027
 Transform:
   m_ObjectHideFlags: 0
