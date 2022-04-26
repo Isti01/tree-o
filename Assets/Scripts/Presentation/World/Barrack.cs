@@ -11,8 +11,6 @@ public class Barrack : Structure {
 	[SerializeField]
 	private BarrackData redBarrackData;
 
-	private Logic.Data.World.Barrack _data;
-
 	[SerializeField]
 	private SpriteRenderer spriteConstant;
 
@@ -22,8 +20,10 @@ public class Barrack : Structure {
 	[SerializeField]
 	private Light2D pointLight;
 
+	private Logic.Data.World.Barrack _data;
+
 	/// <summary>
-	/// Updates the displayed barrack type
+	///     Updates the displayed barrack type
 	/// </summary>
 	public void SetData(Logic.Data.World.Barrack data) {
 		_data = data;

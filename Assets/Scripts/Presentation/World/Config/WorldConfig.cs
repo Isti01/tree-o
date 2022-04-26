@@ -5,13 +5,10 @@ using Random = UnityEngine.Random;
 
 namespace Presentation.World.Config {
 /// <summary>
-/// Enables the World related settings to be configured in the Unity Editor
+///     Enables the World related settings to be configured in the Unity Editor
 /// </summary>
 [CreateAssetMenu(fileName = "New World Config", menuName = "World/Config/World Config", order = 1)]
 public class WorldConfig : ScriptableObject, IGameWorldConfig {
-	[NonSerialized]
-	private int _width;
-
 	[SerializeField]
 	[Min(8)]
 	[Tooltip("Inclusive")]
@@ -21,9 +18,6 @@ public class WorldConfig : ScriptableObject, IGameWorldConfig {
 	[Min(8)]
 	[Tooltip("Inclusive")]
 	private int maxWidth;
-
-	[NonSerialized]
-	private int _height;
 
 	[SerializeField]
 	[Min(8)]
@@ -46,6 +40,12 @@ public class WorldConfig : ScriptableObject, IGameWorldConfig {
 	[SerializeField]
 	[Min(0)]
 	private int maxBuildingDistance;
+
+	[NonSerialized]
+	private int _height;
+
+	[NonSerialized]
+	private int _width;
 
 	public int Width {
 		get {

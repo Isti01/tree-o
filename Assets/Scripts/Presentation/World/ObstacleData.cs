@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Presentation.World {
 /// <summary>
-/// Enables the obstacle visualization settings to be configured in the Unity Editor
+///     Enables the obstacle visualization settings to be configured in the Unity Editor
 /// </summary>
 [CreateAssetMenu(fileName = "New Obstacle", menuName = "World/Structures/Obstacle", order = 1)]
 public class ObstacleData : ScriptableObject {

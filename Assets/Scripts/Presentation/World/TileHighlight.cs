@@ -18,7 +18,7 @@ public class TileHighlight : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the highlight intensity to dimmed
+	///     Sets the highlight intensity to dimmed
 	/// </summary>
 	public void SetDimmed(bool dimmed = true) {
 		_dimmed = dimmed;
@@ -26,7 +26,7 @@ public class TileHighlight : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the highlight radius
+	///     Sets the highlight radius
 	/// </summary>
 	public void SetRadius(float outerRadius, float innerRadius = 0.0f) {
 		_light.pointLightOuterRadius = outerRadius;
@@ -34,7 +34,7 @@ public class TileHighlight : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Scales the highlight intensity
+	///     Scales the highlight intensity
 	/// </summary>
 	public void ScaleIntensity(float scale) {
 		_scale = scale;
@@ -42,7 +42,7 @@ public class TileHighlight : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Updates the displayed highlight type
+	///     Updates the displayed highlight type
 	/// </summary>
 	public void SetData(TileHighlightData data) {
 		highlightData = data;

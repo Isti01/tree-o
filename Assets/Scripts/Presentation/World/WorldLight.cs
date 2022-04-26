@@ -13,9 +13,7 @@ public class WorldLight : MonoBehaviour {
 			new Vector3(0, height), new Vector3(0, 0), new Vector3(width, 0), new Vector3(width, height)
 		};
 
-		for (int i = 0; i < offsets.Length; i++) {
-			shapeLight.shapePath[i] = offsets[i];
-		}
+		for (int i = 0; i < offsets.Length; i++) shapeLight.shapePath[i] = offsets[i];
 	}
 }
 }

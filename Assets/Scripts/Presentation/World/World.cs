@@ -40,8 +40,9 @@ public class World : MonoBehaviour {
 	[SerializeField]
 	private GameObject environmentPrefab;
 
-	private GameObject[,] _map;
 	private GameTeam _buildingPossibleTeam;
+
+	private GameObject[,] _map;
 	private Logic.Data.World.Barrack _selectedBarrack;
 	private Logic.Data.World.Tower _selectedTower;
 	private GameObject _selectedTowerRadiusHighlight;
@@ -130,14 +131,12 @@ public class World : MonoBehaviour {
 	}
 
 	private void HighlightTowerRadius(Logic.Data.World.Tower tower) {
-		if (_selectedTowerRadiusHighlight != null) {
-			Destroy(_selectedTowerRadiusHighlight);
-		}
+		if (_selectedTowerRadiusHighlight != null) Destroy(_selectedTowerRadiusHighlight);
 
 		if (tower == null) return;
 
-		var position = tower.Position;
-		var parentTile = _map[position.X, position.Y];
+		TilePosition position = tower.Position;
+		GameObject parentTile = _map[position.X, position.Y];
 		_selectedTowerRadiusHighlight = Instantiate(towerRadiusHighlightPrefab, parentTile.transform);
 		_selectedTowerRadiusHighlight.GetComponent<TileHighlight>().SetRadius(tower.Type.Range);
 	}
@@ -166,7 +165,7 @@ public class World : MonoBehaviour {
 		float checkpointCount = _selectedBarrack.CheckPoints.Count;
 		int current = 1;
 		foreach (TilePosition position in _selectedBarrack.CheckPoints) {
-			var highlight = HighlightTile(position);
+			TileHighlight highlight = HighlightTile(position);
 			highlight.ScaleIntensity(current / checkpointCount);
 			current++;
 		}
@@ -183,7 +182,7 @@ public class World : MonoBehaviour {
 		if (_buildingPossibleTeam == null) return;
 
 		foreach (TilePosition position in _buildingPossibleTeam.AvailableTowerPositions) {
-			var tile = HighlightTile(position);
+			TileHighlight tile = HighlightTile(position);
 			tile.SetDimmed();
 		}
 	}
@@ -192,15 +191,13 @@ public class World : MonoBehaviour {
 		return _map[tileObject.Position.X, tileObject.Position.Y].GetComponentInChildren<T>();
 	}
 
-	/// <returns>Returns the <see cref="Unit"/> on the given coordinates</returns>
+	/// <returns>Returns the <see cref="Unit" /> on the given coordinates</returns>
 	public Unit LogicToPresentation(Logic.Data.World.Unit unit) {
 		return _units[unit];
 	}
 
 	private void OnTowerUpgraded(TowerUpgradedEvent e) {
-		if (_selectedTower == e.Tower) {
-			HighlightTowerRadius(e.Tower);
-		}
+		if (_selectedTower == e.Tower) HighlightTowerRadius(e.Tower);
 
 		var tower = LogicToPresentation<Tower>(e.Tower);
 		tower.SetData(e.Tower);
@@ -208,9 +205,7 @@ public class World : MonoBehaviour {
 	}
 
 	private void OnTowerDestroyed(TowerDestroyedEvent e) {
-		if (_selectedTower == e.Tower) {
-			HighlightTowerRadius(null);
-		}
+		if (_selectedTower == e.Tower) HighlightTowerRadius(null);
 
 		var tower = LogicToPresentation<Tower>(e.Tower);
 		tower.DestroyTower();

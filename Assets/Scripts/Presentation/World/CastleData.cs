@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Presentation.World {
 /// <summary>
-/// Enables the castle visualization settings to be configured in the Unity Editor
+///     Enables the castle visualization settings to be configured in the Unity Editor
 /// </summary>
 [CreateAssetMenu(fileName = "New Castle", menuName = "World/Structures/Castle", order = 1)]
 public class CastleData : ScriptableObject {

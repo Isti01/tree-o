@@ -2,7 +2,6 @@
 using UnityEngine;
 
 namespace Presentation.World {
-
 public class HealthBarController : MonoBehaviour {
 	[SerializeField]
 	private float fullyVisibleDuration = 1f;
@@ -26,7 +25,7 @@ public class HealthBarController : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the health bar sprite transparency to opaque
+	///     Sets the health bar sprite transparency to opaque
 	/// </summary>
 	public void MakeVisible() {
 		_lastActionTime = Time.time;
@@ -34,7 +33,7 @@ public class HealthBarController : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the displayed health amount
+	///     Sets the displayed health amount
 	/// </summary>
 	public void SetHealth(float ratio) {
 		if (Math.Abs(healthContainer.localScale.x - ratio) < 0.001) return;
@@ -46,13 +45,12 @@ public class HealthBarController : MonoBehaviour {
 		float newAlpha;
 
 		float delta = Time.time - _lastActionTime;
-		if (delta < fullyVisibleDuration) {
+		if (delta < fullyVisibleDuration)
 			newAlpha = 1;
-		} else if (delta - fullyVisibleDuration < fadingDuration) {
+		else if (delta - fullyVisibleDuration < fadingDuration)
 			newAlpha = Mathf.Lerp(1, 0, (delta - fullyVisibleDuration) / fadingDuration);
-		} else {
+		else
 			newAlpha = 0;
-		}
 
 		Color backgroundColor = backgroundSprite.color;
 		backgroundColor.a = newAlpha;
@@ -63,5 +61,4 @@ public class HealthBarController : MonoBehaviour {
 		healthSprite.color = healthColor;
 	}
 }
-
 }

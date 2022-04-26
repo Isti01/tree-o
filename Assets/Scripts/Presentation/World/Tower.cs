@@ -7,8 +7,6 @@ public class Tower : Structure {
 	[SerializeField]
 	private Transform rotatingTurret;
 
-	private Logic.Data.World.Tower _data;
-
 	[SerializeField]
 	private SpriteRenderer backgroundSprite;
 
@@ -27,6 +25,8 @@ public class Tower : Structure {
 	[SerializeField]
 	private LineRenderer laserRenderer;
 
+	private Logic.Data.World.Tower _data;
+
 	private World _world;
 
 	private void Awake() {
@@ -41,7 +41,7 @@ public class Tower : Structure {
 	}
 
 	/// <summary>
-	/// Sets the displayed tower type
+	///     Sets the displayed tower type
 	/// </summary>
 	public void SetData(Logic.Data.World.Tower data) {
 		_data = data;
@@ -61,7 +61,7 @@ public class Tower : Structure {
 	}
 
 	/// <summary>
-	/// Removes the tower from the scene
+	///     Removes the tower from the scene
 	/// </summary>
 	public void DestroyTower() {
 		Destroy(gameObject);

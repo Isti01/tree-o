@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Presentation.World {
 /// <summary>
-/// Enables the tile highlight visualization settings to be configured in the Unity Editor
+///     Enables the tile highlight visualization settings to be configured in the Unity Editor
 /// </summary>
 [CreateAssetMenu(fileName = "New Tile Highlight", menuName = "World/Structures/Tile Highlight", order = 1)]
 public class TileHighlightData : ScriptableObject {

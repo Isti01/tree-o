@@ -1,14 +1,9 @@
 using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
-using Color = Logic.Data.Color;
 
 namespace Presentation.World {
 [RequireComponent(typeof(HealthBarController))]
 public class Unit : MonoBehaviour {
-	private Logic.Data.World.Unit _data;
-
-	private Vector3 _lastPosition = Vector3.zero;
-
 	[SerializeField]
 	private Transform rotatingChild;
 
@@ -21,7 +16,11 @@ public class Unit : MonoBehaviour {
 	[SerializeField]
 	private Light2D pointLight;
 
+	private Logic.Data.World.Unit _data;
+
 	private HealthBarController _healthBarController;
+
+	private Vector3 _lastPosition = Vector3.zero;
 
 	private void Awake() {
 		_healthBarController = GetComponent<HealthBarController>();
@@ -38,7 +37,7 @@ public class Unit : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the displayed unit type
+	///     Sets the displayed unit type
 	/// </summary>
 	public void SetData(Logic.Data.World.Unit data) {
 		_data = data;
@@ -51,7 +50,7 @@ public class Unit : MonoBehaviour {
 			coloredSprite.sortingLayerName = "UnitGround";
 		}
 
-		var color = _data.Owner.TeamColor == Color.Blue ? unitData.BlueColor : unitData.RedColor;
+		Color color = _data.Owner.TeamColor == Logic.Data.Color.Blue ? unitData.BlueColor : unitData.RedColor;
 
 		constantSprite.sprite = unitData.AliveSpriteConstant;
 		coloredSprite.sprite = unitData.AliveSpriteColored;
@@ -61,14 +60,14 @@ public class Unit : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Updates the displayed health
+	///     Updates the displayed health
 	/// </summary>
 	public void UpdateHealth() {
 		_healthBarController.SetHealth(_data.CurrentHealth / _data.Type.Health);
 	}
 
 	/// <summary>
-	/// Removes the unit from the scene
+	///     Removes the unit from the scene
 	/// </summary>
 	public void DestroyUnit() {
 		Destroy(gameObject);
