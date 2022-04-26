@@ -23,16 +23,16 @@ public class BattleUI : MonoBehaviour {
 	[SerializeField]
 	private UIDocument ui;
 
+	private bool _active = true;
+
 	private Button _exitButton;
 	private Button _pauseButton;
-
-	private VisualElement RootElement => ui.rootVisualElement;
 	private VisualElement _playerBlueOverallStats;
-	private VisualElement _playerRedOverallStats;
 	private VisualElement _playerBlueRoundStats;
+	private VisualElement _playerRedOverallStats;
 	private VisualElement _playerRedRoundStats;
 
-	private bool _active = true;
+	private VisualElement RootElement => ui.rootVisualElement;
 
 	private void Awake() {
 		_pauseButton = RootElement.Q<Button>(Pause);
@@ -58,8 +58,8 @@ public class BattleUI : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the visibility of the pause button on the battle screen.
-	/// The method hides the "Exit" button and shows the "Pause" button
+	///     Sets the visibility of the pause button on the battle screen.
+	///     The method hides the "Exit" button and shows the "Pause" button
 	/// </summary>
 	public void ShowPauseButton() {
 		_pauseButton.style.display = DisplayStyle.Flex;
@@ -67,8 +67,8 @@ public class BattleUI : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the visibility of the exit button on the battle screen.
-	/// The method hides the "Pause" button and shows the "Exit" button
+	///     Sets the visibility of the exit button on the battle screen.
+	///     The method hides the "Pause" button and shows the "Exit" button
 	/// </summary>
 	public void ShowExitButton() {
 		_pauseButton.style.display = DisplayStyle.None;
@@ -76,7 +76,7 @@ public class BattleUI : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Shows the battle screen
+	///     Shows the battle screen
 	/// </summary>
 	public void Show() {
 		_active = true;
@@ -84,7 +84,7 @@ public class BattleUI : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Hides the battle screen
+	///     Hides the battle screen
 	/// </summary>
 	public void Hide() {
 		_active = false;
@@ -92,17 +92,17 @@ public class BattleUI : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the displayed money amount of the given team
+	///     Sets the displayed money amount of the given team
 	/// </summary>
 	public void SetPlayerMoney(Color color, int money) {
 		if (!_active) return;
 
-		var stats = GetOverallStats(color);
+		VisualElement stats = GetOverallStats(color);
 		stats.Q<Label>(PlayerMoneyText).text = $"Money: {money}";
 	}
 
 	/// <summary>
-	/// Sets both overall and round statistics of the given team
+	///     Sets both overall and round statistics of the given team
 	/// </summary>
 	public void SetTeamStatistics(GameTeam team) {
 		if (!_active) return;
@@ -112,24 +112,22 @@ public class BattleUI : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets round statistics of the given team
+	///     Sets round statistics of the given team
 	/// </summary>
 	private void SetRoundStats(GameTeam team) {
-		var stats = GetRoundStats(team.TeamColor).Q(PlayerStatContainer);
+		VisualElement stats = GetRoundStats(team.TeamColor).Q(PlayerStatContainer);
 		stats.Clear();
 
 		string[] texts = { $"Active towers: {team.PresentTowerCount}", $"Alive Units: {team.AliveUnits}" };
 
-		foreach (string text in texts) {
-			stats.Add(new Label { text = text });
-		}
+		foreach (string text in texts) stats.Add(new Label { text = text });
 	}
 
 	/// <summary>
-	/// Sets overall statistics of the given team
+	///     Sets overall statistics of the given team
 	/// </summary>
 	private void SetOverallStats(GameTeam team) {
-		var stats = GetOverallStats(team.TeamColor);
+		VisualElement stats = GetOverallStats(team.TeamColor);
 		stats.Q<Label>(PlayerRemainingUnitsText).text = $"Units purchased: {team.PurchasedUnitCount}";
 		stats.Q<Label>(PlayerCastleHealthText).text = $"Castle Health: {team.Castle.Health}";
 		stats.Q<Label>(PlayerDeployedTowersText).text = $"Built towers: {team.BuiltTowerCount}";
@@ -137,23 +135,23 @@ public class BattleUI : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the remaining time
+	///     Sets the remaining time
 	/// </summary>
 	public void UpdateRemainingTime(float timeLeft) {
 		if (!_active) return;
 
-		var text = $"{Mathf.Round(timeLeft * 100) / 100 + 0.001f}";
+		string text = $"{Mathf.Round(timeLeft * 100) / 100 + 0.001f}";
 		text = text.Substring(0, text.Length - 1); // A small hack to keep the zeroes after the decimal point
 		RootElement.Q<Label>(TimeLeftText).text = $"Time remaining: {text}s";
 	}
 
 	/// <summary>
-	/// Invoked when the exit button is clicked
+	///     Invoked when the exit button is clicked
 	/// </summary>
 	public event Action OnExitClicked;
 
 	/// <summary>
-	/// Invoked when the pause button is clicked
+	///     Invoked when the pause button is clicked
 	/// </summary>
 	public event Action OnPauseClicked;
 }

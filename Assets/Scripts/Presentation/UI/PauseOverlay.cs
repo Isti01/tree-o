@@ -21,31 +21,31 @@ public class PauseOverlay : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Shows the pause overlay
+	///     Shows the pause overlay
 	/// </summary>
 	public void Show() {
 		RootElement.style.display = DisplayStyle.Flex;
 	}
 
 	/// <summary>
-	/// Hides the pause overlay
+	///     Hides the pause overlay
 	/// </summary>
 	public void Hide() {
 		RootElement.style.display = DisplayStyle.None;
 	}
 
 	/// <summary>
-	/// Invoked when the resume button is clicked
+	///     Invoked when the resume button is clicked
 	/// </summary>
 	public event Action OnResumeClicked;
 
 	/// <summary>
-	/// Invoked when the new game button is clicked
+	///     Invoked when the new game button is clicked
 	/// </summary>
 	public event Action OnNewGameClicked;
 
 	/// <summary>
-	/// Invoked when the exit button is clicked
+	///     Invoked when the exit button is clicked
 	/// </summary>
 	public event Action OnExitClicked;
 }

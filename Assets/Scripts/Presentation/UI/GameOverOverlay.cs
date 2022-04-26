@@ -20,10 +20,10 @@ public class GameOverOverlay : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Displays the winner team's name on the screen
+	///     Displays the winner team's name on the screen
 	/// </summary>
 	public void UpdateMessage(GameTeam winner) {
-		var text = "It's a tie!";
+		string text = "It's a tie!";
 		if (winner != null) {
 			string winnerText = winner.TeamColor == Color.Red ? "Red" : "Blue";
 			text = $"Player {winnerText} has won the game!";
@@ -33,21 +33,21 @@ public class GameOverOverlay : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Shows the game over overlay
+	///     Shows the game over overlay
 	/// </summary>
 	public void Show() {
 		RootElement.style.display = DisplayStyle.Flex;
 	}
 
 	/// <summary>
-	/// Hides the game over overlay
+	///     Hides the game over overlay
 	/// </summary>
 	public void Hide() {
 		RootElement.style.display = DisplayStyle.None;
 	}
 
 	/// <summary>
-	/// Invoked when the ok button is clicked
+	///     Invoked when the ok button is clicked
 	/// </summary>
 	public event Action OnOkClicked;
 }

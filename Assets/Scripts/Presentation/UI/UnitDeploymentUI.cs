@@ -42,7 +42,7 @@ public class UnitDeploymentUI : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the colors that should be displayed on each team's turn
+	///     Sets the colors that should be displayed on each team's turn
 	/// </summary>
 	public void SetTeamColors(UnityEngine.Color teamRedColor, UnityEngine.Color teamBlueColor) {
 		_teamRedColor = teamRedColor;
@@ -76,7 +76,7 @@ public class UnitDeploymentUI : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Increments the bought unit count of a given type
+	///     Increments the bought unit count of a given type
 	/// </summary>
 	public void UpdateBoughtUnitCount(UnitTypeData unit) {
 		if (_unitCards.TryGetValue(unit, out VisualElement card))
@@ -94,7 +94,7 @@ public class UnitDeploymentUI : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the UI color and team name, resets the bought unit counters
+	///     Sets the UI color and team name, resets the bought unit counters
 	/// </summary>
 	public void SetActivePlayer(Color activePlayer) {
 		_activePlayer = activePlayer;
@@ -111,46 +111,45 @@ public class UnitDeploymentUI : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Sets the displayed money amount of the given team
+	///     Sets the displayed money amount of the given team
 	/// </summary>
 	public void SetPlayerMoney(Color teamColor, int playerMoney) {
 		if (teamColor == _activePlayer) RootElement.Q<Label>(BudgetText).text = $"Budget: {playerMoney}";
 	}
 
 	/// <summary>
-	/// Shows the unit deployment UI
+	///     Shows the unit deployment UI
 	/// </summary>
 	public void Show() {
 		RootElement.style.display = DisplayStyle.Flex;
 	}
 
 	/// <summary>
-	/// Hides the unit deployment UI
+	///     Hides the unit deployment UI
 	/// </summary>
 	public void Hide() {
 		RootElement.style.display = DisplayStyle.None;
 	}
 
 	/// <summary>
-	/// Updates overall unit deployment statistics of the given team
+	///     Updates overall unit deployment statistics of the given team
 	/// </summary>
 	public void UpdateDeployedUnitStatistics(GameTeam team) {
 		if (team.TeamColor != _activePlayer) return;
 
-		var container = RootElement.Q(DeployedUnitsContainer);
+		VisualElement container = RootElement.Q(DeployedUnitsContainer);
 		container.Clear();
-		foreach (var type in unitTypes) {
+		foreach (UnitTypeData type in unitTypes)
 			container.Add(new Label { text = $"{type.Name}: {team.GetDeployedUnitTypeCount(type)}" });
-		}
 	}
 
 	/// <summary>
-	/// Invoked when a unit purchase card is clicked
+	///     Invoked when a unit purchase card is clicked
 	/// </summary>
 	public event Action<UnitTypeData> OnUnitPurchased;
 
 	/// <summary>
-	/// Invoked when the next button is clicked
+	///     Invoked when the next button is clicked
 	/// </summary>
 	public event Action OnNextClicked;
 }
