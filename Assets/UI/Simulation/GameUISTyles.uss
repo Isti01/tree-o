@@ -54,8 +54,8 @@
 .button {
     padding-top: 6px;
     padding-bottom: 6px;
-    color: rgba(0, 0, 0, 255);
-    background-color: rgba(255, 255, 255, 255);
+    color: rgb(0, 0, 0);
+    background-color: rgba(255, 255, 255, 0.75);
     border-left-width: 0;
     border-right-width: 0;
     border-top-width: 0;

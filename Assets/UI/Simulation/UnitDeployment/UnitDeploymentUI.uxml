@@ -1,19 +1,19 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="/Assets/UI/Simulation/GameUISTyles.uss" />
-    <ui:VisualElement name="GameUIBase" class="GameUIStyles">
+    <ui:VisualElement name="GameUIBase" class="GameUIStyles" style="color: rgb(255, 255, 255);">
         <ui:VisualElement name="VisualElement" class="ContainerStyle">
             <ui:VisualElement class="ColumnContainer">
                 <ui:VisualElement name="GameView" class="GameViewStyle" />
-                <ui:VisualElement name="BottomPanel" class="BottomPanelStyle" style="flex-shrink: 0;" />
+                <ui:VisualElement name="BottomPanel" class="BottomPanelStyle" style="flex-shrink: 0; height: 75px;" />
             </ui:VisualElement>
-            <ui:VisualElement name="TopPanel" class="TopPanelStyle" style="flex-shrink: 0;">
-                <ui:VisualElement name="NextButtonContainer" class="NextButtonStyle buttons" style="flex-shrink: 0;">
-                    <ui:Button text="NEXT" display-tooltip-when-elided="true" name="Next" class="button" style="bottom: auto; position: relative; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px; flex-grow: 1; font-size: 32px;" />
+            <ui:VisualElement name="TopPanel" class="TopPanelStyle" style="flex-shrink: 0; padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px;">
+                <ui:VisualElement name="NextButtonContainer" class="NextButtonStyle buttons" style="flex-shrink: 0; height: 155px;">
+                    <ui:Button text="NEXT" display-tooltip-when-elided="true" name="Next" class="button" style="bottom: auto; position: relative; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px; flex-grow: 1; font-size: 32px; background-color: rgba(255, 255, 255, 0.75);" />
                 </ui:VisualElement>
                 <ui:Label text="Deploy Units" display-tooltip-when-elided="true" class="TitleStyle" />
                 <ui:Label text="Player Red&apos;s turn" display-tooltip-when-elided="true" name="PlayerNameTurn" />
-                <ui:Label text="Budget: 123" display-tooltip-when-elided="true" name="BudgetText" />
-                <ui:Label text="Units Deployed" display-tooltip-when-elided="true" class="SubtitleStyle" style="font-size: 16px; -unity-font-style: bold;" />
+                <ui:Label text="Budget: 123" display-tooltip-when-elided="true" name="BudgetText" style="margin-bottom: 8px;" />
+                <ui:Label text="Units Deployed" display-tooltip-when-elided="true" class="SubtitleStyle" style="font-size: 16px; -unity-font-style: bold; margin-bottom: 8px;" />
                 <ui:VisualElement name="DeployedUnitsContainer" />
             </ui:VisualElement>
         </ui:VisualElement>
