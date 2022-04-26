@@ -2,8 +2,7 @@
 using System.Linq;
 using Logic.Event.World.Tower;
 
-namespace Logic.Data.World;
-
+namespace Logic.Data.World {
 public class Tower : Building {
 	#region Properties
 
@@ -85,4 +84,5 @@ public class Tower : Building {
 	}
 
 	#endregion
+}
 }
