@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Presentation.World {
 /// <summary>
-/// Enables the tower visualization settings to be configured in the Unity Editor
+///     Enables the tower visualization settings to be configured in the Unity Editor
 /// </summary>
 [CreateAssetMenu(fileName = "New Tower Type", menuName = "World/Structures/Tower Type", order = 1)]
 public class TowerTypeData : ScriptableObject, ITowerTypeData {
@@ -25,12 +25,6 @@ public class TowerTypeData : ScriptableObject, ITowerTypeData {
 
 	[SerializeField]
 	private Color redColor;
-
-	[SerializeField]
-	private GameObject shootingEffect;
-
-	[SerializeField]
-	private GameObject ambientEffect;
 
 	[Header("ITowerTypeData values")]
 	[SerializeField]
@@ -69,9 +63,6 @@ public class TowerTypeData : ScriptableObject, ITowerTypeData {
 	public Sprite SpriteBackground => spriteBackground;
 	public Color BlueColor => blueColor;
 	public Color RedColor => redColor;
-	public GameObject ShootingEffect => shootingEffect;
-	public GameObject AmbientEffect => ambientEffect;
-
 	public string Name => name;
 	public float Damage => damage;
 	public float Range => range;

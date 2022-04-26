@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Presentation.World {
 /// <summary>
-/// Enables the unit visualization settings to be configured in the Unity Editor
+///     Enables the unit visualization settings to be configured in the Unity Editor
 /// </summary>
 [CreateAssetMenu(fileName = "New Unit Type", menuName = "World/Unit Type", order = 1)]
 public class UnitTypeData : ScriptableObject, IUnitTypeData {
@@ -22,15 +22,6 @@ public class UnitTypeData : ScriptableObject, IUnitTypeData {
 
 	[SerializeField]
 	private Sprite aliveSpriteColored;
-
-	[SerializeField]
-	private Sprite destroyedSprite;
-
-	[SerializeField]
-	private GameObject attackEffect;
-
-	[SerializeField]
-	private GameObject destroyedEffect;
 
 	[SerializeField]
 	private bool airborne;
@@ -60,9 +51,6 @@ public class UnitTypeData : ScriptableObject, IUnitTypeData {
 	public Sprite PreviewSprite => previewSprite;
 	public Sprite AliveSpriteConstant => aliveSpriteConstant;
 	public Sprite AliveSpriteColored => aliveSpriteColored;
-	public Sprite DestroyedSprite => destroyedSprite;
-	public GameObject AttackEffect => attackEffect;
-	public GameObject DestroyedEffect => destroyedEffect;
 	public bool Airborne => airborne;
 
 	public string Name => name;

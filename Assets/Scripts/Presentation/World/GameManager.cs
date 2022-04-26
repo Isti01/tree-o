@@ -7,21 +7,21 @@ public class GameManager : MonoBehaviour {
 	private const string SimulationScene = "Scenes/Simulation";
 
 	/// <summary>
-	/// Loads the "MainMenu" scene
+	///     Loads the "MainMenu" scene
 	/// </summary>
 	public void LoadMenu() {
 		SceneManager.LoadScene(MainMenuScene);
 	}
 
 	/// <summary>
-	/// Loads the "Simulation" scene
+	///     Loads the "Simulation" scene
 	/// </summary>
 	public void LoadNewGame() {
 		SceneManager.LoadScene(SimulationScene);
 	}
 
 	/// <summary>
-	/// Closes the game
+	///     Closes the game
 	/// </summary>
 	public void ExitGame() {
 		Application.Quit();

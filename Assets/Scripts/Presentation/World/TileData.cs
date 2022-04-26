@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Presentation.World {
 /// <summary>
-/// Enables the tile visualization settings to be configured in the Unity Editor
+///     Enables the tile visualization settings to be configured in the Unity Editor
 /// </summary>
 [CreateAssetMenu(fileName = "New Tile", menuName = "World/Tile", order = 1)]
 public class TileData : ScriptableObject {
@@ -15,12 +15,8 @@ public class TileData : ScriptableObject {
 	[SerializeField]
 	private Sprite sprite;
 
-	[SerializeField]
-	private GameObject ambientEffect;
-
 	public Color EvenColor => evenColor;
 	public Color OddColor => oddColor;
 	public Sprite Sprite => sprite;
-	public GameObject AmbientEffect => ambientEffect;
 }
 }

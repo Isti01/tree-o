@@ -6,6 +6,7 @@ using Presentation.UI;
 using Presentation.World.Config;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Random = UnityEngine.Random;
 
 namespace Presentation.World {
 public class SimulationManager : MonoBehaviour {
@@ -35,15 +36,13 @@ public class SimulationManager : MonoBehaviour {
 			Debug.LogError($"[Logic Exception]: ${e} {e.InnerException}");
 		}
 
-		GameOverview = new GameOverview(ExceptionHandler, UnityEngine.Random.Range(0, 9999),
+		GameOverview = new GameOverview(ExceptionHandler, Random.Range(0, 9999),
 			overviewConfig, economyConfig, worldConfig);
 	}
 
 	private void Start() {
 		var simulationUI = FindObjectOfType<SimulationUI>();
-		if (simulationUI != null) {
-			simulationUI.OnGameViewMouseUp += SelectTile;
-		}
+		if (simulationUI != null) simulationUI.OnGameViewMouseUp += SelectTile;
 	}
 
 	private void Update() {
@@ -56,11 +55,11 @@ public class SimulationManager : MonoBehaviour {
 
 	private void HandleHover() {
 		Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
-		int layerMask = 1 << LayerMask.NameToLayer("Unit") | 1 << LayerMask.NameToLayer("Castle");
+		int layerMask = (1 << LayerMask.NameToLayer("Unit")) | (1 << LayerMask.NameToLayer("Castle"));
 		RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
 		if (!hit) return;
 
-		HealthbarController health = hit.transform.parent.GetComponent<HealthbarController>();
+		var health = hit.transform.parent.GetComponent<HealthBarController>();
 		health.MakeVisible();
 	}
 
@@ -78,7 +77,7 @@ public class SimulationManager : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Resumes the simulation by setting the timeScale to 1
+	///     Resumes the simulation by setting the timeScale to 1
 	/// </summary>
 	public void ResumeGame() {
 		Time.timeScale = 1;
@@ -86,7 +85,7 @@ public class SimulationManager : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Stops the simulation by setting the timeScale to 0
+	///     Stops the simulation by setting the timeScale to 0
 	/// </summary>
 	public void PauseGame() {
 		Time.timeScale = 0;
@@ -94,7 +93,7 @@ public class SimulationManager : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Invoked when a tile is selected in the game world
+	///     Invoked when a tile is selected in the game world
 	/// </summary>
 	public event Action<TilePosition, MouseButton> OnTileSelected;
 }

@@ -2,13 +2,16 @@
 using System.Linq;
 using Logic.Event.World.Tower;
 
-namespace Logic.Data.World {
+namespace Logic.Data.World;
+
 public class Tower : Building {
 	#region Properties
 
 	public ITowerTypeData Type { get; private set; }
 
-	//TODO we need a CanBeNull annotation or some documentation here
+	/// <summary>
+	///     Stores a reference to the targeted unit. This getter might return null.
+	/// </summary>
 	public Unit Target { get; private set; }
 
 	public Unit ClosestEnemy {
@@ -55,12 +58,11 @@ public class Tower : Building {
 			return;
 		Unit oldTarget = Target;
 		Target = null;
-		foreach (Unit unit in World.Units.OrderBy(unit => Position.ToVectorCentered().Distance(unit.Position))) {
+		foreach (Unit unit in World.Units.OrderBy(unit => Position.ToVectorCentered().Distance(unit.Position)))
 			if (unit.Owner != Owner) {
 				Target = Position.ToVectorCentered().Distance(unit.Position) <= Type.Range ? unit : null;
 				break;
 			}
-		}
 
 		if (Target != oldTarget) World.Overview.Events.Raise(new TowerTargetChangedEvent(this, oldTarget));
 	}
@@ -83,5 +85,4 @@ public class Tower : Building {
 	}
 
 	#endregion
-}
 }

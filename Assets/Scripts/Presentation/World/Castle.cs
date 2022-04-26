@@ -3,15 +3,13 @@ using UnityEngine.Experimental.Rendering.Universal;
 using Color = Logic.Data.Color;
 
 namespace Presentation.World {
-[RequireComponent(typeof(HealthbarController))]
+[RequireComponent(typeof(HealthBarController))]
 public class Castle : Structure {
 	[SerializeField]
 	private CastleData blueCastleData;
 
 	[SerializeField]
 	private CastleData redCastleData;
-
-	private Logic.Data.World.Castle _data;
 
 	[SerializeField]
 	private SpriteRenderer spriteConstant;
@@ -22,16 +20,18 @@ public class Castle : Structure {
 	[SerializeField]
 	private Light2D pointLight;
 
-	private bool _destroyed = false;
+	private Logic.Data.World.Castle _data;
 
-	private HealthbarController _healthbarController;
+	private bool _destroyed;
+
+	private HealthBarController _healthBarController;
 
 	private void Start() {
-		_healthbarController = GetComponent<HealthbarController>();
+		_healthBarController = GetComponent<HealthBarController>();
 	}
 
 	/// <summary>
-	/// Updates the displayed castle type
+	///     Updates the displayed castle type
 	/// </summary>
 	public void SetData(Logic.Data.World.Castle data) {
 		_data = data;
@@ -45,14 +45,14 @@ public class Castle : Structure {
 	}
 
 	/// <summary>
-	/// Updates the displayed health
+	///     Updates the displayed health
 	/// </summary>
 	public void UpdateHealth() {
-		_healthbarController.SetHealth(_data.Health / _data.World.Config.CastleStartingHealth);
+		_healthBarController.SetHealth(_data.Health / _data.World.Config.CastleStartingHealth);
 	}
 
 	/// <summary>
-	/// Updates the displayed castle type to it's destroyed variant
+	///     Updates the displayed castle type to it's destroyed variant
 	/// </summary>
 	public void SetDestroyed() {
 		_destroyed = true;
