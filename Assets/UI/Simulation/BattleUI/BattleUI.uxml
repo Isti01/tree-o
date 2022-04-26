@@ -1,12 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="/Assets/UI/Simulation/GameUISTyles.uss" />
-    <ui:VisualElement name="BattleUI" style="flex-grow: 1;">
+    <ui:VisualElement name="BattleUI" style="flex-grow: 1; color: rgb(255, 255, 255);">
         <ui:VisualElement name="Container" style="flex-grow: 1;">
             <ui:VisualElement name="GameUIBase" class="GameUIStyles">
                 <ui:VisualElement name="VisualElement" class="ContainerStyle">
                     <ui:VisualElement class="ColumnContainer">
                         <ui:VisualElement name="GameView" class="GameViewStyle" />
-                        <ui:VisualElement name="BottomPanel" class="BottomPanelStyle" style="align-items: stretch; justify-content: space-between; flex-direction: row;">
+                        <ui:VisualElement name="BottomPanel" class="BottomPanelStyle" style="align-items: stretch; justify-content: space-between; flex-direction: row; height: 120px; background-color: rgba(238, 238, 238, 0.15);">
                             <ui:VisualElement style="flex-direction: row; flex-grow: 1;">
                                 <ui:VisualElement name="PlayerRedOverallStats" style="flex-grow: 1; height: 100%; padding-left: 12px; padding-right: 12px;">
                                     <ui:Label text="Player Red Stats" display-tooltip-when-elided="true" style="flex-shrink: 1; font-size: 18px; -unity-font-style: bold;" />
@@ -15,20 +15,20 @@
                                             <ui:Label text="Money: 123" display-tooltip-when-elided="true" name="PlayerMoneyText" style="white-space: nowrap;" />
                                             <ui:Label text="Remaining Units: 123" display-tooltip-when-elided="true" name="PlayerRemainingUnitsText" />
                                         </ui:VisualElement>
-                                        <ui:VisualElement style="flex-grow: 1; padding-right: 4px; padding-left: 4px; border-left-width: 1px; border-left-color: rgb(0, 0, 0);">
+                                        <ui:VisualElement style="flex-grow: 1; padding-right: 4px; padding-left: 4px; border-left-width: 1px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);">
                                             <ui:Label text="Castle Health: 100" display-tooltip-when-elided="true" name="PlayerCastleHealthText" />
                                             <ui:Label text="Deployed Towers: 123" display-tooltip-when-elided="true" name="PlayerDeployedTowersText" />
                                         </ui:VisualElement>
                                     </ui:VisualElement>
                                 </ui:VisualElement>
-                                <ui:VisualElement name="PlayerBlueOverallStats" style="flex-grow: 1; height: 100%; padding-left: 12px; padding-right: 12px; border-left-width: 1px; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0);">
+                                <ui:VisualElement name="PlayerBlueOverallStats" style="flex-grow: 1; height: 100%; padding-left: 12px; padding-right: 12px; border-left-width: 1px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);">
                                     <ui:Label text="Player Blue Stats" display-tooltip-when-elided="true" style="flex-shrink: 1; font-size: 18px; -unity-font-style: bold;" />
                                     <ui:VisualElement style="flex-direction: row;">
                                         <ui:VisualElement style="flex-grow: 1; padding-left: 4px; padding-right: 4px;">
                                             <ui:Label text="Money: 123" display-tooltip-when-elided="true" name="PlayerMoneyText" style="white-space: nowrap;" />
                                             <ui:Label text="Remaining Units: 123" display-tooltip-when-elided="true" name="PlayerRemainingUnitsText" />
                                         </ui:VisualElement>
-                                        <ui:VisualElement style="flex-grow: 1; padding-right: 4px; padding-left: 4px; border-left-width: 1px; border-left-color: rgb(0, 0, 0);">
+                                        <ui:VisualElement style="flex-grow: 1; padding-right: 4px; padding-left: 4px; border-left-width: 1px; border-left-color: rgb(255, 255, 255); border-right-color: rgb(255, 255, 255); border-top-color: rgb(255, 255, 255); border-bottom-color: rgb(255, 255, 255);">
                                             <ui:Label text="Castle Health: 100" display-tooltip-when-elided="true" name="PlayerCastleHealthText" />
                                             <ui:Label text="Deployed Towers: 123" display-tooltip-when-elided="true" name="PlayerDeployedTowersText" />
                                         </ui:VisualElement>
@@ -37,8 +37,8 @@
                             </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
-                    <ui:VisualElement name="TopPanel" class="TopPanelStyle">
-                        <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="flex-grow: 1;">
+                    <ui:VisualElement name="TopPanel" class="TopPanelStyle" style="background-color: rgba(238, 238, 238, 0.15);">
+                        <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" style="flex-grow: 1; margin-left: 8px; margin-right: 8px; margin-top: 8px; margin-bottom: 8px;">
                             <ui:VisualElement name="PanelContent">
                                 <ui:Label text="Round Stats" display-tooltip-when-elided="true" class="TitleStyle" />
                                 <ui:Label text="Time left: 6.9s" display-tooltip-when-elided="true" name="TimeLeftText" />
@@ -52,7 +52,7 @@
                                 </ui:VisualElement>
                             </ui:VisualElement>
                         </ui:ScrollView>
-                        <ui:VisualElement name="ButtonContainer" class="NextButtonStyle" style="flex-grow: 0; flex-shrink: 0; position: relative; left: auto; right: auto; bottom: auto; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 1px; border-left-width: 1px;">
+                        <ui:VisualElement name="ButtonContainer" class="NextButtonStyle" style="flex-grow: 0; flex-shrink: 0; position: relative; left: auto; right: auto; bottom: auto; border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 0; border-left-width: 0; height: 155px; border-right-width: 0; border-bottom-width: 0;">
                             <ui:Button text="PAUSE" display-tooltip-when-elided="true" name="Pause" class="button" style="bottom: auto; position: relative; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px; flex-grow: 1; font-size: 32px; display: flex;" />
                             <ui:Button text="EXIT" display-tooltip-when-elided="true" name="Exit" class="button" style="bottom: auto; position: relative; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px; flex-grow: 1; font-size: 32px; display: none;" />
                         </ui:VisualElement>

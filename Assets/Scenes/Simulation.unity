@@ -747,8 +747,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d80f85b23d8d9b842b649c70083f3695, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teamRedColor: {r: 1, g: 0.4208334, b: 0.33490568, a: 1}
-  teamBlueColor: {r: 0.2971698, g: 0.5929819, b: 1, a: 1}
+  teamRedColor: {r: 0.78699994, g: 0.058639213, b: 0, a: 0.2509804}
+  teamBlueColor: {r: 0.10994117, g: 0.42091784, b: 0.801, a: 0.2509804}
 --- !u!1 &1998696470
 GameObject:
   m_ObjectHideFlags: 0
