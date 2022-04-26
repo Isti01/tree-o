@@ -12,5 +12,15 @@
     border-bottom-left-radius: 12px;
     border-top-right-radius: 12px;
     border-bottom-right-radius: 12px;
-    color: rgba(27, 27, 27, 255);
+    color: rgb(27, 27, 27);
+}
+
+.title-style {
+    font-size: 24px;
+    -unity-font-style: bold;
+}
+
+.paragraph-style {
+    white-space: normal;
+    font-size: 16px;
 }
