@@ -77,9 +77,11 @@ public class World : MonoBehaviour {
 		events.AddListener<CastleDestroyedEvent>(OnCastleDestroyed);
 
 		var simulationUI = FindObjectOfType<SimulationUI>();
-		simulationUI.OnBuildingPossibleChanges += OnBuildingPossibleChanges;
-		simulationUI.OnBarrackSelected += OnBarrackSelected;
-		simulationUI.OnTowerSelected += OnTowerSelected;
+		if (simulationUI != null) {
+			simulationUI.OnBuildingPossibleChanges += OnBuildingPossibleChanges;
+			simulationUI.OnBarrackSelected += OnBarrackSelected;
+			simulationUI.OnTowerSelected += OnTowerSelected;
+		}
 
 		GameWorld world = GameOverview.World;
 		transform.position = new Vector3(-world.Width / 2.0f, -world.Width / 2.0f, 0);
@@ -186,8 +188,7 @@ public class World : MonoBehaviour {
 		}
 	}
 
-	/// <returns>Returns the <see cref="Structure"/> on the given coordinates</returns>
-	public T LogicToPresentation<T>(TileObject tileObject) where T : Structure {
+	private T LogicToPresentation<T>(TileObject tileObject) where T : Structure {
 		return _map[tileObject.Position.X, tileObject.Position.Y].GetComponentInChildren<T>();
 	}
 

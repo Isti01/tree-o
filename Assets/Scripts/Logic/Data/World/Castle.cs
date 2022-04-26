@@ -19,7 +19,7 @@ public class Castle : Building {
 	}
 
 	internal void Damage(Unit attacker, float damage) {
-		if (damage <= 0) throw new ArgumentException("Damage must be positive");
+		if (damage < 0) throw new ArgumentException("Damage must not be negative");
 		if (IsDestroyed) throw new InvalidOperationException("Castle is already destroyed");
 
 		Health = Math.Max(Health - damage, 0);

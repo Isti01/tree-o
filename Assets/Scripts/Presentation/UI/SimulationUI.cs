@@ -100,32 +100,6 @@ public class SimulationUI : MonoBehaviour {
 		_battleUI.UpdateRemainingTime(GameOverview.TimeLeftFromPhase);
 	}
 
-	private void OnDestroy() {
-		_simulationManager.OnTileSelected -= OnTileSelected;
-
-		_gameOverOverlay.OnOkClicked -= HideGameOverOverlay;
-
-		_battleUI.OnPauseClicked -= PauseGame;
-		_battleUI.OnExitClicked -= OnExitClicked;
-
-		_towerPlacing.OnNextClicked -= StepTowerPlacing;
-		_towerPlacing.OnTowerTypeSelected -= OnTowerTypeSelected;
-		_towerPlacing.OnTowerDestroyed -= OnTowerDestroyed;
-		_towerPlacing.OnTowerUpgraded -= OnTowerUpgraded;
-
-		_pauseOverlay.OnResumeClicked -= ResumeGame;
-		_pauseOverlay.OnNewGameClicked -= OnNewGameClicked;
-		_pauseOverlay.OnExitClicked -= OnExitClicked;
-
-		_unitDeployment.OnNextClicked -= StepUnitDeployment;
-		_unitDeployment.OnUnitPurchased -= OnUnitPurchased;
-
-		GameOverview.Events.RemoveListener<PhaseAdvancedEvent>(Ordering.Normal, OnPhaseAdvanced);
-		GameOverview.Events.RemoveListener<CastleDestroyedEvent>(Ordering.Normal, OnCastleDestroyed);
-		GameOverview.Events.RemoveListener<TeamMoneyUpdatedEvent>(Ordering.Normal, OnTeamMoneyUpdated);
-		GameOverview.Events.RemoveListener<TeamStatisticsUpdatedEvent>(Ordering.Normal, OnTeamStatisticsUpdated);
-	}
-
 	private void OnTeamStatisticsUpdated(TeamStatisticsUpdatedEvent e) {
 		_battleUI.SetTeamStatistics(e.Team);
 		_unitDeployment.UpdateDeployedUnitStatistics(e.Team);

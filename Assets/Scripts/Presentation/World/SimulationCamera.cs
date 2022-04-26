@@ -48,6 +48,10 @@ public class SimulationCamera : MonoBehaviour {
 
 	private void SetupCallbacks() {
 		var simulationUI = FindObjectOfType<SimulationUI>();
+		if (simulationUI == null) {
+			_shouldZoom = false;
+			return;
+		}
 
 		Vector2 mousePosition = Vector2.zero;
 		simulationUI.OnGameViewMouseDown += e => {
