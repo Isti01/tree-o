@@ -14,8 +14,8 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Barrack = Logic.Data.World.Barrack;
 using Color = UnityEngine.Color;
+using EventDispatcher = Logic.Event.EventDispatcher;
 using Tower = Logic.Data.World.Tower;
-using Ordering = Logic.Event.EventDispatcher.Ordering;
 
 namespace Presentation.UI {
 public class SimulationUI : MonoBehaviour {
@@ -79,10 +79,11 @@ public class SimulationUI : MonoBehaviour {
 		_unitDeployment.OnNextClicked += StepUnitDeployment;
 		_unitDeployment.OnUnitPurchased += OnUnitPurchased;
 
-		GameOverview.Events.AddListener<PhaseAdvancedEvent>(Ordering.Normal, OnPhaseAdvanced);
-		GameOverview.Events.AddListener<CastleDestroyedEvent>(Ordering.Normal, OnCastleDestroyed);
-		GameOverview.Events.AddListener<TeamMoneyUpdatedEvent>(Ordering.Normal, OnTeamMoneyUpdated);
-		GameOverview.Events.AddListener<TeamStatisticsUpdatedEvent>(Ordering.Normal, OnTeamStatisticsUpdated);
+		GameOverview.Events.AddListener<PhaseAdvancedEvent>(EventDispatcher.Ordering.Normal, OnPhaseAdvanced);
+		GameOverview.Events.AddListener<CastleDestroyedEvent>(EventDispatcher.Ordering.Normal, OnCastleDestroyed);
+		GameOverview.Events.AddListener<TeamMoneyUpdatedEvent>(EventDispatcher.Ordering.Normal, OnTeamMoneyUpdated);
+		GameOverview.Events.AddListener<TeamStatisticsUpdatedEvent>(EventDispatcher.Ordering.Normal,
+			OnTeamStatisticsUpdated);
 
 		HideUIs();
 		SetupMousePanning();
@@ -114,7 +115,7 @@ public class SimulationUI : MonoBehaviour {
 	}
 
 	private void OnCastleDestroyed(CastleDestroyedEvent e) {
-		var winner = e.Castle.World.Overview.Teams.FirstOrDefault(team => !team.Castle.IsDestroyed);
+		GameTeam winner = e.Castle.World.Overview.Teams.FirstOrDefault(team => !team.Castle.IsDestroyed);
 		_gameOverOverlay.UpdateMessage(winner);
 	}
 
@@ -226,11 +227,10 @@ public class SimulationUI : MonoBehaviour {
 		OnBuildingPossibleChanges?.Invoke(null);
 		OnTowerSelected?.Invoke(null);
 
-		if (_activePlayer == Logic.Data.Color.Blue) {
+		if (_activePlayer == Logic.Data.Color.Blue)
 			StartTowerPlacing(Logic.Data.Color.Red, true);
-		} else {
+		else
 			UpdateUiState(UIState.UnitDeployment);
-		}
 	}
 
 	private void OnTowerTypeSelected(TowerTypeData towerType) {
@@ -297,15 +297,14 @@ public class SimulationUI : MonoBehaviour {
 			_unitDeployment.SetPlayerMoney(player, playerData.Money);
 			_unitDeployment.UpdateDeployedUnitStatistics(GameOverview.GetTeam(_activePlayer));
 		}
+
 		_unitDeployment.Show();
 	}
 
 	private void StartBattle() {
 		_battleUI.Show();
 		_battleUI.ShowPauseButton();
-		foreach (var team in GameOverview.Teams) {
-			_battleUI.SetTeamStatistics(team);
-		}
+		foreach (GameTeam team in GameOverview.Teams) _battleUI.SetTeamStatistics(team);
 	}
 
 	private void ShowPauseOverlay() {
@@ -350,42 +349,42 @@ public class SimulationUI : MonoBehaviour {
 	}
 
 	/// <summary>
-	/// Invoked when a tower is selected, the event argument is null when a tower is deselected
+	///     Invoked when a tower is selected, the event argument is null when a tower is deselected
 	/// </summary>
 	public event Action<Tower> OnTowerSelected;
 
 	/// <summary>
-	/// Invoked when the building possible area visualization should be updated
+	///     Invoked when the building possible area visualization should be updated
 	/// </summary>
 	public event Action<GameTeam> OnBuildingPossibleChanges;
 
 	/// <summary>
-	/// Invoked when a barrack is selected, the event argument is null when a barrack is deselected
+	///     Invoked when a barrack is selected, the event argument is null when a barrack is deselected
 	/// </summary>
 	public event Action<Barrack> OnBarrackSelected;
 
 	/// <summary>
-	/// Invoked when the mouse enters the game area
+	///     Invoked when the mouse enters the game area
 	/// </summary>
 	public event Action<MouseEnterEvent> OnGameViewMouseEnter;
 
 	/// <summary>
-	/// Invoked when the mouse leaves the game area
+	///     Invoked when the mouse leaves the game area
 	/// </summary>
 	public event Action<MouseLeaveEvent> OnGameViewMouseLeave;
 
 	/// <summary>
-	/// Invoked when a mouse button is pressed down on the game area
+	///     Invoked when a mouse button is pressed down on the game area
 	/// </summary>
 	public event Action<MouseDownEvent> OnGameViewMouseDown;
 
 	/// <summary>
-	/// Invoked when a mouse button is released on the game area
+	///     Invoked when a mouse button is released on the game area
 	/// </summary>
 	public event Action<MouseUpEvent> OnGameViewMouseUp;
 
 	/// <summary>
-	/// Invoked when the mouse cursor moved on the game area
+	///     Invoked when the mouse cursor moved on the game area
 	/// </summary>
 	public event Action<MouseMoveEvent> OnGameViewMouseMove;
 }
