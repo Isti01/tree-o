@@ -12,11 +12,7 @@ public class ObstacleData : ScriptableObject {
 	[SerializeField]
 	private Sprite sprite;
 
-	[SerializeField]
-	private GameObject ambientEffect;
-
 	public Color Color => color;
 	public Sprite Sprite => sprite;
-	public GameObject AmbientEffect => ambientEffect;
 }
 }

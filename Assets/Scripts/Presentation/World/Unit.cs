@@ -3,7 +3,7 @@ using UnityEngine.Experimental.Rendering.Universal;
 using Color = Logic.Data.Color;
 
 namespace Presentation.World {
-[RequireComponent(typeof(HealthbarController))]
+[RequireComponent(typeof(HealthBarController))]
 public class Unit : MonoBehaviour {
 	private Logic.Data.World.Unit _data;
 
@@ -21,10 +21,10 @@ public class Unit : MonoBehaviour {
 	[SerializeField]
 	private Light2D pointLight;
 
-	private HealthbarController _healthbarController;
+	private HealthBarController _healthBarController;
 
 	private void Awake() {
-		_healthbarController = GetComponent<HealthbarController>();
+		_healthBarController = GetComponent<HealthBarController>();
 	}
 
 	private void FixedUpdate() {
@@ -64,7 +64,7 @@ public class Unit : MonoBehaviour {
 	/// Updates the displayed health
 	/// </summary>
 	public void UpdateHealth() {
-		_healthbarController.SetHealth(_data.CurrentHealth / _data.Type.Health);
+		_healthBarController.SetHealth(_data.CurrentHealth / _data.Type.Health);
 	}
 
 	/// <summary>

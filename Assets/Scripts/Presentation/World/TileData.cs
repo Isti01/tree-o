@@ -15,12 +15,8 @@ public class TileData : ScriptableObject {
 	[SerializeField]
 	private Sprite sprite;
 
-	[SerializeField]
-	private GameObject ambientEffect;
-
 	public Color EvenColor => evenColor;
 	public Color OddColor => oddColor;
 	public Sprite Sprite => sprite;
-	public GameObject AmbientEffect => ambientEffect;
 }
 }

@@ -68,8 +68,8 @@ public class MainMenuSimulationSupervisor : MonoBehaviour {
 			UnitTypeData modifiedUnitType = Instantiate(unitType);
 			FieldInfo prop = modifiedUnitType.GetType().GetField("damage",
 				BindingFlags.NonPublic | BindingFlags.Instance);
+
 			Debug.Assert(prop != null);
-			if (prop == null) continue;
 			prop.SetValue(modifiedUnitType, 0.0f);
 			_modifiedUnitTypes.Add(modifiedUnitType);
 		}

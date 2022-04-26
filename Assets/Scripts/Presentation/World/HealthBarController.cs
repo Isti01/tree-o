@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Presentation.World {
 
-public class HealthbarController : MonoBehaviour {
+public class HealthBarController : MonoBehaviour {
 	[SerializeField]
 	private float fullyVisibleDuration = 1f;
 

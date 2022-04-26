@@ -24,15 +24,6 @@ public class UnitTypeData : ScriptableObject, IUnitTypeData {
 	private Sprite aliveSpriteColored;
 
 	[SerializeField]
-	private Sprite destroyedSprite;
-
-	[SerializeField]
-	private GameObject attackEffect;
-
-	[SerializeField]
-	private GameObject destroyedEffect;
-
-	[SerializeField]
 	private bool airborne;
 
 	[Header("IUnitTypeData values")]
@@ -60,9 +51,6 @@ public class UnitTypeData : ScriptableObject, IUnitTypeData {
 	public Sprite PreviewSprite => previewSprite;
 	public Sprite AliveSpriteConstant => aliveSpriteConstant;
 	public Sprite AliveSpriteColored => aliveSpriteColored;
-	public Sprite DestroyedSprite => destroyedSprite;
-	public GameObject AttackEffect => attackEffect;
-	public GameObject DestroyedEffect => destroyedEffect;
 	public bool Airborne => airborne;
 
 	public string Name => name;

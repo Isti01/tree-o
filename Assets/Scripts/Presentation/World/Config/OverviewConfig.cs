@@ -9,7 +9,7 @@ namespace Presentation.World.Config {
 public class OverviewConfig : ScriptableObject, IGameOverviewConfig {
 	[SerializeField]
 	[Min(0.1f)]
-	public float fightingPhaseDuration;
+	private float fightingPhaseDuration;
 
 	public float FightingPhaseDuration => fightingPhaseDuration;
 }

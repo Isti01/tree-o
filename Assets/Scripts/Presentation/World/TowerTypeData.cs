@@ -26,12 +26,6 @@ public class TowerTypeData : ScriptableObject, ITowerTypeData {
 	[SerializeField]
 	private Color redColor;
 
-	[SerializeField]
-	private GameObject shootingEffect;
-
-	[SerializeField]
-	private GameObject ambientEffect;
-
 	[Header("ITowerTypeData values")]
 	[SerializeField]
 	private new string name;
@@ -69,9 +63,6 @@ public class TowerTypeData : ScriptableObject, ITowerTypeData {
 	public Sprite SpriteBackground => spriteBackground;
 	public Color BlueColor => blueColor;
 	public Color RedColor => redColor;
-	public GameObject ShootingEffect => shootingEffect;
-	public GameObject AmbientEffect => ambientEffect;
-
 	public string Name => name;
 	public float Damage => damage;
 	public float Range => range;

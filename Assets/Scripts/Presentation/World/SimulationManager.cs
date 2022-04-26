@@ -60,7 +60,7 @@ public class SimulationManager : MonoBehaviour {
 		RaycastHit2D hit = Physics2D.GetRayIntersection(ray, Mathf.Infinity, layerMask);
 		if (!hit) return;
 
-		HealthbarController health = hit.transform.parent.GetComponent<HealthbarController>();
+		HealthBarController health = hit.transform.parent.GetComponent<HealthBarController>();
 		health.MakeVisible();
 	}
 

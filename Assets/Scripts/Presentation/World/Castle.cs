@@ -3,7 +3,7 @@ using UnityEngine.Experimental.Rendering.Universal;
 using Color = Logic.Data.Color;
 
 namespace Presentation.World {
-[RequireComponent(typeof(HealthbarController))]
+[RequireComponent(typeof(HealthBarController))]
 public class Castle : Structure {
 	[SerializeField]
 	private CastleData blueCastleData;
@@ -22,12 +22,12 @@ public class Castle : Structure {
 	[SerializeField]
 	private Light2D pointLight;
 
-	private bool _destroyed = false;
+	private bool _destroyed;
 
-	private HealthbarController _healthbarController;
+	private HealthBarController _healthBarController;
 
 	private void Start() {
-		_healthbarController = GetComponent<HealthbarController>();
+		_healthBarController = GetComponent<HealthBarController>();
 	}
 
 	/// <summary>
@@ -48,7 +48,7 @@ public class Castle : Structure {
 	/// Updates the displayed health
 	/// </summary>
 	public void UpdateHealth() {
-		_healthbarController.SetHealth(_data.Health / _data.World.Config.CastleStartingHealth);
+		_healthBarController.SetHealth(_data.Health / _data.World.Config.CastleStartingHealth);
 	}
 
 	/// <summary>

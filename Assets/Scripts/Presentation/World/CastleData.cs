@@ -21,18 +21,10 @@ public class CastleData : ScriptableObject {
 	[SerializeField]
 	private Sprite destroyedSpriteColored;
 
-	[SerializeField]
-	private GameObject ambientEffect;
-
-	[SerializeField]
-	private GameObject explosionEffect;
-
 	public Color Color => color;
 	public Sprite IntactSpriteConstant => intactSpriteConstant;
 	public Sprite IntactSpriteColored => intactSpriteColored;
 	public Sprite DestroyedSpriteConstant => destroyedSpriteConstant;
 	public Sprite DestroyedSpriteColored => destroyedSpriteColored;
-	public GameObject AmbientEffect => ambientEffect;
-	public GameObject ExplosionEffect => explosionEffect;
 }
 }
