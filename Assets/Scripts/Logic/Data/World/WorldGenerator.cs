@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Logic.Data.World {
-
 internal class WorldGenerator {
 	public static TileObject[,] GenerateGrid(int seed, int width, int height,
 		bool generateObstacles, ITileObjectConstructors constructors) {
@@ -51,11 +50,11 @@ internal class WorldGenerator {
 
 		occupiedList.Add(_constructors.CreateBarrack(new TilePosition(x, y), Color.Red));
 
-		int obstacleCount = _generateObstacles ? (_random.Next() % ((_width * _height) / 60)) + 2 : 0;
+		int obstacleCount = _generateObstacles ? (_random.Next() % ((_width * _height) / 40)) + 2 : 0;
 		int i = 0, rep = 0;
 		while (i < obstacleCount && rep < 1000) {
 			++rep;
-			int obstacleSize = _random.Next() % 3 + 1;
+			int obstacleSize = _random.Next() % 2 + 1;
 			x = _random.Next() % (_width - obstacleSize);
 			y = _random.Next() % ((_height / 2) - obstacleSize);
 			bool allGood = true;
@@ -77,6 +76,21 @@ internal class WorldGenerator {
 
 				++i;
 			}
+		}
+
+		if (i == 0) {
+			List<int> goodindeces = new List<int>();
+			for (int j = 0; j < _width; j++) {
+				tp = new TilePosition(_height / 2, _width);
+				if (!occupiedList.Where(building => !(building is Obstacle))
+					.Any(occupied => occupied.Position.FirstNormDistance(tp) < 4)) {
+					goodindeces.Add(j);
+				}
+			}
+
+			occupiedList.Add(_constructors.CreateObstacle(new TilePosition(
+				goodindeces[_random.Next() % goodindeces.Count],
+				_height / 2)));
 		}
 
 		List<TileObject> otherSide = new List<TileObject>();
@@ -109,5 +123,4 @@ internal class WorldGenerator {
 		public Obstacle CreateObstacle(TilePosition position);
 	}
 }
-
 }

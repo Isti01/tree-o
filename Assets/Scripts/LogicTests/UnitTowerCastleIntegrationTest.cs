@@ -11,7 +11,6 @@ using Logic.Event.World.Unit;
 using NUnit.Framework;
 
 namespace LogicTests {
-
 /// <summary>
 /// Tests the basic interactions between <see cref="Unit"/>, <see cref="Castle"/>
 /// and <see cref="Tower"/> instances: unit damaging castle, unit destroying castle,
@@ -117,8 +116,8 @@ public class UnitTowerCastleIntegrationTest {
 		GameTeam towerTeam = overview.GetEnemyTeam(unitTeam);
 
 		//Purchase a unit with zero speed
-		GameTestUtils.UnitTypeData unitType = new GameTestUtils.UnitTypeData { Speed = 0 };
-		Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(unitTeam, unitType)));
+		GameTestUtils.UnitTypeData unitType = new GameTestUtils.UnitTypeData {Speed = 0};
+		unitTeam.Barracks.First().QueueUnit(unitType);
 
 		//Build a tower with zero damage and high range
 		GameTestUtils.TowerTypeData towerType = new GameTestUtils.TowerTypeData {
@@ -157,7 +156,7 @@ public class UnitTowerCastleIntegrationTest {
 	[Test]
 	public void TestTowerTargetReachedCastle() {
 		GameOverview overview = CreateTowerTargetTestingGame(10, 10,
-			(towerTeam, _) => new[] { towerTeam.AvailableTowerPositions.First() }, 1, 0, float.PositiveInfinity, 1);
+			(towerTeam, _) => new[] {towerTeam.AvailableTowerPositions.First()}, 1, 0, float.PositiveInfinity, 1);
 
 		//Update the tower's target
 		Assert.IsTrue(overview.Commands.Issue(new AdvanceTimeCommand(overview, float.Epsilon)));
@@ -194,8 +193,8 @@ public class UnitTowerCastleIntegrationTest {
 	[Test]
 	public void TestTowerTargetMovedOutOfRange() {
 		IEnumerable<TilePosition> TowerPositionChooser(GameTeam towerTeam, GameWorld world) {
-			int[] dx = { -1, 0, 0, 1 };
-			int[] dy = { 0, 1, -1, 0 };
+			int[] dx = {-1, 0, 0, 1};
+			int[] dy = {0, 1, -1, 0};
 			foreach (Barrack barrack in world.Overview.GetEnemyTeam(towerTeam).Barracks) {
 				bool any = false;
 				for (int i = 0; i < 4 && !any; i++) {
@@ -244,8 +243,8 @@ public class UnitTowerCastleIntegrationTest {
 		GameTeam towerTeam = overview.GetEnemyTeam(unitTeam);
 
 		//Purchase a unit
-		GameTestUtils.UnitTypeData unitType = new GameTestUtils.UnitTypeData { Health = unitHealth };
-		Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(unitTeam, unitType)));
+		GameTestUtils.UnitTypeData unitType = new GameTestUtils.UnitTypeData {Health = unitHealth};
+		overview.Teams.First().Barracks.First().QueueUnit(unitType);
 
 		//Build a tower
 		GameTestUtils.TowerTypeData towerType = new GameTestUtils.TowerTypeData {
@@ -265,5 +264,4 @@ public class UnitTowerCastleIntegrationTest {
 		return overview;
 	}
 }
-
 }

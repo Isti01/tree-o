@@ -94,7 +94,8 @@ public class GameOverview : IGameOverview {
 			TimeLeftFromPhase = Math.Max(OverviewConfig.FightingPhaseDuration,
 				World.GetTileObjectsOfType<Barrack>()
 					.Max(barrack =>
-						barrack.QueuedUnits.Count * World.Config.BarrackSpawnCooldownTime));
+						barrack.QueuedUnits.Count * World.Config.BarrackSpawnCooldownTime
+						+ barrack.Ordinal * World.Config.BarrackSpawnTimeOffset));
 		} else if (CurrentPhase == GamePhase.Fight) {
 			if (Teams.Any(t => t.Castle.IsDestroyed)) {
 				CurrentPhase = GamePhase.Finished;

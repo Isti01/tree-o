@@ -121,7 +121,7 @@ public static class GameTestUtils {
 		public int MaxBuildingDistance { get; set; } = 5;
 		public bool GenerateObstacles { get; set; } = true;
 
-		public float BarrackSpawnTimeOffset { get; set; } = 0;
+		public float BarrackSpawnTimeOffset { get; set; } = 0.1f;
 	}
 
 	/// <summary>
