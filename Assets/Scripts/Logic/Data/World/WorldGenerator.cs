@@ -79,17 +79,17 @@ internal class WorldGenerator {
 		}
 
 		if (i == 0) {
-			List<int> goodindeces = new List<int>();
+			List<int> goodIndices = new List<int>();
 			for (int j = 0; j < _width; j++) {
 				tp = new TilePosition(_height / 2, _width);
 				if (!occupiedList.Where(building => !(building is Obstacle))
 					.Any(occupied => occupied.Position.FirstNormDistance(tp) < 4)) {
-					goodindeces.Add(j);
+					goodIndices.Add(j);
 				}
 			}
 
 			occupiedList.Add(_constructors.CreateObstacle(new TilePosition(
-				goodindeces[_random.Next() % goodindeces.Count],
+				goodIndices[_random.Next() % goodIndices.Count],
 				_height / 2)));
 		}
 

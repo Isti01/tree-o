@@ -43,7 +43,6 @@ public class GameOverviewTest {
 	}
 
 	[Test]
-	[Repeat(100)]
 	public void TestFightingPhaseHasLimitedTime() {
 		GameOverview overview = GameTestUtils.CreateOverview();
 

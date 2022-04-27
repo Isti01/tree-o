@@ -55,7 +55,7 @@ public class GameTeam {
 		Overview = overview;
 		TeamColor = color;
 		Castle = castle;
-		Barracks = new List<Barrack>(barracks).OrderBy(barrack => barrack.Ordinal).ToList();
+		Barracks = barracks.OrderBy(barrack => barrack.Ordinal).ToList();
 		Money = overview.EconomyConfig.StartingBalance;
 	}
 
