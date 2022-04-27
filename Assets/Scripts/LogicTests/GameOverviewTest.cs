@@ -6,7 +6,6 @@ using Logic.Data;
 using NUnit.Framework;
 
 namespace LogicTests {
-
 /// <summary>
 /// Container of unit tests for the <see cref="GameOverview"/> class.
 /// This class encapsulates almost all other classes in the logic component,
@@ -48,8 +47,8 @@ public class GameOverviewTest {
 		GameOverview overview = GameTestUtils.CreateOverview();
 
 		Assert.AreEqual(GamePhase.Prepare, overview.CurrentPhase);
-		GameTestUtils.UnitTypeData unitType = new GameTestUtils.UnitTypeData { Speed = float.Epsilon };
-		Assert.IsTrue(overview.Commands.Issue(new PurchaseUnitCommand(overview.Teams.First(), unitType)));
+		GameTestUtils.UnitTypeData unitType = new GameTestUtils.UnitTypeData {Speed = float.Epsilon};
+		overview.Teams.First().Barracks.First().QueueUnit(unitType);
 
 		overview.AdvancePhase();
 		Assert.AreEqual(GamePhase.Fight, overview.CurrentPhase);
@@ -80,5 +79,4 @@ public class GameOverviewTest {
 		Assert.AreEqual(GamePhase.Finished, overview.CurrentPhase);
 	}
 }
-
 }

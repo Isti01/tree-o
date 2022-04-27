@@ -5,7 +5,6 @@ using Logic.Event.World.Barrack;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
-
 public class Barrack : Building {
 	#region Fields
 
@@ -25,12 +24,16 @@ public class Barrack : Building {
 
 	public IReadOnlyCollection<IUnitTypeData> QueuedUnits => new List<IUnitTypeData>(_queuedUnits);
 
+	public int Ordinal  { get; }
+
 	#endregion
 
 	#region Methods
 
-	internal Barrack(GameWorld world, TilePosition position, Color owner)
-		: base(world, position, owner) {}
+	internal Barrack(GameWorld world, TilePosition position, Color owner, int ordinal)
+		: base(world, position, owner) {
+		Ordinal  = ordinal;
+	}
 
 	internal void QueueUnit(IUnitTypeData type) {
 		_queuedUnits.Add(type);
@@ -62,7 +65,7 @@ public class Barrack : Building {
 	}
 
 	internal void ResetCooldown() {
-		RemainingCooldownTime = 0;
+		RemainingCooldownTime = Ordinal  * World.Config.BarrackSpawnTimeOffset;
 	}
 
 	internal void Spawn() {
@@ -98,5 +101,4 @@ public class Barrack : Building {
 
 	#endregion
 }
-
 }

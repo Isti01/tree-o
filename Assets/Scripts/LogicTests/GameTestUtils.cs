@@ -5,7 +5,6 @@ using Logic.Data.World;
 using NUnit.Framework;
 
 namespace LogicTests {
-
 /// <summary>
 /// Utility methods regarding the whole game (<see cref="GameOverview"/>).
 /// </summary>
@@ -121,6 +120,8 @@ public static class GameTestUtils {
 		public float CastleStartingHealth { get; set; } = 10;
 		public int MaxBuildingDistance { get; set; } = 5;
 		public bool GenerateObstacles { get; set; } = true;
+
+		public float BarrackSpawnTimeOffset { get; set; } = 0.1f;
 	}
 
 	/// <summary>
@@ -156,5 +157,4 @@ public static class GameTestUtils {
 		public ITowerTypeData AfterUpgradeType { get; set; } = null;
 	}
 }
-
 }

@@ -55,7 +55,7 @@ public class GameTeam {
 		Overview = overview;
 		TeamColor = color;
 		Castle = castle;
-		Barracks = new List<Barrack>(barracks);
+		Barracks = barracks.OrderBy(barrack => barrack.Ordinal).ToList();
 		Money = overview.EconomyConfig.StartingBalance;
 	}
 
@@ -122,7 +122,7 @@ public class GameTeam {
 		_availableTowerPositionsCache.ExceptWith(world.Units.Select(u => u.TilePosition));
 
 		_availableTowerPositionsCache.RemoveWhere(position => {
-			ISet<TilePosition> blocked = new HashSet<TilePosition> { position };
+			ISet<TilePosition> blocked = new HashSet<TilePosition> {position};
 
 			foreach (GameTeam sourceTeam in Overview.Teams) {
 				TilePosition from = Overview.GetEnemyTeam(sourceTeam).Castle.Position;
