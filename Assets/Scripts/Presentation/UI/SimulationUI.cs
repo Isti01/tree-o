@@ -35,7 +35,7 @@ public class SimulationUI : MonoBehaviour {
 	private UIState _lastUiState;
 	private PauseOverlay _pauseOverlay;
 	private Barrack _selectedBarrack;
-	private TowerTypeData _selectedTowerType;
+	private ITowerData _selectedTowerType;
 
 	private SimulationManager _simulationManager;
 	private TowerPlacingUI _towerPlacing;
@@ -203,7 +203,7 @@ public class SimulationUI : MonoBehaviour {
 		}
 	}
 
-	private void OnUnitPurchased(UnitTypeData unitType) {
+	private void OnUnitPurchased(IUnitData unitType) {
 		var command = new PurchaseUnitCommand(GameOverview.GetTeam(_activePlayer), unitType);
 		if (GameOverview.Commands.Issue(command)) _unitDeployment.UpdateBoughtUnitCount(unitType);
 	}
@@ -233,7 +233,7 @@ public class SimulationUI : MonoBehaviour {
 			UpdateUiState(UIState.UnitDeployment);
 	}
 
-	private void OnTowerTypeSelected(TowerTypeData towerType) {
+	private void OnTowerTypeSelected(ITowerData towerType) {
 		_selectedTowerType = towerType;
 		_towerPlacing.ShowTowerTypeStats(towerType);
 		OnTowerSelected?.Invoke(null);

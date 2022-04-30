@@ -42,7 +42,7 @@ public class TowerPlacingUI : MonoBehaviour {
 	private VisualTreeAsset cardComponent;
 
 	[SerializeField]
-	private List<TowerTypeData> towersToPlace;
+	private List<TowerData> towersToPlace;
 
 	private readonly List<VisualElement> _tabs = new List<VisualElement>();
 
@@ -136,7 +136,7 @@ public class TowerPlacingUI : MonoBehaviour {
 		var cardList = RootElement.Q<VisualElement>(BottomPanel);
 		cardList.Clear();
 
-		foreach (TowerTypeData towerType in towersToPlace) {
+		foreach (ITowerData towerType in towersToPlace) {
 			TemplateContainer card = cardComponent.Instantiate();
 
 			var content = card.Q<VisualElement>(CardContent);
@@ -157,7 +157,7 @@ public class TowerPlacingUI : MonoBehaviour {
 	/// <summary>
 	///     Displays the stats of a tower type
 	/// </summary>
-	public void ShowTowerTypeStats(TowerTypeData towerType) {
+	public void ShowTowerTypeStats(ITowerData towerType) {
 		HideTabs();
 		VisualElement tab = RootElement.Q(TowerTypeStats);
 		tab.style.display = DisplayStyle.Flex;
@@ -165,7 +165,7 @@ public class TowerPlacingUI : MonoBehaviour {
 		ShowTowerTypeStats(towerType, tab.Q<VisualElement>(TowerStats));
 	}
 
-	private void ShowTowerTypeStats(TowerTypeData towerType, VisualElement statsContainer) {
+	private void ShowTowerTypeStats(ITowerData towerType, VisualElement statsContainer) {
 		statsContainer.Clear();
 		if (towerType != null) {
 			string[] stats = new[] {
@@ -224,11 +224,11 @@ public class TowerPlacingUI : MonoBehaviour {
 		if (_showDeployedStats) {
 			manageContainer.style.display = DisplayStyle.None;
 			statsContainer.style.display = DisplayStyle.Flex;
-			ShowTowerTypeStats(tower.Type as TowerTypeData, statsContainer);
+			ShowTowerTypeStats(tower.Type as ITowerData, statsContainer);
 		} else {
 			manageContainer.style.display = DisplayStyle.Flex;
 			statsContainer.style.display = DisplayStyle.None;
-			var afterUpgrade = tower.Type.AfterUpgradeType as TowerTypeData;
+			var afterUpgrade = tower.Type.AfterUpgradeType as ITowerData;
 			VisualElement container = manageContainer.Q(UpgradeContainer);
 
 			if (afterUpgrade != null) {
@@ -262,6 +262,6 @@ public class TowerPlacingUI : MonoBehaviour {
 	/// <summary>
 	///     Invoked when a tower type is selected
 	/// </summary>
-	public event Action<TowerTypeData> OnTowerTypeSelected;
+	public event Action<ITowerData> OnTowerTypeSelected;
 }
 }

@@ -1,12 +1,12 @@
-using Logic.Data.World;
+﻿using Logic.Data.World;
 using UnityEngine;
 
 namespace Presentation.World {
 /// <summary>
-///     Enables the tower visualization settings to be configured in the Unity Editor
+///     Enables the tower settings to be configured in the Unity Editor
 /// </summary>
 [CreateAssetMenu(fileName = "New Tower Type", menuName = "World/Structures/Tower Type", order = 1)]
-public class TowerTypeData : ScriptableObject, ITowerTypeData {
+public class TowerData : ScriptableObject, ITowerData {
 	[Header("Presentation-specific values")]
 	[SerializeField]
 	private Sprite previewSprite;
@@ -55,7 +55,7 @@ public class TowerTypeData : ScriptableObject, ITowerTypeData {
 	private int upgradeCost;
 
 	[SerializeField]
-	private TowerTypeData afterUpgradeType;
+	private TowerData afterUpgradeType;
 
 	public Sprite PreviewSprite => previewSprite;
 	public Sprite SpriteColored => spriteColored;
