@@ -5,6 +5,7 @@ using Logic.Data.World;
 using Presentation.UI;
 using Presentation.World.Config;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
@@ -32,6 +33,8 @@ public class SimulationManager : MonoBehaviour {
 	public IGameOverview GameOverview { get; private set; }
 
 	private void Awake() {
+		SceneManager.LoadScene("Scenes/SimulationCore", LoadSceneMode.Additive);
+
 		void ExceptionHandler(Exception e) {
 			Debug.LogError($"[Logic Exception]: ${e} {e.InnerException}");
 		}

@@ -8,17 +8,12 @@ using Logic.Command.Unit;
 using Logic.Data;
 using Logic.Data.World;
 using Logic.Event;
-using Presentation.UI;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Color = UnityEngine.Color;
 using Random = UnityEngine.Random;
 
 namespace Presentation.World {
 public class MainMenuSimulationSupervisor : MonoBehaviour {
-	private const string SimulationScenePath = "Scenes/Simulation";
-	private const string SimulationSceneName = "Simulation";
-
 	[SerializeField]
 	private int minTowerPlacingAttempts = 5;
 
@@ -58,50 +53,26 @@ public class MainMenuSimulationSupervisor : MonoBehaviour {
 	[SerializeField]
 	private List<UnitData> unitTypes;
 
+	[SerializeField]
+	private SimulationManager simulationManager;
+
 	private readonly List<IUnitData> _modifiedUnitTypes = new List<IUnitData>();
 	private IEnumerator _simulationCoroutine;
 
 	private void Start() {
-		_simulationCoroutine = null;
-
 		// we don't want to destroy castles
 		_modifiedUnitTypes.AddRange(unitTypes.Select(unit => new NoDamageUnitDataProxy(unit)));
 
-		SceneManager.sceneLoaded += OnSceneLoaded;
-		SceneManager.LoadScene(SimulationScenePath, LoadSceneMode.Additive);
+		_simulationCoroutine = StartSimulation();
+		StartCoroutine(_simulationCoroutine);
 	}
 
 	private void OnDestroy() {
-		SceneManager.sceneLoaded -= OnSceneLoaded;
 		if (_simulationCoroutine != null) StopCoroutine(_simulationCoroutine);
 	}
 
-	private static T FindObjectInRootObjects<T>(Scene scene) where T : MonoBehaviour {
-		return scene.GetRootGameObjects()
-			.Select(rootGameObject => rootGameObject.GetComponent<T>())
-			.FirstOrDefault(component => component != null);
-	}
-
-	private static void RemoveSimulationUI(Scene scene) {
-		var simulationUI = FindObjectInRootObjects<SimulationUI>(scene);
-		simulationUI.gameObject.SetActive(false);
-	}
-
-	private static void MoveWorld(Scene scene) {
-		var simulationCamera = FindObjectInRootObjects<SimulationCamera>(scene);
-
-		simulationCamera.transform.position = new Vector3(-10, -2, -10);
-		simulationCamera.GetComponent<Camera>().orthographicSize = 15;
-	}
-
-	private IEnumerator StartSimulation(Scene scene) {
-		RemoveSimulationUI(scene);
-		MoveWorld(scene);
-
-		var manager = FindObjectInRootObjects<SimulationManager>(scene);
-		yield return new WaitUntil(() => manager.GameOverview != null);
-
-		IGameOverview overview = manager.GameOverview;
+	private IEnumerator StartSimulation() {
+		IGameOverview overview = simulationManager.GameOverview;
 		if (overview.CurrentPhase == GamePhase.Prepare) yield return PreparePhase(overview);
 
 		overview.Events.AddListener<PhaseAdvancedEvent>(OnPhaseAdvanced);
@@ -177,13 +148,6 @@ public class MainMenuSimulationSupervisor : MonoBehaviour {
 			team.Overview.Commands.Issue(new DestroyTowerCommand(tower));
 			yield return new WaitForSeconds(towerPlacingDelay);
 		}
-	}
-
-	private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-		if (scene.name != SimulationSceneName || mode != LoadSceneMode.Additive) return;
-		if (_simulationCoroutine != null) Debug.LogError("The simulation is already running");
-		_simulationCoroutine = StartSimulation(scene);
-		StartCoroutine(_simulationCoroutine);
 	}
 
 	private class NoDamageUnitDataProxy : IUnitData {

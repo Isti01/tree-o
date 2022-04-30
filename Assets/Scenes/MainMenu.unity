@@ -168,7 +168,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 15
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -176,12 +176,12 @@ Camera:
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
-  m_TargetEye: 3
+  m_TargetEye: 0
   m_HDR: 1
-  m_AllowMSAA: 1
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
-  m_OcclusionCulling: 1
+  m_OcclusionCulling: 0
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
 --- !u!4 &22100159
@@ -192,7 +192,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 22100156}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: -10, y: -1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -221,7 +221,7 @@ MonoBehaviour:
     m_Bits: 1
   m_VolumeTrigger: {fileID: 0}
   m_VolumeFrameworkUpdateModeOption: 2
-  m_RenderPostProcessing: 0
+  m_RenderPostProcessing: 1
   m_Antialiasing: 0
   m_AntialiasingQuality: 2
   m_StopNaN: 0
@@ -298,8 +298,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1584077027}
   - component: {fileID: 1584077026}
+  - component: {fileID: 1584077028}
   m_Layer: 0
-  m_Name: Simulation Supervisor
+  m_Name: Simulation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -335,6 +336,7 @@ MonoBehaviour:
   unitTypes:
   - {fileID: 11400000, guid: 990eddc6120b95548a91484d5cad18ff, type: 2}
   - {fileID: 11400000, guid: 7cde7bea9bf73ac44bd6563d6b5d7aeb, type: 2}
+  simulationManager: {fileID: 1584077028}
 --- !u!4 &1584077027
 Transform:
   m_ObjectHideFlags: 0
@@ -343,12 +345,28 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1584077025}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.1338203, y: -0.28453794, z: -38.83009}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1584077028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1584077025}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf7c5a8235d14edca54533665a0d3ee8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  overviewConfig: {fileID: 11400000, guid: 7c8cbf053badd4b41b80657b3ac3f9b0, type: 2}
+  economyConfig: {fileID: 11400000, guid: 81bfec33eeaebc34587067be5f4845a9, type: 2}
+  worldConfig: {fileID: 11400000, guid: f37879d5fb4127c42985f515a7ab96c3, type: 2}
+  mainCamera: {fileID: 22100158}
 --- !u!1 &1622117628
 GameObject:
   m_ObjectHideFlags: 0

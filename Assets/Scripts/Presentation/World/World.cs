@@ -283,6 +283,8 @@ public class World : MonoBehaviour {
 			float remainingTime = 0.15f;
 			while (remainingTime > 0) {
 				yield return new WaitForFixedUpdate();
+				if (laserRenderer == null) yield break; //the tower got destroyed
+
 				remainingTime -= Time.fixedDeltaTime;
 
 				if (e.Target.IsAlive) {
