@@ -41,7 +41,7 @@ public class Unit : MonoBehaviour {
 	/// </summary>
 	public void SetData(Logic.Data.World.Unit data) {
 		_data = data;
-		var unitData = (UnitTypeData) _data.Type;
+		var unitData = (IUnitData) _data.Type;
 		if (unitData.Airborne) {
 			constantSprite.sortingLayerName = "UnitAirborne";
 			coloredSprite.sortingLayerName = "UnitAirborne";

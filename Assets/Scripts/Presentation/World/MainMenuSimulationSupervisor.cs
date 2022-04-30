@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Logic.Command;
 using Logic.Command.Tower;
 using Logic.Command.Unit;
@@ -12,6 +11,7 @@ using Logic.Event;
 using Presentation.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Color = UnityEngine.Color;
 using Random = UnityEngine.Random;
 
 namespace Presentation.World {
@@ -53,26 +53,19 @@ public class MainMenuSimulationSupervisor : MonoBehaviour {
 	private float towerPlacingDelay = .125f;
 
 	[SerializeField]
-	private List<TowerTypeData> towerTypes;
+	private List<TowerData> towerTypes;
 
 	[SerializeField]
-	private List<UnitTypeData> unitTypes;
+	private List<UnitData> unitTypes;
 
-	private readonly List<UnitTypeData> _modifiedUnitTypes = new List<UnitTypeData>();
+	private readonly List<IUnitData> _modifiedUnitTypes = new List<IUnitData>();
 	private IEnumerator _simulationCoroutine;
 
 	private void Start() {
 		_simulationCoroutine = null;
-		// we don't want to destroy castles
-		foreach (UnitTypeData unitType in unitTypes) {
-			UnitTypeData modifiedUnitType = Instantiate(unitType);
-			FieldInfo prop = modifiedUnitType.GetType().GetField("damage",
-				BindingFlags.NonPublic | BindingFlags.Instance);
 
-			Debug.Assert(prop != null);
-			prop.SetValue(modifiedUnitType, 0.0f);
-			_modifiedUnitTypes.Add(modifiedUnitType);
-		}
+		// we don't want to destroy castles
+		_modifiedUnitTypes.AddRange(unitTypes.Select(unit => new NoDamageUnitDataProxy(unit)));
 
 		SceneManager.sceneLoaded += OnSceneLoaded;
 		SceneManager.LoadScene(SimulationScenePath, LoadSceneMode.Additive);
@@ -191,6 +184,26 @@ public class MainMenuSimulationSupervisor : MonoBehaviour {
 		if (_simulationCoroutine != null) Debug.LogError("The simulation is already running");
 		_simulationCoroutine = StartSimulation(scene);
 		StartCoroutine(_simulationCoroutine);
+	}
+
+	private class NoDamageUnitDataProxy : IUnitData {
+		private readonly IUnitData source;
+
+		public NoDamageUnitDataProxy(IUnitData source) {
+			this.source = source;
+		}
+
+		public float Damage => 0; //Only this property is changed
+		public string Name => source.Name;
+		public float Health => source.Health;
+		public float Speed => source.Speed;
+		public int Cost => source.Cost;
+		public Color BlueColor => source.BlueColor;
+		public Color RedColor => source.RedColor;
+		public Sprite PreviewSprite => source.PreviewSprite;
+		public Sprite AliveSpriteConstant => source.AliveSpriteConstant;
+		public Sprite AliveSpriteColored => source.AliveSpriteColored;
+		public bool Airborne => source.Airborne;
 	}
 }
 }

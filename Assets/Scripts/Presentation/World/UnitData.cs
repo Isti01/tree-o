@@ -1,12 +1,11 @@
-using Logic.Data.World;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Presentation.World {
 /// <summary>
-///     Enables the unit visualization settings to be configured in the Unity Editor
+///     Enables the unit settings to be configured in the Unity Editor
 /// </summary>
 [CreateAssetMenu(fileName = "New Unit Type", menuName = "World/Unit Type", order = 1)]
-public class UnitTypeData : ScriptableObject, IUnitTypeData {
+public class UnitData : ScriptableObject, IUnitData {
 	[Header("Presentation-specific values")]
 	[SerializeField]
 	private Color blueColor;

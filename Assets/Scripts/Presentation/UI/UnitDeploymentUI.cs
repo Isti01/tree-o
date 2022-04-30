@@ -26,9 +26,9 @@ public class UnitDeploymentUI : MonoBehaviour {
 	private UIDocument ui;
 
 	[SerializeField]
-	private List<UnitTypeData> unitTypes;
+	private List<UnitData> unitTypes;
 
-	private readonly Dictionary<UnitTypeData, VisualElement> _unitCards = new Dictionary<UnitTypeData, VisualElement>();
+	private readonly Dictionary<IUnitData, VisualElement> _unitCards = new Dictionary<IUnitData, VisualElement>();
 
 	private Color _activePlayer = Color.Red;
 	private UnityEngine.Color _teamBlueColor = UnityEngine.Color.magenta;
@@ -54,8 +54,8 @@ public class UnitDeploymentUI : MonoBehaviour {
 		var cardList = RootElement.Q<VisualElement>(BottomPanel);
 		cardList.Clear();
 
-		foreach (UnitTypeData unitType in unitTypes) {
-			UnitTypeData unit = unitType;
+		foreach (IUnitData unitType in unitTypes) {
+			IUnitData unit = unitType;
 			TemplateContainer card = cardComponent.Instantiate();
 			var content = card.Q<VisualElement>(CardContent);
 			content.style.backgroundImage = new StyleBackground(unitType.PreviewSprite);
@@ -78,7 +78,7 @@ public class UnitDeploymentUI : MonoBehaviour {
 	/// <summary>
 	///     Increments the bought unit count of a given type
 	/// </summary>
-	public void UpdateBoughtUnitCount(UnitTypeData unit) {
+	public void UpdateBoughtUnitCount(IUnitData unit) {
 		if (_unitCards.TryGetValue(unit, out VisualElement card))
 			UpdateCardUnitCount(card, 1);
 		else
@@ -139,14 +139,14 @@ public class UnitDeploymentUI : MonoBehaviour {
 
 		VisualElement container = RootElement.Q(DeployedUnitsContainer);
 		container.Clear();
-		foreach (UnitTypeData type in unitTypes)
+		foreach (IUnitData type in unitTypes)
 			container.Add(new Label { text = $"{type.Name}: {team.GetDeployedUnitTypeCount(type)}" });
 	}
 
 	/// <summary>
 	///     Invoked when a unit purchase card is clicked
 	/// </summary>
-	public event Action<UnitTypeData> OnUnitPurchased;
+	public event Action<IUnitData> OnUnitPurchased;
 
 	/// <summary>
 	///     Invoked when the next button is clicked

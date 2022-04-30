@@ -45,7 +45,7 @@ public class Tower : Structure {
 	/// </summary>
 	public void SetData(Logic.Data.World.Tower data) {
 		_data = data;
-		var type = (TowerTypeData) data.Type;
+		var type = (ITowerData) data.Type;
 
 		Color color = _data.OwnerColor == Logic.Data.Color.Blue ? type.BlueColor : type.RedColor;
 		backgroundSprite.sprite = type.SpriteBackground;
