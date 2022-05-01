@@ -409,30 +409,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd5ff973fabe4977b60c0a9681cec3df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameRules: '#title
+  gameRules: 'In this game, two players face each other, trying to destroy the other''s
+    castle with units while defending theirs with towers. The game is divided into
+    rounds. Every round consists of 3 phases.
 
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-    minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-    commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit
-    esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    #First phase: Building
 
-    #title
+    In
+    this phase, first the blue and then the red player can build, upgrade, and destroy
+    their towers. The players can choose a tower from the bottom-side bar and place
+    it on any of the highlighted squares if they have enough money. On the right
+    side of the screen are shown the stats of the selected tower. If a tower from
+    the gamefield is selected, the players can also upgrade it, or destroy it for
+    a refund.
 
-    Lorem
-    ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-    ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation
-    ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-    in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-    mollit anim id est laborum.
+    #Second phase: Unit training
 
-    #title
+    In the second phase, following
+    the team order stated in the first phase, the players can buy units and plan
+    their route to the enemy''s castle. Choosing a unit is similar to choosing a
+    tower, but after clicking on one of them from the bottom bar, if the player has
+    enough money, the unit gets queued up in one of the barracks and will be spawned
+    in the last phase. When clicking on one of the barracks, the players can add
+    a checkpoint to those units'' paths that will spawn from that barrack by clicking
+    on a reachable tile with a left-click, or remove a checkpoint with a right-click.
+    The brightness of the checkpoints indicates their order: the brightest checkpoint
+    is the last before the enemy castle. Note that the players have the same budget
+    for the towers and the units, and they have to manage it accordingly to succeed.
 
-    Lorem ipsum dolor sit amet, consectetur
-    adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-    non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+    #Third
+    phase: Attacking
+
+    In this phase, the players can only inspect their fight.
+    The units that are left alive from the previous rounds continue their journey
+    into the enemy base, while the ones purchased in this round start to deploy from
+    the barracks. When a unit reaches its destination, it damages it and gets destroyed.
+    If one castle gets destroyed until the end of the round, the enemy team wins.
+    If both get destroyed, the game is tied.
+
+    When hovering the cursor over
+    a unit or a castle, a healthbar appears, showing its current health.'
