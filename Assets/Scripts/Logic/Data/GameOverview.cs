@@ -4,7 +4,6 @@ using System.Linq;
 using Logic.Command;
 using Logic.Data.World;
 using Logic.Event;
-using Logic.Event.Team;
 using Logic.Handler;
 using Logic.System;
 
@@ -103,12 +102,6 @@ public class GameOverview : IGameOverview {
 			} else {
 				CurrentPhase = GamePhase.Prepare;
 				TimeLeftFromPhase = float.PositiveInfinity;
-				foreach (GameTeam team in Teams) {
-					int oldMoney = team.Money;
-					team.GiveMoney(EconomyConfig.RoundBasePay
-						+ team.PurchasedUnitCount * EconomyConfig.TotalUnitsPurchasedPay);
-					Events.Raise(new TeamMoneyUpdatedEvent(team, oldMoney));
-				}
 			}
 		} else {
 			throw new Exception($"Unexpected phase: {CurrentPhase}");
@@ -126,10 +119,11 @@ public class GameOverview : IGameOverview {
 
 	private void RegisterSystems() {
 		_systems.Add(new DestroyUnitSystem());
+		_systems.Add(new InvalidateCachesSystem());
+		_systems.Add(new StartNextRoundSystem());
+		_systems.Add(new TeamStatisticsSystem());
 		_systems.Add(new TowerDamagesUnitSystem());
 		_systems.Add(new UnitDamagesCastleSystem());
-		_systems.Add(new InvalidateCachesSystem());
-		_systems.Add(new TeamStatisticsSystem());
 		foreach (BaseSystem system in _systems) system.RegisterListeners(Events);
 	}
 
