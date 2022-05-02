@@ -15,36 +15,36 @@ public interface IGameOverview {
 	/// <summary>
 	/// The common event dispatcher used everywhere in this game instance.
 	/// </summary>
-	EventDispatcher Events { get; }
+	public EventDispatcher Events { get; }
 
 	/// <summary>
 	/// The common command dispatcher used everywhere in this game instance.
 	/// </summary>
-	CommandDispatcher Commands { get; }
+	public CommandDispatcher Commands { get; }
 
 	/// <summary>
 	/// The world of this game instance.
 	/// </summary>
-	GameWorld World { get; }
+	public GameWorld World { get; }
 
 	/// <summary>
 	/// The current phase of this game instance.
 	/// </summary>
 	/// <seealso cref="TimeLeftFromPhase"/>
-	GamePhase CurrentPhase { get; }
+	public GamePhase CurrentPhase { get; }
 
 	/// <summary>
 	/// The time until the team is updated "automatically".
 	/// The value is never negative and may be infinite.
 	/// </summary>
-	float TimeLeftFromPhase { get; }
+	public float TimeLeftFromPhase { get; }
 
 	/// <summary>
 	/// The random instance used as the randomness source in this game instance.
 	/// This random should be used directly to get random values
 	/// or it can be used to seed a new random instance.
 	/// </summary>
-	Random Random { get; }
+	public Random Random { get; }
 
 	/// <summary>
 	/// The unique teams in this game instance.
@@ -63,7 +63,7 @@ public interface IGameOverview {
 	/// <param name="color">the color whose associated team to get</param>
 	/// <returns>the <see cref="GameTeam"/> associated with the specified color</returns>
 	/// <exception cref="Exception">if the specified color is invalid</exception>
-	GameTeam GetTeam(Color color);
+	public GameTeam GetTeam(Color color);
 
 	/// <summary>
 	/// Gets the <see cref="GameTeam"/> which isn't the specified team.
@@ -72,7 +72,7 @@ public interface IGameOverview {
 	/// <param name="team">the team whose enemy to get</param>
 	/// <returns>the enemy of the specified team</returns>
 	/// <exception cref="Exception">if the specified team is invalid</exception>
-	GameTeam GetEnemyTeam(GameTeam team);
+	public GameTeam GetEnemyTeam(GameTeam team);
 }
 
 }
