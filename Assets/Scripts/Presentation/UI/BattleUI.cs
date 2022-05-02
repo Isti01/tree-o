@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Logic.Data;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -118,7 +119,7 @@ public class BattleUI : MonoBehaviour {
 		VisualElement stats = GetRoundStats(team.TeamColor).Q(PlayerStatContainer);
 		stats.Clear();
 
-		string[] texts = { $"Active towers: {team.PresentTowerCount}", $"Alive Units: {team.AliveUnits}" };
+		string[] texts = { $"Active towers: {team.Towers.Count()}", $"Alive Units: {team.Units.Count()}" };
 
 		foreach (string text in texts) stats.Add(new Label { text = text });
 	}

@@ -8,11 +8,17 @@ using Logic.Handler;
 using Logic.System;
 
 namespace Logic.Data {
+
+/// <summary>
+/// Implementation of <see cref="IGameOverview"/>.
+/// The interface was created to allow testing (mocking).
+/// </summary>
 public class GameOverview : IGameOverview {
 	#region Fields
 
 	private readonly IList<BaseSystem> _systems = new List<BaseSystem>();
 	private readonly IList<BaseHandler> _handlers = new List<BaseHandler>();
+	private readonly IGameOverviewConfig _config;
 	private readonly GameTeam _redTeam;
 	private readonly GameTeam _blueTeam;
 
@@ -32,9 +38,7 @@ public class GameOverview : IGameOverview {
 
 	public Random Random { get; }
 
-	public IEnumerable<GameTeam> Teams => new[] {_redTeam, _blueTeam};
-
-	public IGameOverviewConfig OverviewConfig { get; }
+	public IEnumerable<GameTeam> Teams => new[] { _redTeam, _blueTeam };
 
 	public IGameEconomyConfig EconomyConfig { get; }
 
@@ -42,9 +46,19 @@ public class GameOverview : IGameOverview {
 
 	#region Methods
 
+	/// <summary>
+	/// Creates a new game instance.
+	/// Also creates and initializes all aggregated game components (e.g. <see cref="GameWorld"/>).
+	/// </summary>
+	/// <param name="eventExceptionHandler">the callback that gets called when an unexpected
+	/// error occurs in the game logic (this callback should log the error or close the app)</param>
+	/// <param name="rngSeed">the seed to use for <see cref="Random"/></param>
+	/// <param name="overviewConfig">container of configuration entries related to this class</param>
+	/// <param name="economyConfig">the value for <see cref="EconomyConfig"/></param>
+	/// <param name="worldConfig">the value for <see cref="GameWorld.Config"/></param>
 	public GameOverview(Action<Exception> eventExceptionHandler, int rngSeed,
 		IGameOverviewConfig overviewConfig, IGameEconomyConfig economyConfig, IGameWorldConfig worldConfig) {
-		OverviewConfig = overviewConfig;
+		_config = overviewConfig;
 		EconomyConfig = economyConfig;
 
 		Events = new EventDispatcher((exceptions => {
@@ -85,12 +99,17 @@ public class GameOverview : IGameOverview {
 		throw new Exception($"Unexpected team: {team}");
 	}
 
+	/// <summary>
+	/// Tries to update the value of <see cref="GamePhase"/> based on its current value.
+	/// Also updates <see cref="TimeLeftFromPhase"/>.
+	/// </summary>
+	/// <exception cref="Exception">if advancing from the current phase is not possible</exception>
 	internal void AdvancePhase() {
 		GamePhase oldPhase = CurrentPhase;
 
 		if (CurrentPhase == GamePhase.Prepare) {
 			CurrentPhase = GamePhase.Fight;
-			TimeLeftFromPhase = Math.Max(OverviewConfig.FightingPhaseDuration,
+			TimeLeftFromPhase = Math.Max(_config.FightingPhaseDuration,
 				World.GetTileObjectsOfType<Barrack>()
 					.Max(barrack =>
 						barrack.QueuedUnits.Count * World.Config.BarrackSpawnCooldownTime
@@ -110,6 +129,11 @@ public class GameOverview : IGameOverview {
 		Events.Raise(new PhaseAdvancedEvent(this, oldPhase));
 	}
 
+	/// <summary>
+	/// Decreases the value of <see cref="TimeLeftFromPhase"/>,
+	/// calling <see cref="AdvancePhase"/> if it reaches 0.
+	/// </summary>
+	/// <param name="deltaTime">the amount of time that has passed</param>
 	internal void DecreaseTimeLeftFromPhase(float deltaTime) {
 		TimeLeftFromPhase -= deltaTime;
 		if (TimeLeftFromPhase <= 0) {
@@ -138,4 +162,5 @@ public class GameOverview : IGameOverview {
 
 	#endregion
 }
+
 }
