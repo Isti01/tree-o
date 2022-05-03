@@ -39,8 +39,12 @@ public class SimulationManager : MonoBehaviour {
 			Debug.LogError($"[Logic Exception]: ${e} {e.InnerException}");
 		}
 
+		//Clone the ScriptableObject: it calculates and caches a random value,
+		//  which shouldn't be persisted between separate games.
+		WorldConfig worldConfigClone = Instantiate(worldConfig);
+
 		GameOverview = new GameOverview(ExceptionHandler, Random.Range(0, 9999),
-			overviewConfig, economyConfig, worldConfig);
+			overviewConfig, economyConfig, worldConfigClone);
 	}
 
 	private void Start() {
