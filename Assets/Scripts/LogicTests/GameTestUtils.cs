@@ -154,7 +154,7 @@ public static class GameTestUtils {
 		public int BuildingCost { get; set; } = 3;
 		public int DestroyRefund { get; set; } = 1;
 		public int UpgradeCost { get; set; } = 2;
-		public ITowerTypeData AfterUpgradeType { get; set; } = null;
+		public ITowerTypeData AfterUpgradeType { get; set; }
 	}
 }
 }

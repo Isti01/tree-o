@@ -46,7 +46,7 @@ public class MainMenu : MonoBehaviour {
 		textContent.Clear();
 		foreach (string entry in gameRules.Split('\n')) {
 			bool isTitle = entry.StartsWith("#");
-			var label = new Label() { text = isTitle ? entry.Substring(1) : entry };
+			var label = new Label { text = isTitle ? entry.Substring(1) : entry };
 			label.AddToClassList(isTitle ? TitleStyle : ParagraphStyle);
 			textContent.Add(label);
 		}
