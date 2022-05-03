@@ -465,5 +465,8 @@ MonoBehaviour:
     If one castle gets destroyed until the end of the round, the enemy team wins.
     If both get destroyed, the game is tied.
 
-    When hovering the cursor over
-    a unit or a castle, a healthbar appears, showing its current health.'
+    When hovering the cursor over a
+    unit or a castle, a healthbar appears, showing its current health.
+
+    Pressing
+    ESC will pause/resume the simulation.'
