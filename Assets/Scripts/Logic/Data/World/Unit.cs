@@ -102,8 +102,13 @@ public class Unit {
 	}
 
 	internal void InflictDamage(Tower attacker, float damage) {
-		CurrentHealth = Math.Max(CurrentHealth - damage, 0);
-		World.Overview.Events.Raise(new UnitDamagedEvent(this, attacker));
+		if (damage >= CurrentHealth) {
+			damage = CurrentHealth;
+			CurrentHealth = 0;
+		} else {
+			CurrentHealth -= damage;
+		}
+		World.Overview.Events.Raise(new UnitDamagedEvent(this, damage, attacker));
 	}
 
 	internal void DestroyWithoutDamage() {
