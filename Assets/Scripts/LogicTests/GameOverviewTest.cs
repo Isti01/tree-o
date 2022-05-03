@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Logic.Command;
-using Logic.Command.Unit;
 using Logic.Data;
 using NUnit.Framework;
 

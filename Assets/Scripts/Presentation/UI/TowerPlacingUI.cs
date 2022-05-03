@@ -168,7 +168,7 @@ public class TowerPlacingUI : MonoBehaviour {
 	private void ShowTowerTypeStats(ITowerData towerType, VisualElement statsContainer) {
 		statsContainer.Clear();
 		if (towerType != null) {
-			string[] stats = new[] {
+			string[] stats = {
 				$"Damage: {towerType.Damage}", $"Range: {towerType.Range}", $"Building Cost: {towerType.BuildingCost}",
 				$"Destroy Refund: {towerType.DestroyRefund}", $"Cooldown Time: {towerType.CooldownTime}",
 				$"UpgradeCost: {towerType.UpgradeCost}"
@@ -255,7 +255,7 @@ public class TowerPlacingUI : MonoBehaviour {
 	public event Action<Tower> OnTowerUpgraded;
 
 	/// <summary>
-	///     Invoked when the next button is clicke
+	///     Invoked when the next button is clicked
 	/// </summary>
 	public event Action OnNextClicked;
 
