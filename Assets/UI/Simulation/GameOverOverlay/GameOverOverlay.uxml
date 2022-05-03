@@ -4,7 +4,7 @@
         <ui:VisualElement name="GameOverDialog" style="height: auto; padding-left: 64px; padding-right: 64px; padding-top: 16px; padding-bottom: 16px; background-color: rgb(255, 255, 255); border-top-left-radius: 12px; border-bottom-left-radius: 12px; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
             <ui:Label text="Game Over!" display-tooltip-when-elided="true" name="GameOverText" class="DialogTitle" style="margin-right: 4px; margin-left: 4px; margin-bottom: 4px;" />
             <ui:Label text="Player Red has won the battle!" display-tooltip-when-elided="true" name="Message" style="margin-bottom: 20px; -unity-text-align: upper-center; font-size: 16px;" />
-            <ui:Button text="OK" display-tooltip-when-elided="true" name="OkButton" class="DialogButton" />
+            <ui:Button focusable="false" text="OK" display-tooltip-when-elided="true" name="OkButton" class="DialogButton" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

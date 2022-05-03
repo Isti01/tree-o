@@ -8,7 +8,7 @@
             </ui:VisualElement>
             <ui:VisualElement name="TopPanel" class="TopPanelStyle" style="flex-shrink: 0; padding-left: 8px; padding-right: 8px; padding-top: 8px; padding-bottom: 8px;">
                 <ui:VisualElement name="NextButtonContainer" class="NextButtonStyle buttons" style="flex-shrink: 0; height: 175px;">
-                    <ui:Button text="NEXT" display-tooltip-when-elided="true" name="Next" class="button" style="bottom: auto; position: relative; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px; flex-grow: 1; font-size: 32px; background-color: rgba(255, 255, 255, 0.75);" />
+                    <ui:Button focusable="false" text="NEXT" display-tooltip-when-elided="true" name="Next" class="button" style="bottom: auto; position: relative; border-top-left-radius: 8px; border-bottom-left-radius: 8px; border-top-right-radius: 8px; border-bottom-right-radius: 8px; margin-left: 12px; margin-right: 12px; margin-top: 12px; margin-bottom: 12px; flex-grow: 1; font-size: 32px; background-color: rgba(255, 255, 255, 0.75);" />
                 </ui:VisualElement>
                 <ui:Label text="Deploy Units" display-tooltip-when-elided="true" class="TitleStyle" />
                 <ui:Label text="Player Red&apos;s turn" display-tooltip-when-elided="true" name="PlayerNameTurn" />
