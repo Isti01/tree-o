@@ -3,9 +3,9 @@
     <ui:VisualElement name="PauseRoot" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.25); justify-content: center; align-items: center;">
         <ui:VisualElement name="PauseDialog" style="height: auto; padding-left: 64px; padding-right: 64px; padding-top: 16px; padding-bottom: 16px; background-color: rgb(255, 255, 255); border-top-left-radius: 12px; border-bottom-left-radius: 12px; border-top-right-radius: 12px; border-bottom-right-radius: 12px;">
             <ui:Label text="Paused" display-tooltip-when-elided="true" name="PausedText" class="DialogTitle" />
-            <ui:Button text="Resume" display-tooltip-when-elided="true" name="ResumeButton" class="DialogButton" />
-            <ui:Button text="New Game" display-tooltip-when-elided="true" name="NewGameButton" class="DialogButton" />
-            <ui:Button text="Exit" display-tooltip-when-elided="true" name="ExitButton" class="DialogButton" />
+            <ui:Button focusable="false" text="Resume" display-tooltip-when-elided="true" name="ResumeButton" class="DialogButton" />
+            <ui:Button focusable="false" text="New Game" display-tooltip-when-elided="true" name="NewGameButton" class="DialogButton" />
+            <ui:Button focusable="false" text="Exit" display-tooltip-when-elided="true" name="ExitButton" class="DialogButton" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>
