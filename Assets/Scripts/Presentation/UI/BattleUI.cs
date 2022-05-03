@@ -141,9 +141,15 @@ public class BattleUI : MonoBehaviour {
 	public void UpdateRemainingTime(float timeLeft) {
 		if (!_active) return;
 
-		string text = $"{Mathf.Round(timeLeft * 100) / 100 + 0.001f}";
-		text = text.Substring(0, text.Length - 1); // A small hack to keep the zeroes after the decimal point
-		RootElement.Q<Label>(TimeLeftText).text = $"Time remaining: {text}s";
+		string text;
+		if (float.IsNaN(timeLeft) || float.IsInfinity(timeLeft)) {
+			text = "-";
+		} else {
+			text = $"{Mathf.Round(timeLeft * 100) / 100 + 0.001f}";
+			text = text.Substring(0, text.Length - 1); // A small hack to keep the zeroes after the decimal point
+			text += "s";
+		}
+		RootElement.Q<Label>(TimeLeftText).text = $"Time remaining: {text}";
 	}
 
 	/// <summary>
