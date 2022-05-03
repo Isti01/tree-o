@@ -81,8 +81,8 @@ get-activation-file:
   artifacts:
     when: always
     paths:
-    # This is exported to allow viewing the Coverage Report in detail if needed
-    - $UNITY_DIR/$TEST_PLATFORM-coverage/
+      # This is exported to allow viewing the Coverage Report in detail if needed
+      - $UNITY_DIR/$TEST_PLATFORM-coverage/
     reports:
       junit:
         - $UNITY_DIR/$TEST_PLATFORM-junit-results.xml
@@ -110,6 +110,9 @@ test-editmode-with-junit-reports:
   artifacts:
     paths:
       - $UNITY_DIR/Builds/
+  needs:
+    - job: test-playmode-with-junit-reports
+    - job: test-editmode-with-junit-reports
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main"'
 
