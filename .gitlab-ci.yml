@@ -113,6 +113,8 @@ test-editmode-with-junit-reports:
   needs:
     - job: test-playmode-with-junit-reports
     - job: test-editmode-with-junit-reports
+    - job: get-unity-version
+      artifacts: true
   rules:
     - if: '$CI_COMMIT_REF_NAME == "main"'
 
