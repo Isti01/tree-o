@@ -3,6 +3,9 @@ using System.Linq;
 using Logic.Event.World.Tower;
 
 namespace Logic.Data.World {
+/// <summary>
+/// Represents a tower of the world.
+/// </summary>
 public class Tower : Building {
 	#region Properties
 
@@ -107,7 +110,7 @@ public class Tower : Building {
 	}
 
 	/// <summary>
-	/// The tower at the target.
+	/// The tower shoots at the target.
 	/// </summary>
 	/// <exception cref="InvalidOperationException">If the tower has no targets or is on cooldown.</exception>
 	internal void Shoot() {

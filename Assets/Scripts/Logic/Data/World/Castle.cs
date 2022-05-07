@@ -2,6 +2,9 @@
 using Logic.Event.World.Castle;
 
 namespace Logic.Data.World {
+/// <summary>
+/// represents a castle in the game.
+/// </summary>
 public class Castle : Building {
 	#region Properties
 

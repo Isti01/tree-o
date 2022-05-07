@@ -3,6 +3,9 @@ using System.Linq;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
+/// <summary>
+/// Represents a unit of the world.
+/// </summary>
 public class Unit {
 	#region Fields
 

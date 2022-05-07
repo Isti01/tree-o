@@ -3,7 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Logic.Data.World {
+/// <summary>
+/// Class for generating the world.
+/// </summary>
 internal class WorldGenerator {
+	/// <summary>
+	/// Generates the world.
+	/// </summary>
+	/// <param name="seed">Seed for randomisation.</param>
+	/// <param name="width">The width of the world.</param>
+	/// <param name="height">The height of the world.</param>
+	/// <param name="generateObstacles">If false, obstacles won't be generated.</param>
+	/// <param name="constructors">The constructors for the TileObjects.</param>
+	/// <returns>The grid of the world.</returns>
 	public static TileObject[,] GenerateGrid(int seed, int width, int height,
 		bool generateObstacles, ITileObjectConstructors constructors) {
 		WorldGenerator generator = new WorldGenerator(seed, width, height, generateObstacles, constructors);
@@ -117,6 +129,9 @@ internal class WorldGenerator {
 		}
 	}
 
+	/// <summary>
+	/// Interface for constructing TileObjects during generation.
+	/// </summary>
 	public interface ITileObjectConstructors {
 		public Castle CreateCastle(TilePosition position, Color team);
 		public Barrack CreateBarrack(TilePosition position, Color team);

@@ -1,4 +1,7 @@
 ﻿namespace Logic.Data.World {
+/// <summary>
+/// Interface for the different types of <see cref="Unit"/>s
+/// </summary>
 public interface IUnitTypeData {
 	#region Properties
 

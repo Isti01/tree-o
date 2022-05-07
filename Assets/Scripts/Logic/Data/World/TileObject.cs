@@ -1,4 +1,7 @@
 ﻿namespace Logic.Data.World {
+/// <summary>
+/// Base class of every Building and obstacle of the world.
+/// </summary>
 public abstract class TileObject {
 	/// <summary>
 	/// The world in which the TileObject is located.
@@ -15,10 +18,6 @@ public abstract class TileObject {
 		Position = position;
 	}
 
-	/// <summary>
-	/// Formats the object for printing on screen.
-	/// </summary>
-	/// <returns>Printable format of the TileObject.</returns>
 	public override string ToString() {
 		return $"{GetType().Name}@{Position}";
 	}

@@ -1,6 +1,9 @@
 ﻿using System;
 
 namespace Logic.Data.World {
+/// <summary>
+/// Represents a tile's position on the grid.
+/// </summary>
 public readonly struct TilePosition {
 	/// <summary>
 	/// First coordinate of the position.
@@ -92,10 +95,6 @@ public readonly struct TilePosition {
 		return Added(-x, -y);
 	}
 
-	/// <summary>
-	/// Formats the TilePosition for printing on screen.
-	/// </summary>
-	/// <returns>Printable format of the TilePosition.</returns>
 	public override string ToString() {
 		return $"({X};{Y})";
 	}

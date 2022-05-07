@@ -5,6 +5,9 @@ using Logic.Event.World.Barrack;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
+/// <summary>
+/// Represents a barrack in the game.
+/// </summary>
 public class Barrack : Building {
 	#region Fields
 

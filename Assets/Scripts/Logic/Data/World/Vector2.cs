@@ -1,6 +1,10 @@
 ﻿using System;
 
 namespace Logic.Data.World {
+
+/// <summary>
+/// Represents an indiscreet position in the world.
+/// </summary>
 public readonly struct Vector2 {
 	/// <summary>
 	/// First coordinate of the vector.

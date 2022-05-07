@@ -1,4 +1,7 @@
 ﻿namespace Logic.Data.World {
+/// <summary>
+/// Interface for the different types of <see cref="Tower"/>s
+/// </summary>
 public interface ITowerTypeData {
 	#region Properties
 
@@ -33,7 +36,7 @@ public interface ITowerTypeData {
 	public int DestroyRefund { get; }
 
 	/// <summary>
-	/// Building cost of the tower type.
+	/// Upgrade cost of the tower type.
 	/// </summary>
 	public int UpgradeCost { get; }
 

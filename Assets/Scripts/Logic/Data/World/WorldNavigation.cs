@@ -3,21 +3,49 @@ using System.Collections.Generic;
 using System.Linq;
 
 namespace Logic.Data.World {
+/// <summary>
+/// Represents the navigation system of the world.
+/// </summary>
 internal class WorldNavigation {
 	private readonly TileObject[,] _grid;
 
+	/// <summary>
+	/// Creates a navigation system.
+	/// </summary>
+	/// <param name="grid">The worldgrid.</param>
 	public WorldNavigation(TileObject[,] grid) {
 		_grid = grid;
 	}
 
+	/// <summary>
+	/// Checks if there's a path between two tiles.
+	/// </summary>
+	/// <param name="from">First tile's position.</param>
+	/// <param name="to">Second tile's position.</param>
+	/// <param name="blockedTiles">The tiles that are blocked.</param>
+	/// <returns>True if a path exists.</returns>
 	public bool IsPositionReachable(TilePosition from, TilePosition to, ISet<TilePosition> blockedTiles) {
-		return GetReachablePositionSubset(from, new HashSet<TilePosition> { to }, blockedTiles).Any();
+		return GetReachablePositionSubset(from, new HashSet<TilePosition> {to}, blockedTiles).Any();
 	}
 
+	/// <summary>
+	/// Checks if there's a path between two tiles.
+	/// </summary>
+	/// <param name="from">First tile's position.</param>
+	/// <param name="to">Second tile's position.</param>
+	/// <returns>True if a path exists.</returns>
 	public bool IsPositionReachable(TilePosition from, TilePosition to) {
-		return GetReachablePositionSubset(from, new HashSet<TilePosition> { to }).Any();
+		return GetReachablePositionSubset(from, new HashSet<TilePosition> {to}).Any();
 	}
 
+	/// <summary>
+	/// Finds all the reachable TilePosition from a TilePosition.
+	/// </summary>
+	/// <param name="from">The start of the pathfinding.</param>
+	/// <param name="to">Set containing the destination for the pathfinding. </param>
+	/// <param name="blockedTiles">The tiles that are blocked. </param>
+	/// <returns>The set of reachable positions.</returns>
+	/// <exception cref="ArgumentException">If 'to' is a blocked position.</exception>
 	public ISet<TilePosition> GetReachablePositionSubset(TilePosition from, ISet<TilePosition> to,
 		ISet<TilePosition> blockedTiles) {
 		if (blockedTiles.Overlaps(to))
@@ -41,6 +69,12 @@ internal class WorldNavigation {
 		return result;
 	}
 
+	/// <summary>
+	/// Finds all the reachable TilePosition from a TilePosition.
+	/// </summary>
+	/// <param name="from">The start of the pathfinding.</param>
+	/// <param name="to">Set containing the destination for the pathfinding. </param>
+	/// <returns>The set of reachable positions.</returns>
 	public ISet<TilePosition> GetReachablePositionSubset(TilePosition from, ISet<TilePosition> to) {
 		Dijkstra[,] dGrid = RunDijkstra(from.X, from.Y, to);
 		HashSet<TilePosition> result = new HashSet<TilePosition>(to);
@@ -66,8 +100,8 @@ internal class WorldNavigation {
 		queue.Add(dGrid[fromX, fromY]);
 		dGrid[fromX, fromY].Queued = true;
 
-		int[] diffX = { 0, 0, -1, 1 };
-		int[] diffY = { 1, -1, 0, 0 };
+		int[] diffX = {0, 0, -1, 1};
+		int[] diffY = {1, -1, 0, 0};
 
 		//Instead of removing from the queue, advance an index: this is faster.
 		//The first element always has the least weight due to all edges having the same cost (1).
@@ -101,11 +135,18 @@ internal class WorldNavigation {
 		return dGrid;
 	}
 
+	/// <summary>
+	/// Calculates the vectors from tile to tile in the path between two positions.
+	/// </summary>
+	/// <param name="from">The start if the path.</param>
+	/// <param name="to">The end of the path.</param>
+	/// <param name="colliderRadius">The colliderRadius of the object that travels on the path.</param>
+	/// <returns>The pathDelta vectors</returns>
 	public List<Vector2> TryGetPathDeltas(Vector2 from, Vector2 to, float colliderRadius) {
 		if (from.ToTilePosition().Equals(to.ToTilePosition())) return new List<Vector2>();
 
 		Dijkstra[,] dGrid = RunDijkstra((int) from.X, (int) from.Y,
-			new HashSet<TilePosition> { to.ToTilePosition() });
+			new HashSet<TilePosition> {to.ToTilePosition()});
 		if (dGrid[(int) to.X, (int) to.Y].D == int.MaxValue) return null;
 
 		List<Vector2> pathDeltas = new List<Vector2>();
@@ -126,6 +167,23 @@ internal class WorldNavigation {
 
 	private class FillerTileObject : TileObject {
 		public FillerTileObject(TilePosition position) : base(null, position) {}
+	}
+
+	private class Dijkstra {
+		public int D { get; set; }
+		public int Ox { get; }
+		public int Oy { get; }
+		public int Px { get; set; }
+		public int Py { get; set; }
+		public bool Queued { get; set; }
+
+		public Dijkstra(int x, int y) {
+			D = int.MaxValue;
+			Ox = x;
+			Oy = y;
+			Px = -1;
+			Py = -1;
+		}
 	}
 }
 }

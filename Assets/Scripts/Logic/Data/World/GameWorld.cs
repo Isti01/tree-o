@@ -5,6 +5,9 @@ using Logic.Event.World.Tower;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
+/// <summary>
+/// Represents the world in which the game takes place.
+/// </summary>
 public class GameWorld {
 	#region Fields
 
