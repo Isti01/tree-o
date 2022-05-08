@@ -3,7 +3,9 @@ using System.Linq;
 using Logic.Event.World.Unit;
 
 namespace Logic.Data.World {
-
+/// <summary>
+/// Represents a unit of the world.
+/// </summary>
 public class Unit {
 	#region Fields
 
@@ -15,26 +17,58 @@ public class Unit {
 
 	#region Properties
 
+	/// <summary>
+	/// Team of the unit.
+	/// </summary>
 	public GameTeam Owner { get; }
 
+	/// <summary>
+	/// Remaining health of the unit.
+	/// </summary>
 	public float CurrentHealth { get; private set; }
 
+	/// <summary>
+	/// Next destination of the unit.
+	/// </summary>
 	public TilePosition NextCheckpoint => _checkPoints[0];
 
+	/// <summary>
+	/// The world in which the unit exists.
+	/// </summary>
 	public GameWorld World { get; }
 
+	/// <summary>
+	/// The position of the unit.
+	/// </summary>
 	public Vector2 Position { get; private set; }
 
+	/// <summary>
+	/// The Tile on which the unit is.
+	/// </summary>
 	public TilePosition TilePosition => Position.ToTilePosition();
 
+	/// <summary>
+	/// The type of the unit.
+	/// </summary>
 	public IUnitTypeData Type { get; }
 
+	/// <summary>
+	/// True if the unit is alive.
+	/// </summary>
 	public bool IsAlive => CurrentHealth > 0;
 
 	#endregion
 
 	#region Methods
 
+	/// <summary>
+	/// Creates a unit.
+	/// </summary>
+	/// <param name="type">Type of the unit.</param>
+	/// <param name="owner">Team of the unit.</param>
+	/// <param name="world">World in which the unit will be created.</param>
+	/// <param name="position">Spawn position of the unit.</param>
+	/// <param name="checkpoints">The list of checkpoints the unit will try to go through.</param>
 	internal Unit(IUnitTypeData type, GameTeam owner, GameWorld world, Vector2 position,
 		IEnumerable<TilePosition> checkpoints) {
 		Type = type;
@@ -46,6 +80,10 @@ public class Unit {
 		_checkPoints.Add(Owner.Overview.GetEnemyTeam(Owner).Castle.Position);
 	}
 
+	/// <summary>
+	///  Moves the unit as time passes.
+	/// </summary>
+	/// <param name="delta">The amount of time passed.</param>
 	internal void Move(float delta) {
 		TilePosition oldPosition = TilePosition;
 
@@ -84,6 +122,9 @@ public class Unit {
 		return true; //Checkpoint reached
 	}
 
+	/// <summary>
+	/// Updates the planned path of a unit.
+	/// </summary>
 	internal void UpdatePlannedPath() {
 		_cachedCheckpointPath = null;
 
@@ -100,6 +141,11 @@ public class Unit {
 		}
 	}
 
+	/// <summary>
+	/// Damages the unit.
+	/// </summary>
+	/// <param name="attacker">The tower that attacked the unit.</param>
+	/// <param name="damage">The amount of damage inflicted.</param>
 	internal void InflictDamage(Tower attacker, float damage) {
 		if (damage >= CurrentHealth) {
 			damage = CurrentHealth;
@@ -107,9 +153,13 @@ public class Unit {
 		} else {
 			CurrentHealth -= damage;
 		}
+
 		World.Overview.Events.Raise(new UnitDamagedEvent(this, damage, attacker));
 	}
 
+	/// <summary>
+	/// Kills unit without it taking damage and raising an event.
+	/// </summary>
 	internal void DestroyWithoutDamage() {
 		CurrentHealth = 0;
 	}
@@ -126,5 +176,4 @@ public class Unit {
 		}
 	}
 }
-
 }
