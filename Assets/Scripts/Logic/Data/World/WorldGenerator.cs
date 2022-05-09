@@ -90,7 +90,7 @@ internal class WorldGenerator {
 			}
 		}
 
-		if (i == 0) {
+		if (i == 0 && _generateObstacles) {
 			List<int> goodIndices = new List<int>();
 			for (int j = 0; j < _width; j++) {
 				tp = new TilePosition(_height / 2, _width);
