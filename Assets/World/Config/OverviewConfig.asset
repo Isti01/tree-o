@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 294053db03e7456ebd6f2fdded42e91f, type: 3}
   m_Name: OverviewConfig
   m_EditorClassIdentifier: 
-  fightingPhaseDuration: 5
+  fightingPhaseDuration: 8

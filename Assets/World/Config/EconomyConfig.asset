@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a9ec0c949c74d24acfd735920debe06, type: 3}
   m_Name: EconomyConfig
   m_EditorClassIdentifier: 
-  startingBalance: 1000
-  roundBasePay: 200
-  newUnitsDestroyedPay: 10
-  totalUnitsPurchasedPay: 10
+  startingBalance: 500
+  roundBasePay: 250
+  newUnitsDestroyedPay: 40
+  totalUnitsPurchasedPay: 20

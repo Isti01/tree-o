@@ -19,4 +19,4 @@ MonoBehaviour:
   barrackSpawnCooldownTime: 0.6
   castleStartingHealth: 10
   maxBuildingDistance: 3
-  barrackSpawnTimeOffset: 0.1
+  barrackSpawnTimeOffset: 0.3
