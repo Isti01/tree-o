@@ -116,7 +116,7 @@ test-editmode-with-junit-reports:
     - job: get-unity-version
       artifacts: true
   rules:
-    - if: '$CI_COMMIT_REF_NAME == "main"'
+    - if: '$CI_COMMIT_REF_NAME == "main" || $CI_COMMIT_TAG'
 
 build-StandaloneLinux64:
   <<: *build
