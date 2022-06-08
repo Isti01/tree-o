@@ -154,6 +154,12 @@ pages:
 package_registry:
   stage: deploy
   image: ubuntu:20.04
+  needs:
+    - job: build-StandaloneLinux64
+    - job: build-StandaloneWindows64
+    - job: build-WebGL
+    - job: get-unity-version
+      artifacts: true
   rules:
     - if: '$CI_COMMIT_TAG && $CI_COMMIT_TAG =~ /^v.*$/'
   variables:
