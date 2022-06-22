@@ -2,7 +2,7 @@
 
 Ebben a Unity-ben feljesztett játékban két játékos körökre osztva küzd egymás ellen. Mindketten tornyokkal védhetik bázisukat, míg egységekkel támadhatják az ellenfelét. Az győz, aki előbb pusztítja el az ellenséges kastélyt. Egy részletes leírás a főmenü 'Guide' menüpontja alatt olvasható.
 
-A játék [GitLab Pages](https://szt-ab-2022.szofttech.gitlab-pages.hu/group-01/tree-o/)-en keresztül online játszható.
+A játék [GitLab Pages](https://hall-of-fame.szofttech.gitlab-pages.hu/tree-o/)-en keresztül online játszható.
 
 ## Képernyőképek
 
